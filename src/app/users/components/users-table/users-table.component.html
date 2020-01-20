@@ -1,10 +1,10 @@
 <div class="users-table">
 
-  <mat-toolbar class="users-table-title">
+  <mat-toolbar>
     <span>Table of users</span>
   </mat-toolbar>
 
-  <mat-form-field class="users-table-filter">
+  <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
 
@@ -35,38 +35,46 @@
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="adressStateName">
+    <ng-container matColumnDef="addressStateName">
       <th mat-header-cell *matHeaderCellDef> State </th>
-      <td mat-cell *matCellDef="let element"> {{element.adress.state.name}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.address.state.name}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="adressCity">
+    <ng-container matColumnDef="addressCity">
       <th mat-header-cell *matHeaderCellDef> City </th>
-      <td mat-cell *matCellDef="let element"> {{element.adress.city}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.address.city}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="adressStreet">
+    <ng-container matColumnDef="addressStreet">
       <th mat-header-cell *matHeaderCellDef> Street </th>
-      <td mat-cell *matCellDef="let element"> {{element.adress.street}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.address.street}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="adressZipcode">
+    <ng-container matColumnDef="addressZipcode">
       <th mat-header-cell *matHeaderCellDef> Zipcode </th>
-      <td mat-cell *matCellDef="let element"> {{element.adress.zipcode}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.address.zipcode}} </td>
     </ng-container>
 
     <ng-container matColumnDef="avatar">
       <th mat-header-cell *matHeaderCellDef> Avatar </th>
       <td mat-cell *matCellDef="let element">
-        <img [src]="element.avatar" [alt]="element.firstname" class="user-table-img">
+        <img [src]="element.avatar" [alt]="element.firstname" class="users-table-img">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <a [routerLink]="['/users/', element.id]" routerLinkActive="router-link-active" class="users-table-edit">Edit</a>
       </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="users-table-pagination"></mat-paginator>
 
-  <a [routerLink]="['/routePath']" routerLinkActive="router-link-active" class="users-table-add">Добавить пользователя</a>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+  <a [routerLink]="['/users/new']" routerLinkActive="router-link-active" class="users-table-new">New</a>
   
 </div>

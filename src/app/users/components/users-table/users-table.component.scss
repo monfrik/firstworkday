@@ -2,26 +2,30 @@
   &-img {
     max-width: 100px;
   }
-  &-table, &-filter {
+  &-table {
     width: 100%;
   }
-  &-table {
-    border: 1px solid rgba(0,0,0,.12);
-    border-bottom: none;
-  }
-  &-pagination {
-    margin-bottom: 50px;
-  }
-  &-add {
-    padding: 1rem 2rem;
-    text-decoration: none;
-    background-color: #444;
-    color: #ddd;
+  &-new {
+    margin-top: 2rem;
+    background-color: #333;
+    color: #eee;
     font-weight: bold;
-    transition: .25s;
+    padding: .5rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
     &:hover {
-      background-color: #333;
-      color: #fff;
+      color: #e91e63;
+    }
+  }
+  &-edit {
+    margin-top: 2rem;
+    background-color: #eee;
+    color: #333;
+    padding: .3rem 1.2rem;
+    text-decoration: none;
+    border-radius: 4px;
+    &:hover {
+      color: #e91e63;
     }
   }
 

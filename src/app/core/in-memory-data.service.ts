@@ -13,8 +13,8 @@ export class InMemoryDataService implements InMemoryDbService {
         lastname: 'Baker',
         phone: '3342-1560',
         email: 'all.bake@gmail.com',
-        adress: {
-          state : {
+        address: {
+          state: {
             shortname: 'NJ',
             name: 'New Jersey',
           },
@@ -30,7 +30,7 @@ export class InMemoryDataService implements InMemoryDbService {
         lastname: 'Ball',
         phone: '3348-1571',
         email: 'GeGball@gmail.com',
-        adress: {
+        address: {
           state : {
             shortname: 'TX',
             name: 'Texas',
@@ -47,7 +47,7 @@ export class InMemoryDataService implements InMemoryDbService {
         lastname: 'Allen',
         phone: '3383-9124',
         email: 'Hallenry@gmail.com',
-        adress: {
+        address: {
           state : {
             shortname: 'HI',
             name: 'Hawaii',
@@ -60,35 +60,35 @@ export class InMemoryDataService implements InMemoryDbService {
       },
       {
         id: 4,
-        firstname: 'Oliver',
-        lastname: 'Baker',
-        phone: '3342-1560',
-        email: 'all.bake@gmail.com',
-        adress: {
+        firstname: 'Harry',
+        lastname: 'Allen',
+        phone: '3383-9124',
+        email: 'Hallenry@gmail.com',
+        address: {
           state : {
-            shortname: 'NJ',
-            name: 'New Jersey',
+            shortname: 'HI',
+            name: 'Hawaii',
           },
           city: 'Trenton',
-          street: 'N Clinton Ave',
-          zipcode: '08610',
+          street: 'Olali St',
+          zipcode: '96705',
         },
         avatar: 'https://www.thispersondoesnotexist.com/image'
       },
       {
         id: 5,
-        firstname: 'George',
-        lastname: 'Ball',
-        phone: '3348-1571',
-        email: 'GeGball@gmail.com',
-        adress: {
+        firstname: 'Harry',
+        lastname: 'Allen',
+        phone: '3383-9124',
+        email: 'Hallenry@gmail.com',
+        address: {
           state : {
-            shortname: 'TX',
-            name: 'Texas',
+            shortname: 'HI',
+            name: 'Hawaii',
           },
-          city: 'Addison',
-          street: 'Morris Ave',
-          zipcode: '75001',
+          city: 'Trenton',
+          street: 'Olali St',
+          zipcode: '96705',
         },
         avatar: 'https://www.thispersondoesnotexist.com/image'
       },
@@ -98,7 +98,7 @@ export class InMemoryDataService implements InMemoryDbService {
         lastname: 'Allen',
         phone: '3383-9124',
         email: 'Hallenry@gmail.com',
-        adress: {
+        address: {
           state : {
             shortname: 'HI',
             name: 'Hawaii',
@@ -111,45 +111,11 @@ export class InMemoryDataService implements InMemoryDbService {
       },
       {
         id: 7,
-        firstname: 'Oliver',
-        lastname: 'Baker',
-        phone: '3342-1560',
-        email: 'all.bake@gmail.com',
-        adress: {
-          state : {
-            shortname: 'NJ',
-            name: 'New Jersey',
-          },
-          city: 'Trenton',
-          street: 'N Clinton Ave',
-          zipcode: '08610',
-        },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
-      },
-      {
-        id: 8,
-        firstname: 'George',
-        lastname: 'Ball',
-        phone: '3348-1571',
-        email: 'GeGball@gmail.com',
-        adress: {
-          state : {
-            shortname: 'TX',
-            name: 'Texas',
-          },
-          city: 'Addison',
-          street: 'Morris Ave',
-          zipcode: '75001',
-        },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
-      },
-      {
-        id: 9,
         firstname: 'Harry',
         lastname: 'Allen',
         phone: '3383-9124',
         email: 'Hallenry@gmail.com',
-        adress: {
+        address: {
           state : {
             shortname: 'HI',
             name: 'Hawaii',
@@ -170,7 +136,7 @@ export class InMemoryDataService implements InMemoryDbService {
 //   lastname
 //   phone
 //   email
-//     adress: {
+//     address: {
 //       state : {
 //         shortname
 //         name

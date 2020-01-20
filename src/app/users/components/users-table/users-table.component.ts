@@ -5,7 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { Subscriber } from 'rxjs';
 
-import { UserTableService } from "../../services/user-table";
+import { UsersService } from "../../services/users";
 import { UserModel } from "../../models/user.model";
 
 
@@ -13,7 +13,7 @@ import { UserModel } from "../../models/user.model";
   selector: 'app-users-table',
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss'],
-  providers: [ UserTableService ],
+  providers: [ UsersService ],
 })
 export class UsersTableComponent implements OnInit {
 
@@ -26,22 +26,25 @@ export class UsersTableComponent implements OnInit {
     'lastname',
     'phone',
     'email',
-    'adressStateName',
-    'adressCity',
-    'adressStreet',
-    'adressZipcode',
-    'avatar'
+    'addressStateName',
+    'addressCity',
+    'addressStreet',
+    'addressZipcode',
+    'avatar',
+    'actions',
   ];
  
   constructor(
-    private readonly _userTableService: UserTableService,
+    private readonly _usersService: UsersService,
   ) { }
   
   public ngOnInit(): void {
-    this._userTableService
+    console.log('12')
+    this._usersService
       .getUsers()
       .subscribe({
         next: (data) => {
+          console.log('table', data)
           this.users = new MatTableDataSource<UserModel>(data);
           this.users.paginator = this.paginator;
         },
@@ -50,8 +53,12 @@ export class UsersTableComponent implements OnInit {
       })
   }
 
-  applyFilter(filterValue: string) {
+  public applyFilter(filterValue: string): void {
     this.users.filter = filterValue.trim().toLowerCase();
+  }
+
+  public editItem(id: number): void {
+
   }
 
 }

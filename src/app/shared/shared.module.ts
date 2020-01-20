@@ -3,28 +3,26 @@ import { NgModule } from '@angular/core';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import {
   MatPaginatorModule,
-  MatInputModule
+  MatInputModule,
 } from '@angular/material';
+
 
 @NgModule({
   imports: [
     CommonModule,
-    MatToolbarModule,
+    MatTableModule,
     MatPaginatorModule,
     MatInputModule,
-    MatTableModule,
     MatButtonModule,
   ],
   declarations: [ ],
   exports: [
     CommonModule,
-    MatToolbarModule,
+    MatTableModule,
     MatPaginatorModule,
     MatInputModule,
-    MatTableModule,
     MatButtonModule,
   ],
 })
