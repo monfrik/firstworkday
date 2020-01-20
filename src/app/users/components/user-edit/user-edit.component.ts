@@ -5,6 +5,8 @@ import {
   Validators
 } from '@angular/forms';
 
+import { FileUploadValidators } from '@iplab/ngx-file-upload';
+
 import { UserModel } from '../../models/user.model';
 
 @Component({
@@ -14,27 +16,30 @@ import { UserModel } from '../../models/user.model';
 })
 
 export class UserEditComponent implements OnInit {
-  public firstFormGroup: FormGroup;
-  public secondFormGroup: FormGroup;
-  public thirdFormGroup: FormGroup;
+  public userForm: FormGroup;
+
   public constructor(private _formBuilder: FormBuilder) {}
 
   public ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', Validators.required],
-    });
-    this.secondFormGroup = this._formBuilder.group( {
-      state: ['', Validators.required],
-      stateShort: ['', Validators.required],
-      city: ['', Validators.required],
-      street: ['', Validators.required],
-      zipcode: ['', Validators.required],
-    });
-    this.thirdFormGroup = this._formBuilder.group( {
-      avatar: ['', Validators.required],
+    this.userForm = this._formBuilder.group({
+      firstname: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required]],
+      address: this._formBuilder.group({
+        state: this._formBuilder.group({
+          name: ['', [Validators.required]],
+          shortname: ['', [Validators.required]],
+        }),
+        city: ['', [Validators.required]],
+        street: ['', [Validators.required]],
+        zipcode: ['', [Validators.required]],
+      }),
+      avatar: [[], [Validators.required, FileUploadValidators.filesLimit(1)]],
     });
   }
+
+  public clear(): void {}
+  public reset(): void {}
+  public save(): void {}
 }

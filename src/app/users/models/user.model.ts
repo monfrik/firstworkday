@@ -10,7 +10,6 @@ export class UserModel {
   public avatar: string;
 
   constructor (data: any = {}) {
-    console.log('bmbmbmbmbm')
     this.id = data.id || void 0;
     this.firstname = data.firstname || void 0;
     this.lastname = data.lastname || void 0;
@@ -18,8 +17,6 @@ export class UserModel {
     this.email = data.email || void 0;
     this.firstname = data.firstname || void 0;
     this.avatar = data.avatar || void 0;
-    console.log('?')
-    console.log(new AddressModel(data.address))
     this.address = data.address ? new AddressModel(data.address) : void 0;
   }
 }

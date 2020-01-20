@@ -7,7 +7,6 @@ export class AddressModel {
   public zipcode: string | number;
 
   constructor (data: any = {}) {
-    console.log('asdasdasdasdasd')
     this.state = data.state ? new StateModel(data.state) : void 0;
     this.city = data.city || void 0;
     this.street = data.street || void 0;

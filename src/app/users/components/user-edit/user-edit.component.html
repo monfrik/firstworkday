@@ -1,71 +1,35 @@
-<!-- <div class="example-container">
-  <mat-form-field>
-    <input matInput placeholder="Input">
-  </mat-form-field>
-
-</div> -->
 <div class="user-edit">
-  <mat-horizontal-stepper [linear]="false" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
-      <form [formGroup]="firstFormGroup" class="user-edit-form">
-        <ng-template matStepLabel>Fill out your pesonal data</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="First name" formControlName="firstname" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Last name" formControlName="lastname" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Phone" formControlName="phone" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Email" formControlName="email" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup" class="user-edit-form">
-        <ng-template matStepLabel>Fill out your address</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="State" formControlName="state" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="State abbreviation" formControlName="stateShort" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="City" formControlName="city" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Street" formControlName="street" required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Zipcode" formControlName="zipcode" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="thirdFormGroup">
-      <form [formGroup]="thirdFormGroup" class="user-edit-form">
-        <ng-template matStepLabel>Fill out your avatar</ng-template>
-          <input placeholder="avatar" type="file" formControlName="avatar" required>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
+  <form [formGroup]="userForm" class="user-edit-form" (onSubmit)="save()">
+    <mat-form-field>
+      <input matInput placeholder="First name" type="text" name="firstname" formControlName="firstname" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Last name" type="text" name="lastname" formControlName="lastname" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Phone" type="tel" name="phone" formControlName="phone" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email" type="email" name="email" formControlName="email" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="State" type="text" name="state" formControlName="name" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="State abbreviation" type="text" name="stateShort" formControlName="shortname" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="City" type="text" name="city" formControlName="city" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Street" type="text" name="street" formControlName="street" required>
+    </mat-form-field>
+    <input matInput placeholder="Zipcode" type="text" name="zipcode" formControlName="zipcode" required>
+    <mat-form-field>
+      <file-upload type="file" name="avatar" formControlName="avatar"></file-upload>
+    </mat-form-field>
+    <button mat-button type="button" (click)="clear()">Clear</button>
+    <button mat-button type="button" (click)="reset()">Reset</button>
+    <button mat-button type="submit">Save</button>
+  </form>
 </div>
