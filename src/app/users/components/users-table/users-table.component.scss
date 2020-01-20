@@ -1,0 +1,28 @@
+.users-table {
+  &-img {
+    max-width: 100px;
+  }
+  &-table, &-filter {
+    width: 100%;
+  }
+  &-table {
+    border: 1px solid rgba(0,0,0,.12);
+    border-bottom: none;
+  }
+  &-pagination {
+    margin-bottom: 50px;
+  }
+  &-add {
+    padding: 1rem 2rem;
+    text-decoration: none;
+    background-color: #444;
+    color: #ddd;
+    font-weight: bold;
+    transition: .25s;
+    &:hover {
+      background-color: #333;
+      color: #fff;
+    }
+  }
+
+}
