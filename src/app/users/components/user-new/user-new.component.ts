@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  Validators
+  Validators,
+  AbstractControl
 } from '@angular/forms';
 
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
@@ -11,6 +12,9 @@ import { UsersService } from '../../services/users';
 import { UserModel } from '../../models/user.model';
 import { AddressModel } from '../../models/address.model';
 import { StateModel } from '../../models/state.model';
+import { UserValidator } from '@core/validators/user-validator';
+import { AddressValidator } from '@core/validators/address-validator';
+import { StateValidator } from '@core/validators/state-validator';
 
 @Component({
   selector: 'app-user-new',
@@ -30,17 +34,17 @@ export class UserNewComponent implements OnInit {
 
   public ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      firstname: ['', [Validators.required, UserValidator.nameValidator]],
+      lastname: ['', [Validators.required, UserValidator.nameValidator]],
+      phone: ['', [Validators.required, UserValidator.phoneValidator]],
+      email: ['', [Validators.required, UserValidator.emailValidator]],
     });
     this.secondFormGroup = this._formBuilder.group( {
-      state: ['', [Validators.required]],
-      stateShort: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      street: ['', [Validators.required]],
-      zipcode: ['', [Validators.required]],
+      state: ['', [Validators.required, StateValidator.nameValidator]],
+      stateShort: ['', [Validators.required, StateValidator.shortnameValidator]],
+      city: ['', [Validators.required, AddressValidator.cityValidator]],
+      street: ['', [Validators.required, AddressValidator.streetValidator]],
+      zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
     });
     this.thirdFormGroup = this._formBuilder.group( {
       avatar: [[], [Validators.required, FileUploadValidators.filesLimit(1)]],
@@ -48,18 +52,17 @@ export class UserNewComponent implements OnInit {
   }
 
   public submit(): void {
-    const stateData = {
+    const state = {
       shortname: this.secondFormGroup.value.stateShort,
       name: this.secondFormGroup.value.state,
     }
-    const state = new StateModel(stateData);
     const { city, street, zipcode } = this.secondFormGroup.value;
-    const address = new AddressModel({
+    const address = {
       state,
       city,
       street,
       zipcode
-    });
+    }
     const { firstname, lastname, phone, email } = this.firstFormGroup.value;
     const { avatar } = this.thirdFormGroup.value;
     const user = new UserModel({

@@ -17,7 +17,6 @@ import {
     MatInputModule,
     MatButtonModule,
   ],
-  declarations: [ ],
   exports: [
     CommonModule,
     MatTableModule,

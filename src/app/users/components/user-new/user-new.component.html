@@ -5,15 +5,29 @@
         <ng-template matStepLabel>Fill out your pesonal data</ng-template>
         <mat-form-field>
           <input matInput placeholder="First name" formControlName="firstname" required>
+          <mat-error *ngIf="firstFormGroup.get('firstname').errors?.required">Required</mat-error>
+          <mat-error *ngIf="firstFormGroup.get('firstname').errors?.invalidName">
+            Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Last name" formControlName="lastname" required>
+          <mat-error *ngIf="firstFormGroup.get('lastname').errors?.required">Required</mat-error>
+          <mat-error *ngIf="firstFormGroup.get('lastname').errors?.invalidName">
+            Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Phone" formControlName="phone" required>
+          <mat-error *ngIf="firstFormGroup.get('phone').errors?.required">Required</mat-error>
+          <mat-error *ngIf="firstFormGroup.get('phone').errors?.invalidPhone">
+            Invalid phone. Phone template: +0 (000)-000-0000
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Email" formControlName="email" required>
+          <mat-error *ngIf="firstFormGroup.get('email').errors?.required">Required</mat-error>
+          <mat-error *ngIf="firstFormGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
         </mat-form-field>
         <div>
           <button mat-button matStepperNext>Next</button>
@@ -25,18 +39,28 @@
         <ng-template matStepLabel>Fill out your address</ng-template>
         <mat-form-field>
           <input matInput placeholder="State" formControlName="state" required>
+          <mat-error *ngIf="secondFormGroup.get('state').errors?.required">Required</mat-error>
+          <mat-error *ngIf="secondFormGroup.get('state').errors?.invalidName">Invalid state</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="State abbreviation" formControlName="stateShort" required>
+          <mat-error *ngIf="secondFormGroup.get('stateShort').errors?.required">Required</mat-error>
+          <mat-error *ngIf="secondFormGroup.get('stateShort').errors?.invalidShortname">Invalid state abbr.</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="City" formControlName="city" required>
+          <mat-error *ngIf="secondFormGroup.get('city').errors?.required">Required</mat-error>
+          <mat-error *ngIf="secondFormGroup.get('city').errors?.invalidCity">Invalid city</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Street" formControlName="street" required>
+          <mat-error *ngIf="secondFormGroup.get('street').errors?.required">Required</mat-error>
+          <mat-error *ngIf="secondFormGroup.get('street').errors?.invalidStreet">Invalid street</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="Zipcode" formControlName="zipcode" required>
+          <mat-error *ngIf="secondFormGroup.get('zipcode').errors?.required">Required</mat-error>
+          <mat-error *ngIf="secondFormGroup.get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
         </mat-form-field>
         <div>
           <button mat-button matStepperPrevious>Back</button>
@@ -47,7 +71,8 @@
     <mat-step [stepControl]="thirdFormGroup">
       <form [formGroup]="thirdFormGroup" class="user-new-form">
         <ng-template matStepLabel>Fill out your avatar</ng-template>
-          <file-upload formControlName="avatar"></file-upload>
+        <file-upload formControlName="avatar"></file-upload>
+        <mat-error *ngIf="thirdFormGroup.get('avatar').errors?.required">Required</mat-error>
         <div>
           <button mat-button matStepperNext>Next</button>
         </div>
