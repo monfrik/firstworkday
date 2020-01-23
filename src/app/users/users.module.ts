@@ -11,6 +11,7 @@ import { UsersTableComponent } from './components/users-table';
 import { UsersRoutingModule } from './users-routing.module';
 import { UserEditComponent } from './components/user-edit';
 import { UserNewComponent } from './components/user-new';
+import { FormStepperComponent } from './components/form-stepper';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { UserNewComponent } from './components/user-new';
     UsersTableComponent,
     UserEditComponent,
     UserNewComponent,
+    FormStepperComponent,
   ],
 })
 export class UsersModule { }
