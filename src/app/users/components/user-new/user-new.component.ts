@@ -22,10 +22,10 @@ import { StateValidator } from '@core/validators/state-validator';
   styleUrls: ['./user-new.component.scss'],
   providers: [ UsersService ],
 })
+
 export class UserNewComponent implements OnInit {
-  public firstFormGroup: FormGroup;
-  public secondFormGroup: FormGroup;
-  public thirdFormGroup: FormGroup;
+  public formStepper;
+  public formList;
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -33,49 +33,42 @@ export class UserNewComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
-      firstname: ['', [Validators.required, UserValidator.nameValidator]],
-      lastname: ['', [Validators.required, UserValidator.nameValidator]],
-      phone: ['', [Validators.required, UserValidator.phoneValidator]],
-      email: ['', [Validators.required, UserValidator.emailValidator]],
+    this.formStepper = this._formBuilder.group({
+      firstFormGroup: this._formBuilder.group({}),
+      secondFormGroup: this._formBuilder.group({}),
+      thirdFormGroup: this._formBuilder.group({}),
     });
-    this.secondFormGroup = this._formBuilder.group( {
-      state: ['', [Validators.required, StateValidator.nameValidator]],
-      stateShort: ['', [Validators.required, StateValidator.shortnameValidator]],
-      city: ['', [Validators.required, AddressValidator.cityValidator]],
-      street: ['', [Validators.required, AddressValidator.streetValidator]],
-      zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
-    });
-    this.thirdFormGroup = this._formBuilder.group( {
-      avatar: [[], [Validators.required, FileUploadValidators.filesLimit(1)]],
-    });
+    this.formList = this._formBuilder.group({});
   }
 
   public submit(): void {
-    const state = {
-      shortname: this.secondFormGroup.value.stateShort,
-      name: this.secondFormGroup.value.state,
-    }
-    const { city, street, zipcode } = this.secondFormGroup.value;
-    const address = {
-      state,
-      city,
-      street,
-      zipcode
-    }
-    const { firstname, lastname, phone, email } = this.firstFormGroup.value;
-    const { avatar } = this.thirdFormGroup.value;
+    const formData = this.formList.value;
     const user = new UserModel({
-      firstname,
-      lastname,
-      phone,
-      email,
-      address,
-      avatar: avatar[0].name
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      phone: formData.phone,
+      avatar: formData.avatar,
+      address: {
+        state: {
+          name: formData.state,
+          shortname: formData.stateShort,
+        },
+        city: formData.city,
+        street: formData.street,
+        zipcode: formData.zipcode,
+      }
     })
-    this._usersService
-      .addUser(user)
-      .subscribe()
+    // this._usersService
+    //   .addUser(user)
+    //   .subscribe()
+  }
+
+  public onUpdateStepper(data: any): void {
+    this.formList.setValue(data);
+  }
+  public onUpdateList(data: any): void {
+    console.log(data)
+    // this.formList.setValue(data);
   }
 
 }

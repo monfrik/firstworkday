@@ -39,12 +39,10 @@ export class UsersTableComponent implements OnInit {
   ) { }
   
   public ngOnInit(): void {
-    console.log('12')
     this._usersService
       .getUsers()
       .subscribe({
         next: (data) => {
-          console.log('table', data)
           this.users = new MatTableDataSource<UserModel>(data);
           this.users.paginator = this.paginator;
         },

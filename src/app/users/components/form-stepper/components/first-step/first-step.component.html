@@ -1,0 +1,32 @@
+<form [formGroup]="formGroup" class="form-stepper-form">
+  <ng-template matStepLabel>Fill out your pesonal data</ng-template>
+  <mat-form-field>
+    <input matInput type="text" name="firstname" placeholder="First name" formControlName="firstname" required>
+    <mat-error *ngIf="formGroup.get('firstname').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('firstname').errors?.invalidName">
+      Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="lastname" placeholder="Last name" formControlName="lastname" required>
+    <mat-error *ngIf="formGroup.get('lastname').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('lastname').errors?.invalidName">
+      Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="tel" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
+    <mat-error *ngIf="formGroup.get('phone').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('phone').errors?.invalidPhone">
+      Invalid phone. Phone template: +0 (000)-000-0000
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="email" name="email" placeholder="Email" formControlName="email" required>
+    <mat-error *ngIf="formGroup.get('email').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
+  </mat-form-field>
+  <div>
+    <button mat-button matStepperNext>Next</button>
+  </div>
+</form>

@@ -23,6 +23,7 @@
     "@angular/router": "~8.2.14",
     "@iplab/ngx-file-upload": "^1.4.3",
     "angular-in-memory-web-api": "^0.9.0",
+    "angular2-text-mask": "^9.0.0",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
