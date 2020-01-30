@@ -1,20 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl
-} from '@angular/forms';
-
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import { FormBuilder } from '@angular/forms';
 
 import { UsersService } from '../../services/users';
 import { UserModel } from '../../models/user.model';
 import { AddressModel } from '../../models/address.model';
 import { StateModel } from '../../models/state.model';
-import { UserValidator } from '@core/validators/user-validator';
-import { AddressValidator } from '@core/validators/address-validator';
-import { StateValidator } from '@core/validators/state-validator';
 
 @Component({
   selector: 'app-user-new',
@@ -33,42 +23,63 @@ export class UserNewComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.formStepper = this._formBuilder.group({
-      firstFormGroup: this._formBuilder.group({}),
-      secondFormGroup: this._formBuilder.group({}),
-      thirdFormGroup: this._formBuilder.group({}),
-    });
+    this.formStepper = this._formBuilder.group({});
     this.formList = this._formBuilder.group({});
   }
 
-  public submit(): void {
-    const formData = this.formList.value;
-    const user = new UserModel({
-      firstname: formData.firstname,
-      lastname: formData.lastname,
-      phone: formData.phone,
-      avatar: formData.avatar,
+  public onSubmit(): void {
+    if (this.formList.valid) {
+      const newUser = new UserModel(this.formList.value);
+      this._usersService
+        .addUser(newUser)
+        .subscribe(data => console.log(data));
+    }
+  }
+  
+  public onUpdateStepper(data: any = {}): void {
+    this.formList.patchValue({
+      firstname: data.firstFormGroup.firstname,
+      lastname: data.firstFormGroup.lastname,
+      phone: data.firstFormGroup.phone,
+      email: data.firstFormGroup.email,
       address: {
         state: {
-          name: formData.state,
-          shortname: formData.stateShort,
+          name: data.secondFormGroup.state,
+          shortname: data.secondFormGroup.stateShort,
         },
-        city: formData.city,
-        street: formData.street,
-        zipcode: formData.zipcode,
-      }
+        city: data.secondFormGroup.city,
+        street: data.secondFormGroup.street,
+        zipcode: data.secondFormGroup.zipcode,
+      },
+      avatar: data.thirdFormGroup.avatar,
+    }, {
+      emitEvent: false
     })
-    // this._usersService
-    //   .addUser(user)
-    //   .subscribe()
   }
 
-  public onUpdateStepper(data: any): void {
-    this.formList.setValue(data);
-  }
-  public onUpdateList(data: any): void {
-    console.log(data)
-    // this.formList.setValue(data);
+  public onUpdateList(data: any = {}): void {
+    this.formStepper.get('firstFormGroup').patchValue({
+      firstname: data.firstname,
+      lastname: data.lastname,
+      phone: data.phone,
+      email: data.email,
+    }, {
+      emitEvent: false
+    })
+    this.formStepper.get('secondFormGroup').patchValue({
+      state: data.address.state.name,
+      stateShort: data.address.state.shortname,
+      city: data.address.city,
+      street: data.address.street,
+      zipcode: data.address.zipcode,
+    }, {
+      emitEvent: false
+    })
+    this.formStepper.get('thirdFormGroup').patchValue({
+      avatar: data.avatar,
+    }, {
+      emitEvent: false
+    })
   }
 
 }

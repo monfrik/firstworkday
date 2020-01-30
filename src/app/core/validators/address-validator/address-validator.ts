@@ -11,6 +11,9 @@ export class AddressValidator {
   }
   
   static cityValidator(control) {
+    if (!control.value) {
+      return { invalidName: true };
+    }
     if (
       !control.value.match(
         /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]+$/
@@ -22,6 +25,9 @@ export class AddressValidator {
   }
 
   static streetValidator(control) {
+    if (!control.value) {
+      return { invalidName: true };
+    }
     if (
       !control.value.match(
         /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]+$/
@@ -33,6 +39,9 @@ export class AddressValidator {
   }
 
   static zipcodeValidator(control) {
+    if (!control.value) {
+      return { invalidName: true };
+    }
     if (!control.value.match(/^([0-9]{3})\-([0-9]{3})$/)) {
       return { invalidZipcode: true };
     }

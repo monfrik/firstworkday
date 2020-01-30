@@ -1,9 +1,9 @@
 import {
   Component, 
-  AfterContentInit,
   Input,
   EventEmitter,
   Output,
+  OnInit,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -15,35 +15,9 @@ import {
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import { UserValidator } from '@app/core/validators/user-validator';
-import { UserModel } from '../../models/user.model';
+import { AddressValidator } from '@app/core/validators/address-validator';
+import { StateValidator } from '@app/core/validators/state-validator';
 
-
-class FormListModel {
-  public id: number;
-  public firstname: string;
-  public lastname: string;
-  public phone: string;
-  public email: string;
-  public avatar: string;
-  public state: string;
-  public stateShort: string;
-  public city: string;
-  public street: string;
-  public zipcode: string;
-
-  public constructor(data: any = {}) {
-    this.id = data.id || void 0;
-    this.firstname = data.firstname || void 0;
-    this.lastname = data.lastname || void 0;
-    this.phone = data.phone || void 0;
-    this.email = data.email || void 0;
-    this.state = data.state || void 0;
-    this.state = data.state || void 0;
-    this.city = data.city || void 0;
-    this.street = data.street || void 0;
-    this.zipcode = data.zipcode || void 0;
-  }
-}
 
 @Component({
   selector: 'app-form-list',
@@ -51,51 +25,50 @@ class FormListModel {
   styleUrls: ['./form-list.component.scss']
 })
 
-export class FormListComponent implements AfterContentInit {
+export class FormListComponent implements OnInit {
 
+  public mask: Array<string | RegExp> = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  
   @Input()
   public formGroup: FormGroup;
   
   @Output()
   public updateList = new EventEmitter();
 
-  public constructor(private _formBuilder: FormBuilder) {}
+  @Output()
+  public submit = new EventEmitter();
 
-  public ngAfterContentInit(): void {
-    this.formGroup.addControl('firstname', new FormControl('', [Validators.required, UserValidator.nameValidator]))
-    this.formGroup.addControl('lastname', new FormControl('', [Validators.required, UserValidator.nameValidator]))
-    this.formGroup.addControl('phone', new FormControl('', [Validators.required, UserValidator.phoneValidator]))
-    this.formGroup.addControl('email', new FormControl('', [Validators.required, UserValidator.emailValidator]))
+  public constructor(
+    private readonly _formBuilder: FormBuilder
+  ) {}
+
+  public ngOnInit(): void {
+    this._formInitialization();
     this.onValueChanges();
   }
 
-  public clear(): void {}
-  public reset(): void {}
-  public save(): void {}
-
   public onValueChanges(): void {
     this.formGroup.valueChanges
-      .subscribe( val => {
-        this.updateList.emit(this._getUserModel(new FormListModel(val)));
+      .subscribe( data => {
+        this.updateList.emit(data);
       });
   }
 
-  private _getUserModel(formData: FormListModel): UserModel {
-    return new UserModel({
-      firstname: formData.firstname,
-      lastname: formData.lastname,
-      phone: formData.phone,
-      avatar: formData.avatar,
-      address: {
-        state: {
-          name: formData.state,
-          shortname: formData.stateShort,
-        },
-        city: formData.city,
-        street: formData.street,
-        zipcode: formData.zipcode,
-      }
-    })
+  private _formInitialization(): void {
+    this.formGroup.addControl('firstname', new FormControl('', [Validators.required, UserValidator.nameValidator]));
+    this.formGroup.addControl('lastname', new FormControl('', [Validators.required, UserValidator.nameValidator]));
+    this.formGroup.addControl('phone', new FormControl('', [Validators.required, UserValidator.phoneValidator]));
+    this.formGroup.addControl('email', new FormControl('', [Validators.required, UserValidator.emailValidator]));
+    this.formGroup.addControl('address', this._formBuilder.group({
+      state: this._formBuilder.group({
+        name: ['', [Validators.required, StateValidator.nameValidator]],
+        shortname: ['', [Validators.required, StateValidator.shortnameValidator]],
+      }),
+      city: ['', [Validators.required, AddressValidator.cityValidator]],
+      street: ['', [Validators.required, AddressValidator.streetValidator]],
+      zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
+    }))
+    this.formGroup.addControl('avatar', new FormControl(null, [Validators.required, FileUploadValidators.filesLimit(1)]));
   }
 
 }

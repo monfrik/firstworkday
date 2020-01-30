@@ -1,89 +1,25 @@
 <div class="form-stepper">
   <mat-horizontal-stepper [linear]="true" #stepper>
-    <mat-step [stepControl]="formGroup.controls.firstFormGroup">
-      <app-first-step [formGroup]="formGroup.controls.firstFormGroup" (updateFirstStep)="onUpdateFirstStep($event)"></app-first-step>
-      <!-- <form [formGroup]="formGroup" class="form-stepper-form">
-        <ng-template matStepLabel>Fill out your pesonal data</ng-template>
-        <mat-form-field>
-          <input matInput type="text" name="firstname" placeholder="First name" formControlName="firstname" required>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('firstname').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('firstname').errors?.invalidName">
-            Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" name="lastname" placeholder="Last name" formControlName="lastname" required>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('lastname').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('lastname').errors?.invalidName">
-            Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="tel" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('phone').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('phone').errors?.invalidPhone">
-            Invalid phone. Phone template: +0 (000)-000-0000
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="email" name="email" placeholder="Email" formControlName="email" required>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('email').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.firstFormGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form> -->
+    <mat-step [stepControl]="formGroup.get('firstFormGroup')">
+      <ng-template matStepLabel>Fill out your pesonal data</ng-template>
+      <app-first-step [formGroup]="formGroup.get('firstFormGroup')"></app-first-step>
     </mat-step>
-    <mat-step [stepControl]="formGroup.controls.secondFormGroup">
-      <!-- <form [formGroup]="formsGroup.secondFormGroup" class="form-stepper-form">
-        <ng-template matStepLabel>Fill out your address</ng-template>
-        <mat-form-field>
-          <input matInput type="text" name="state" placeholder="State" formControlName="state" required>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('state').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('state').errors?.invalidName">Invalid state</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" name="stateShort" placeholder="State abbreviation" formControlName="stateShort" required>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('stateShort').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('stateShort').errors?.invalidShortname">Invalid state abbr.</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" name="city" placeholder="City" formControlName="city" required>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('city').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('city').errors?.invalidCity">Invalid city</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" name="street" placeholder="Street" formControlName="street" required>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('street').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('street').errors?.invalidStreet">Invalid street</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" name="zipcode" placeholder="Zipcode" formControlName="zipcode" required>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('zipcode').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formsGroup.secondFormGroup.get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form> -->
+
+    <mat-step [stepControl]="formGroup.get('secondFormGroup')">
+      <app-second-step [formGroup]="formGroup.get('secondFormGroup')"></app-second-step>
+      <ng-template matStepLabel>Fill out your address</ng-template>
     </mat-step>
-    <mat-step [stepControl]="formGroup.controls.thirdFormGroup">
-      <!-- <form [formGroup]="formsGroup.thirdFormGroup" class="form-stepper-form">
-        <ng-template matStepLabel>Fill out your avatar</ng-template>
-        <file-upload formControlName="avatar" data-attr="23"></file-upload>
-        <mat-error *ngIf="formsGroup.thirdFormGroup.get('avatar').errors?.required">Required</mat-error>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form> -->
+
+    <mat-step [stepControl]="formGroup.get('thirdFormGroup')">
+      <ng-template matStepLabel>Fill out your avatar</ng-template>
+      <app-third-step [formGroup]="formGroup.get('thirdFormGroup')"></app-third-step>
     </mat-step>
+
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <div>
         <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
-        <button mat-button (click)="submit()">Submit</button>
+        <button mat-button (click)="submit.emit()">Submit</button>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
       </div>

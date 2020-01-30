@@ -1,4 +1,4 @@
-<div class="user-new">
+<div class="user-new" (submit)="onSubmit()">
   <mat-tab-group>
     <mat-tab label="Form">
       <app-form-list [formGroup]="formList" (updateList)="onUpdateList($event)"></app-form-list>

@@ -1,1 +1,7 @@
-<p>third-step works!</p>
+<form [formGroup]="formGroup" class="third-step step">
+  <file-upload formControlName="avatar" data-attr="23"></file-upload>
+  <mat-error *ngIf="formGroup.get('avatar').errors?.required">Required</mat-error>
+  <div>
+    <button mat-button matStepperNext>Next</button>
+  </div>
+</form>

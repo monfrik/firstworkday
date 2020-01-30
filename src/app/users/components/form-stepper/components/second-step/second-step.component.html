@@ -1,1 +1,31 @@
-<p>second-step works!</p>
+<form [formGroup]="formGroup" class="second-step step">
+  <mat-form-field>
+    <input matInput type="text" name="state" placeholder="State" formControlName="state" required>
+    <mat-error *ngIf="formGroup.get('state').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('state').errors?.invalidName">Invalid state</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="stateShort" placeholder="State abbreviation" formControlName="stateShort" required>
+    <mat-error *ngIf="formGroup.get('stateShort').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('stateShort').errors?.invalidShortname">Invalid state abbr. State abbr. template - AA</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="city" placeholder="City" formControlName="city" required>
+    <mat-error *ngIf="formGroup.get('city').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('city').errors?.invalidCity">Invalid city</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="street" placeholder="Street" formControlName="street" required>
+    <mat-error *ngIf="formGroup.get('street').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('street').errors?.invalidStreet">Invalid street</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="zipcode" placeholder="Zipcode" formControlName="zipcode" required>
+    <mat-error *ngIf="formGroup.get('zipcode').errors?.required">Required</mat-error>
+    <mat-error *ngIf="formGroup.get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
+  </mat-form-field>
+  <div>
+    <button mat-button matStepperPrevious>Back</button>
+    <button mat-button matStepperNext>Next</button>
+  </div>
+</form>

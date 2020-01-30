@@ -2,36 +2,65 @@
   <form [formGroup]="formGroup" class="form-list-form" (onSubmit)="save()">
     <mat-form-field>
       <input matInput placeholder="First name" type="text" name="firstname" formControlName="firstname" required>
+      <mat-error *ngIf="formGroup.get('firstname').errors?.required">Required</mat-error>
+      <mat-error *ngIf="formGroup.get('firstname').errors?.invalidName">
+        Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Last name" type="text" name="lastname" formControlName="lastname" required>
+      <mat-error *ngIf="formGroup.get('lastname').errors?.required">Required</mat-error>
+      <mat-error *ngIf="formGroup.get('lastname').errors?.invalidName">
+        Invalid name. Name can only contain: a-z, A-Z, 0-9, `
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Phone" type="tel" name="phone" formControlName="phone" required>
+      <input matInput type="text" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
+      <mat-error *ngIf="formGroup.get('phone').errors?.required">Required</mat-error>
+      <mat-error *ngIf="formGroup.get('phone').errors?.invalidPhone">
+        Invalid phone. Phone template: +0 (000)-000-0000
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Email" type="email" name="email" formControlName="email" required>
+      <mat-error *ngIf="formGroup.get('email').errors?.required">Required</mat-error>
+      <mat-error *ngIf="formGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
     </mat-form-field>
-    <!-- <mat-form-field>
-      <input matInput placeholder="State" type="text" name="state" formControlName="state" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="State abbreviation" type="text" name="stateShort" formControlName="stateShort" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="City" type="text" name="city" formControlName="city" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Street" type="text" name="street" formControlName="street" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Zipcode" type="text" name="zipcode" formControlName="zipcode" required>
-    </mat-form-field>
-    <file-upload type="file" name="avatar" formControlName="avatar"></file-upload> -->
+    <div formGroupName="address" class="form-list-subList">
+      <div formGroupName="state" class="form-list-subList">
+        <mat-form-field>
+          <input matInput placeholder="State" type="text" name="state" formControlName="name" required>
+          <mat-error *ngIf="formGroup.get('address').get('state').get('name').errors?.required">Required</mat-error>
+          <mat-error *ngIf="formGroup.get('address').get('state').get('name').errors?.invalidName">Invalid state</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="State abbreviation" type="text" name="stateShort" formControlName="shortname" required>
+          <mat-error *ngIf="formGroup.get('address').get('state').get('shortname').errors?.required">Required</mat-error>
+          <mat-error *ngIf="formGroup.get('address').get('state').get('shortname').errors?.invalidShortname">Invalid state abbr. State abbr. template - AA</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field>
+        <input matInput placeholder="City" type="text" name="city" formControlName="city" required>
+        <mat-error *ngIf="formGroup.get('address').get('city').errors?.required">Required</mat-error>
+        <mat-error *ngIf="formGroup.get('address').get('city').errors?.invalidCity">Invalid city</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Street" type="text" name="street" formControlName="street" required>
+        <mat-error *ngIf="formGroup.get('address').get('street').errors?.required">Required</mat-error>
+        <mat-error *ngIf="formGroup.get('address').get('street').errors?.invalidStreet">Invalid street</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Zipcode" type="text" name="zipcode" formControlName="zipcode" required>
+        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.required">Required</mat-error>
+        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
+      </mat-form-field>
+    </div>
+    <file-upload type="file" name="avatar" formControlName="avatar"></file-upload>
+    <mat-error *ngIf="formGroup.get('avatar').errors?.required">Required</mat-error>
     <div class="form-list-actions">
-      <button mat-button type="button" (click)="clear()">Clear</button>
-      <button mat-button type="button" (click)="reset()">Reset</button>
-      <button mat-button type="submit">Save</button>
+      <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
+      <button mat-button type="button" (click)="formGroup.reset()">Clear</button>
+      <button mat-button type="submit" (click)="submit.emit()">Save</button>
     </div>
   </form>
 </div>

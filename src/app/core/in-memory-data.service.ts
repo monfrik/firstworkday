@@ -22,7 +22,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'N Clinton Ave',
           zipcode: '08610',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 2,
@@ -39,7 +39,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Morris Ave',
           zipcode: '75001',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 3,
@@ -56,7 +56,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '96705',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 4,
@@ -73,7 +73,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '96705',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 5,
@@ -90,7 +90,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '96705',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 6,
@@ -107,7 +107,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '96705',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
       {
         id: 7,
@@ -124,25 +124,9 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '96705',
         },
-        avatar: 'https://www.thispersondoesnotexist.com/image'
+        avatar: ['https://www.thispersondoesnotexist.com/image']
       },
     ];
     return { users };
   }
 }
-
-// id
-//   firstname
-//   lastname
-//   phone
-//   email
-//     address: {
-//       state : {
-//         shortname
-//         name
-//       }
-//       city
-//       street
-//       zipcode
-//     }
-//       avatar
