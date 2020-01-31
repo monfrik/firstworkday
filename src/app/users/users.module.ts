@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -27,6 +28,7 @@ import { ThirdStepComponent } from './components/form-stepper/components/third-s
     MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
+    MatSnackBarModule,
     FileUploadModule,
     TextMaskModule,
     SharedModule,
@@ -43,4 +45,5 @@ import { ThirdStepComponent } from './components/form-stepper/components/third-s
     ThirdStepComponent,
   ],
 })
+
 export class UsersModule { }

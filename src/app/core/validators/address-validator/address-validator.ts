@@ -1,6 +1,6 @@
 export class AddressValidator {
   static getValidatorErrorMessage(validatorName: string) {
-    let config = {
+    const config = {
       required: 'Required',
       invalidCity: 'Invalid city',
       invalidStreet: 'Invalid street',
@@ -9,7 +9,7 @@ export class AddressValidator {
 
     return config[validatorName];
   }
-  
+
   static cityValidator(control) {
     if (!control.value) {
       return { invalidName: true };
@@ -47,5 +47,4 @@ export class AddressValidator {
     }
     return null;
   }
-
 }

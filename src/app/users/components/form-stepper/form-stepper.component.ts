@@ -5,14 +5,13 @@ import {
   Output,
   OnInit,
 } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import { UserValidator } from '@core/validators/user-validator';
 import { AddressValidator } from '@core/validators/address-validator';
 import { StateValidator } from '@core/validators/state-validator';
-import { UsersService } from '../../services/users';
 
 
 @Component({
@@ -21,26 +20,26 @@ import { UsersService } from '../../services/users';
   styleUrls: ['./form-stepper.component.scss'],
 })
 
-export class FormStepperComponent implements OnInit{
+export class FormStepperComponent implements OnInit {
 
   @Input()
-  public formGroup;
+  public formGroup: FormGroup;
 
   @Output()
-  public updateStepper = new EventEmitter();
+  public updateStepper: EventEmitter<void> = new EventEmitter();
 
   @Output()
-  public submit = new EventEmitter();
+  public submitStepper: EventEmitter<void> = new EventEmitter<void>();
 
   public constructor(
-    private readonly _formBuilder: FormBuilder
+    private readonly _formBuilder: FormBuilder,
   ) {}
 
   public ngOnInit(): void {
     this._formInitialization();
-    this._onValueChanges()
+    this._onValueChanges();
   }
-  
+
   private _onValueChanges(): void {
     this.formGroup.valueChanges
       .subscribe( data => {
@@ -54,17 +53,18 @@ export class FormStepperComponent implements OnInit{
       lastname: ['', [Validators.required, UserValidator.nameValidator]],
       phone: ['', [Validators.required, UserValidator.phoneValidator]],
       email: ['', [Validators.required, UserValidator.emailValidator]],
-    }))
+    }));
+
     this.formGroup.addControl('secondFormGroup', this._formBuilder.group({
       state: ['', [Validators.required, StateValidator.nameValidator]],
       stateShort: ['', [Validators.required, StateValidator.shortnameValidator]],
       city: ['', [Validators.required, AddressValidator.cityValidator]],
       street: ['', [Validators.required, AddressValidator.streetValidator]],
       zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
-    }))
+    }));
+
     this.formGroup.addControl('thirdFormGroup', this._formBuilder.group({
       avatar: [null, [Validators.required, FileUploadValidators.filesLimit(1)]],
-    }))
+    }));
   }
-
 }

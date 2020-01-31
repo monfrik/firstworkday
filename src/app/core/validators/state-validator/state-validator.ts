@@ -1,6 +1,6 @@
 export class StateValidator {
   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
-    let config = {
+    const config = {
       required: 'Required',
       invalidState: 'Invalid state',
       invalidShortname: 'Invalid state abbr. State abbr. template - AA',
@@ -8,7 +8,7 @@ export class StateValidator {
 
     return config[validatorName];
   }
-  
+
   static nameValidator(control) {
     if (!control.value) {
       return { invalidName: true };
@@ -32,5 +32,4 @@ export class StateValidator {
     }
     return null;
   }
-
 }

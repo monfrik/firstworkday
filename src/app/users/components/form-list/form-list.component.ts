@@ -1,5 +1,5 @@
 import {
-  Component, 
+  Component,
   Input,
   EventEmitter,
   Output,
@@ -28,18 +28,19 @@ import { StateValidator } from '@app/core/validators/state-validator';
 export class FormListComponent implements OnInit {
 
   public mask: Array<string | RegExp> = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  
+  public zipcodeMask: Array<string | RegExp> = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+
   @Input()
   public formGroup: FormGroup;
-  
-  @Output()
-  public updateList = new EventEmitter();
 
   @Output()
-  public submit = new EventEmitter();
+  public updateList: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  public submitList: EventEmitter<void> = new EventEmitter();
 
   public constructor(
-    private readonly _formBuilder: FormBuilder
+    private readonly _formBuilder: FormBuilder,
   ) {}
 
   public ngOnInit(): void {
@@ -59,6 +60,10 @@ export class FormListComponent implements OnInit {
     this.formGroup.addControl('lastname', new FormControl('', [Validators.required, UserValidator.nameValidator]));
     this.formGroup.addControl('phone', new FormControl('', [Validators.required, UserValidator.phoneValidator]));
     this.formGroup.addControl('email', new FormControl('', [Validators.required, UserValidator.emailValidator]));
+    this.formGroup.addControl(
+      'avatar',
+      new FormControl(null, [Validators.required, FileUploadValidators.filesLimit(1)])
+    );
     this.formGroup.addControl('address', this._formBuilder.group({
       state: this._formBuilder.group({
         name: ['', [Validators.required, StateValidator.nameValidator]],
@@ -67,8 +72,7 @@ export class FormListComponent implements OnInit {
       city: ['', [Validators.required, AddressValidator.cityValidator]],
       street: ['', [Validators.required, AddressValidator.streetValidator]],
       zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
-    }))
-    this.formGroup.addControl('avatar', new FormControl(null, [Validators.required, FileUploadValidators.filesLimit(1)]));
+    }));
   }
 
 }

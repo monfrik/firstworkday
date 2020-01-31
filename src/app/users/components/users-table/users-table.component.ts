@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
-import { Subscriber } from 'rxjs';
-
-import { UsersService } from "../../services/users";
-import { UserModel } from "../../models/user.model";
+import { UsersService } from '../../services/users';
+import { UserModel } from '../../models/user.model';
 
 
 @Component({
@@ -15,9 +13,8 @@ import { UserModel } from "../../models/user.model";
   styleUrls: ['./users-table.component.scss'],
   providers: [ UsersService ],
 })
-export class UsersTableComponent implements OnInit {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+export class UsersTableComponent implements OnInit {
 
   public users = new MatTableDataSource<UserModel>([]);
   public displayedColumns: string[] = [
@@ -33,11 +30,14 @@ export class UsersTableComponent implements OnInit {
     'avatar',
     'actions',
   ];
- 
-  constructor(
+
+  @ViewChild(MatPaginator, {static: true})
+  public paginator: MatPaginator;
+
+  public constructor(
     private readonly _usersService: UsersService,
-  ) { }
-  
+  ) {}
+
   public ngOnInit(): void {
     this._usersService
       .getUsers()
@@ -48,15 +48,11 @@ export class UsersTableComponent implements OnInit {
         },
         error: () => {},
         complete: () => {},
-      })
+      });
   }
 
   public applyFilter(filterValue: string): void {
     this.users.filter = filterValue.trim().toLowerCase();
-  }
-
-  public editItem(id: number): void {
-
   }
 
 }

@@ -1,5 +1,5 @@
 <div class="form-list">
-  <form [formGroup]="formGroup" class="form-list-form" (onSubmit)="save()">
+  <form [formGroup]="formGroup" class="form-list-form">
     <mat-form-field>
       <input matInput placeholder="First name" type="text" name="firstname" formControlName="firstname" required>
       <mat-error *ngIf="formGroup.get('firstname').errors?.required">Required</mat-error>
@@ -18,7 +18,7 @@
       <input matInput type="text" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
       <mat-error *ngIf="formGroup.get('phone').errors?.required">Required</mat-error>
       <mat-error *ngIf="formGroup.get('phone').errors?.invalidPhone">
-        Invalid phone. Phone template: +0 (000)-000-0000
+        Invalid phone. Phone template: (000)-000-0000
       </mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -50,9 +50,9 @@
         <mat-error *ngIf="formGroup.get('address').get('street').errors?.invalidStreet">Invalid street</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Zipcode" type="text" name="zipcode" formControlName="zipcode" required>
+        <input matInput placeholder="Zipcode" type="text" name="zipcode" [textMask]="{mask: zipcodeMask}" formControlName="zipcode" required>
         <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.required">Required</mat-error>
-        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
+        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.invalidZipcode">Invalid zip code. Zip code template: 000-000</mat-error>
       </mat-form-field>
     </div>
     <file-upload type="file" name="avatar" formControlName="avatar"></file-upload>

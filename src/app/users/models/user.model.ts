@@ -9,7 +9,7 @@ export class UserModel {
   public address: AddressModel;
   public avatar: Array<any>;
 
-  constructor (data: any = {}) {
+  public constructor(data: any = {}) {
     this.id = data.id || void 0;
     this.firstname = data.firstname || void 0;
     this.lastname = data.lastname || void 0;

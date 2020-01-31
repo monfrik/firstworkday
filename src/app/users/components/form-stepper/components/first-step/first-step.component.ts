@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 })
 
 export class FirstStepComponent {
-  
+
   public mask: Array<string | RegExp> = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   @Input()

@@ -9,20 +9,21 @@ import { UserNewComponent } from './components/user-new';
 const routes: Routes = [
   {
     path: '',
-    component: UsersTableComponent
+    component: UsersTableComponent,
   },
   {
     path: 'new',
-    component: UserNewComponent
+    component: UserNewComponent,
   },
   {
     path: ':id',
-    component: UserEditComponent
+    component: UserEditComponent,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
+
 export class UsersRoutingModule { }

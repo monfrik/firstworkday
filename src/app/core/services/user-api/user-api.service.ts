@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
-import { UserModel } from "@app/users/models/user.model";
+import { UserModel } from '@app/users/models/user.model';
+
 
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -13,8 +14,9 @@ const HTTP_OPTIONS = {
 const USERS_URL = 'api/users';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
+
 export class UserApiService {
 
   constructor(
@@ -25,21 +27,18 @@ export class UserApiService {
     return this._http
       .get<UserModel[]>(USERS_URL)
       .pipe(
-        map((data: any) => {
-          if (!data) {
+        map((users: any) => {
+          if (!users) {
             return [];
           }
-          return data.map(item => new UserModel(item));
+          return users.map(item => new UserModel(item));
         })
       );
   }
 
-  public addUser(data: UserModel): Observable<UserModel> {
+  public addUser(user: UserModel): Observable<UserModel> {
     return this._http
-      .post<UserModel>(USERS_URL, data, HTTP_OPTIONS)
-      .pipe(
-        tap((data)=> {console.log(data)})
-      )
+      .post<UserModel>(USERS_URL, user, HTTP_OPTIONS);
   }
 
 }

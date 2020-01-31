@@ -10,6 +10,8 @@ import { FormGroup } from '@angular/forms';
 
 export class SecondStepComponent {
 
+  public mask: Array<string | RegExp> = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+
   @Input()
   public formGroup: FormGroup;
 

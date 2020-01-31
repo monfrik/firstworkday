@@ -1,6 +1,6 @@
 export class UserValidator {
   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
-    let config = {
+    const config = {
       required: 'Required',
       invalidEmailAddress: 'Invalid email address',
       invalidName: 'Invalid name. Name can only contain: a-z, A-Z, 0-9, `',
@@ -9,7 +9,7 @@ export class UserValidator {
 
     return config[validatorName];
   }
-  
+
   static nameValidator(control: any = {}) {
     if (!control.value) {
       return { invalidName: true };
@@ -30,14 +30,17 @@ export class UserValidator {
     }
     if (
       !control.value.match(
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        new RegExp([
+          "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*",
+          '@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?'
+        ].join(''))
       )
     ) {
       return { invalidEmailAddress: true };
     }
     return null;
   }
-  
+
   static phoneValidator(control: any = {}) {
     if (!control.value) {
       return { invalidName: true };
@@ -51,5 +54,4 @@ export class UserValidator {
     }
     return null;
   }
-
 }

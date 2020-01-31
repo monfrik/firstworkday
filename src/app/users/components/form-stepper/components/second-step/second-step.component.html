@@ -20,9 +20,9 @@
     <mat-error *ngIf="formGroup.get('street').errors?.invalidStreet">Invalid street</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput type="text" name="zipcode" placeholder="Zipcode" formControlName="zipcode" required>
+    <input matInput type="text" name="zipcode" placeholder="Zipcode" [textMask]="{mask: mask}" formControlName="zipcode" required>
     <mat-error *ngIf="formGroup.get('zipcode').errors?.required">Required</mat-error>
-    <mat-error *ngIf="formGroup.get('zipcode').errors?.invalidZipcode">Invalid zip code</mat-error>
+    <mat-error *ngIf="formGroup.get('zipcode').errors?.invalidZipcode">Invalid zip code. Zip code template: 000-000</mat-error>
   </mat-form-field>
   <div>
     <button mat-button matStepperPrevious>Back</button>
