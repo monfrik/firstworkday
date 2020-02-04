@@ -1,66 +1,201 @@
 <div class="form-list">
   <form [formGroup]="formGroup" class="form-list-form">
+
     <mat-form-field>
-      <input matInput placeholder="First name" type="text" name="firstname" formControlName="firstname" required>
-      <mat-error *ngIf="formGroup.get('firstname').errors?.required">Required</mat-error>
-      <mat-error *ngIf="formGroup.get('firstname').errors?.invalidName">
-        Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-      </mat-error>
+      <input
+        formControlName="firstname"
+        matInput
+        type="text"
+        name="firstname"
+        placeholder="First name"
+        required
+      >
+      <mat-error
+        [inputControl]="formGroup.get('firstname')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid name. Name can only contain: a-z, A-Z, 0-9, `'
+        }"
+        error-filed
+      ></mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input matInput placeholder="Last name" type="text" name="lastname" formControlName="lastname" required>
-      <mat-error *ngIf="formGroup.get('lastname').errors?.required">Required</mat-error>
-      <mat-error *ngIf="formGroup.get('lastname').errors?.invalidName">
-        Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-      </mat-error>
+      <input
+        formControlName="lastname"
+        matInput
+        type="text"
+        name="lastname"
+        placeholder="Last name"
+        required
+      >
+      <mat-error
+        [inputControl]="formGroup.get('lastname')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid name. Name can only contain: a-z, A-Z, 0-9, `'
+        }"
+        error-filed
+      ></mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input matInput type="text" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
-      <mat-error *ngIf="formGroup.get('phone').errors?.required">Required</mat-error>
-      <mat-error *ngIf="formGroup.get('phone').errors?.invalidPhone">
-        Invalid phone. Phone template: (000)-000-0000
-      </mat-error>
+      <input
+        formControlName="phone"
+        [textMask]="{mask: phoneMask}"
+        matInput
+        type="text"
+        name="phone"
+        placeholder="Phone"
+        required
+      >
+      <mat-error
+        [inputControl]="formGroup.get('phone')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid phone. Phone template: (000)-000-0000'
+        }"
+        error-filed
+      ></mat-error>
     </mat-form-field>
+
     <mat-form-field>
-      <input matInput placeholder="Email" type="email" name="email" formControlName="email" required>
-      <mat-error *ngIf="formGroup.get('email').errors?.required">Required</mat-error>
-      <mat-error *ngIf="formGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
+      <input
+        formControlName="email"
+        matInput
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+      >
+      <mat-error
+        [inputControl]="formGroup.get('email')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid email address'
+        }"
+        error-filed
+      ></mat-error>
     </mat-form-field>
+    
     <div formGroupName="address" class="form-list-subList">
       <div formGroupName="state" class="form-list-subList">
+
         <mat-form-field>
-          <input matInput placeholder="State" type="text" name="state" formControlName="name" required>
-          <mat-error *ngIf="formGroup.get('address').get('state').get('name').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formGroup.get('address').get('state').get('name').errors?.invalidName">Invalid state</mat-error>
+          <input
+            formControlName="name"
+            matInput
+            type="text"
+            name="state"
+            placeholder="State"
+            required
+          >
+          <mat-error
+            [inputControl]="state.get('name')"
+            [errorMessages]="{
+              'required': 'this control is required',
+              'pattern': 'Invalid state'
+            }"
+            error-filed
+          ></mat-error>
         </mat-form-field>
+
         <mat-form-field>
-          <input matInput placeholder="State abbreviation" type="text" name="stateShort" formControlName="shortname" required>
-          <mat-error *ngIf="formGroup.get('address').get('state').get('shortname').errors?.required">Required</mat-error>
-          <mat-error *ngIf="formGroup.get('address').get('state').get('shortname').errors?.invalidShortname">Invalid state abbr. State abbr. template - AA</mat-error>
+          <input
+            formControlName="shortname"
+            matInput
+            type="text"
+            name="stateShort"
+            placeholder="State abbreviation"
+            required
+          >
+          <mat-error
+            [inputControl]="state.get('shortname')"
+            [errorMessages]="{
+              'required': 'this control is required',
+              'pattern': 'Invalid state abbr. State abbr. template - AA'
+            }"
+            error-filed
+          ></mat-error>
         </mat-form-field>
       </div>
+
       <mat-form-field>
-        <input matInput placeholder="City" type="text" name="city" formControlName="city" required>
-        <mat-error *ngIf="formGroup.get('address').get('city').errors?.required">Required</mat-error>
-        <mat-error *ngIf="formGroup.get('address').get('city').errors?.invalidCity">Invalid city</mat-error>
+        <input
+          formControlName="city"
+          matInput
+          type="text"
+          name="city"
+          placeholder="City"
+          required
+        >
+        <mat-error
+          [inputControl]="address.get('city')"
+          [errorMessages]="{
+            'required': 'this control is required',
+            'pattern': 'Invalid city'
+          }"
+          error-filed
+        ></mat-error>
       </mat-form-field>
+
       <mat-form-field>
-        <input matInput placeholder="Street" type="text" name="street" formControlName="street" required>
-        <mat-error *ngIf="formGroup.get('address').get('street').errors?.required">Required</mat-error>
-        <mat-error *ngIf="formGroup.get('address').get('street').errors?.invalidStreet">Invalid street</mat-error>
+        <input
+          formControlName="street"
+          matInput
+          type="text"
+          name="street"
+          placeholder="Street"
+          required
+        >
+        <mat-error
+          [inputControl]="address.get('street')"
+          [errorMessages]="{
+            'required': 'this control is required',
+            'pattern': 'Invalid street'
+          }"
+          error-filed
+        ></mat-error>
       </mat-form-field>
+
       <mat-form-field>
-        <input matInput placeholder="Zipcode" type="text" name="zipcode" [textMask]="{mask: zipcodeMask}" formControlName="zipcode" required>
-        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.required">Required</mat-error>
-        <mat-error *ngIf="formGroup.get('address').get('zipcode').errors?.invalidZipcode">Invalid zip code. Zip code template: 000-000</mat-error>
+        <input
+          formControlName="zipcode"
+          [textMask]="{mask: zipcodeMask}"
+          matInput
+          type="text"
+          name="zipcode"
+          placeholder="Zipcode"
+          required
+        >
+        <mat-error
+          error-filed
+          [inputControl]="address.get('zipcode')"
+          [errorMessages]="{
+            'required': 'this control is required',
+            'pattern': 'Invalid zip code. Zip code template: 000-000'
+          }"
+        ></mat-error>
       </mat-form-field>
     </div>
-    <file-upload type="file" name="avatar" formControlName="avatar"></file-upload>
-    <mat-error *ngIf="formGroup.get('avatar').errors?.required">Required</mat-error>
+
+    <file-upload
+      formControlName="avatar"
+      type="file"
+      name="avatar"
+    ></file-upload>
+    <mat-error
+      error-filed
+      [inputControl]="formGroup.get('firstname')"
+      [errorMessages]="{
+        'required': 'this control is required'
+      }"
+    ></mat-error>
+
     <div class="form-list-actions">
       <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
-      <button mat-button type="button" (click)="formGroup.reset()">Clear</button>
-      <button mat-button type="submit" (click)="submit.emit()">Save</button>
+      <button mat-button (click)="formGroup.reset()" type="button">Clear</button>
+      <button mat-button (click)="submit()" type="submit">Save</button>
     </div>
   </form>
 </div>

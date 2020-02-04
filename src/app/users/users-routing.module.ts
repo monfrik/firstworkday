@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { UsersTableComponent } from './components/users-table';
-import { UserEditComponent } from './components/user-edit';
-import { UserNewComponent } from './components/user-new';
+import {
+  UsersTableComponent,
+  UserEditComponent,
+  UserNewComponent
+} from './components';
 
 
 const routes: Routes = [

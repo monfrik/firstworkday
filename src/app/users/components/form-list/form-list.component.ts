@@ -1,22 +1,31 @@
 import {
   Component,
-  Input,
-  EventEmitter,
-  Output,
   OnInit,
 } from '@angular/core';
+
 import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
 
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
-import { UserValidator } from '@app/core/validators/user-validator';
-import { AddressValidator } from '@app/core/validators/address-validator';
-import { StateValidator } from '@app/core/validators/state-validator';
+import { UsersService } from '@app/users/services';
+import {
+  PHONE_MASK,
+  ZIPCODE_MASK,
+
+  NAME_PATTERN,
+  EMAIL_PATTERN,
+  PHONE_PATTERN,
+  CITY_PATTERN,
+  STREET_PATTERN,
+  ZIPCODE_PATTERN,
+  STATE_PATTERN,
+  STATE_SHORT_PATTERN,
+} from '@app/utils';
+import { UserModel } from '@app/users/models';
 
 
 @Component({
@@ -27,52 +36,72 @@ import { StateValidator } from '@app/core/validators/state-validator';
 
 export class FormListComponent implements OnInit {
 
-  public mask: Array<string | RegExp> = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  public zipcodeMask: Array<string | RegExp> = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+  public phoneMask: (string | RegExp)[] = PHONE_MASK;
+  public zipcodeMask: (string | RegExp)[] = ZIPCODE_MASK;
 
-  @Input()
   public formGroup: FormGroup;
-
-  @Output()
-  public updateList: EventEmitter<void> = new EventEmitter();
-
-  @Output()
-  public submitList: EventEmitter<void> = new EventEmitter();
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
+    private readonly _usersService: UsersService,
   ) {}
+
+  public get address() {
+    return this.formGroup.get('address');
+  }
+
+  public get state() {
+    return this.formGroup.get('address').get('state');
+  }
 
   public ngOnInit(): void {
     this._formInitialization();
-    this.onValueChanges();
+    this._onValueChanges();
+    this._getValueChanges();
   }
 
-  public onValueChanges(): void {
+  public submit(): void {
+    // this.submitList.emit();
+  }
+
+  private _onValueChanges(): void {
     this.formGroup.valueChanges
-      .subscribe( data => {
-        this.updateList.emit(data);
+      .subscribe({
+        next: formData => {
+          this._usersService
+            .patchUserForm(new UserModel(formData));
+        }
       });
   }
 
+  private _getValueChanges(): void {
+    this._usersService.userFormData$
+      .subscribe({
+        next: userData => {
+          this.formGroup.patchValue(userData, {
+            emitEvent: false,
+          });
+        }
+      })
+  }
+
   private _formInitialization(): void {
-    this.formGroup.addControl('firstname', new FormControl('', [Validators.required, UserValidator.nameValidator]));
-    this.formGroup.addControl('lastname', new FormControl('', [Validators.required, UserValidator.nameValidator]));
-    this.formGroup.addControl('phone', new FormControl('', [Validators.required, UserValidator.phoneValidator]));
-    this.formGroup.addControl('email', new FormControl('', [Validators.required, UserValidator.emailValidator]));
-    this.formGroup.addControl(
-      'avatar',
-      new FormControl(null, [Validators.required, FileUploadValidators.filesLimit(1)])
-    );
-    this.formGroup.addControl('address', this._formBuilder.group({
-      state: this._formBuilder.group({
-        name: ['', [Validators.required, StateValidator.nameValidator]],
-        shortname: ['', [Validators.required, StateValidator.shortnameValidator]],
-      }),
-      city: ['', [Validators.required, AddressValidator.cityValidator]],
-      street: ['', [Validators.required, AddressValidator.streetValidator]],
-      zipcode: ['', [Validators.required, AddressValidator.zipcodeValidator]],
-    }));
+    this.formGroup = this._formBuilder.group({
+      firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
+      lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
+      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
+      avatar: [null, [Validators.required, FileUploadValidators.filesLimit(1)]],
+      address: this._formBuilder.group({
+        state: this._formBuilder.group({
+          name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
+          shortname: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
+        }),
+        city: ['', [Validators.required, Validators.pattern(CITY_PATTERN)]],
+        street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
+        zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
+      })
+    })
   }
 
 }

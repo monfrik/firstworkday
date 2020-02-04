@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { PHONE_MASK } from '@app/utils';
+
 
 @Component({
   selector: 'app-first-step',
@@ -10,7 +12,7 @@ import { FormGroup } from '@angular/forms';
 
 export class FirstStepComponent {
 
-  public mask: Array<string | RegExp> = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public phoneMask: (string | RegExp)[] = PHONE_MASK;
 
   @Input()
   public formGroup: FormGroup;

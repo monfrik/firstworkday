@@ -19,7 +19,7 @@
       <ng-template matStepLabel>Done</ng-template>
       <div>
         <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
-        <button mat-button (click)="submit.emit()">Submit</button>
+        <button mat-button (click)="submit()">Submit</button>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
       </div>

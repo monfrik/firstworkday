@@ -11,16 +11,20 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { SharedModule } from '../shared/shared.module';
-import { UsersRoutingModule } from './users-routing.module';
-import { UsersTableComponent } from './components/users-table';
-import { UserEditComponent } from './components/user-edit';
-import { UserNewComponent } from './components/user-new';
-import { FormListComponent } from './components/form-list';
-import { FormStepperComponent } from './components/form-stepper';
-import { FirstStepComponent } from './components/form-stepper/components/first-step';
-import { SecondStepComponent } from './components/form-stepper/components/second-step';
-import { ThirdStepComponent } from './components/form-stepper/components/third-step';
 
+import { UsersRoutingModule } from './users-routing.module';
+import {
+  UsersTableComponent,
+  UserEditComponent,
+  UserNewComponent,
+  FormListComponent,
+  FormStepperComponent,
+  FirstStepComponent,
+  SecondStepComponent,
+  ThirdStepComponent,
+} from './components';
+
+import { ErrorFiledComponent } from '../core/components';
 
 @NgModule({
   imports: [
@@ -43,6 +47,7 @@ import { ThirdStepComponent } from './components/form-stepper/components/third-s
     FirstStepComponent,
     SecondStepComponent,
     ThirdStepComponent,
+    ErrorFiledComponent
   ],
 })
 

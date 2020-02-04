@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { ZIPCODE_MASK } from '@app/utils';
+
 
 @Component({
   selector: 'app-second-step',
@@ -10,7 +12,7 @@ import { FormGroup } from '@angular/forms';
 
 export class SecondStepComponent {
 
-  public mask: Array<string | RegExp> = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+  public mask: (string | RegExp)[] = ZIPCODE_MASK;
 
   @Input()
   public formGroup: FormGroup;

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
-import { UserApiService } from '@core/services/user-api';
-import { UserModel } from '../../models/user.model';
+import { UserApiService } from '@core/services';
+import { UserModel } from '../../models';
 
 
 @Injectable()
@@ -11,6 +11,7 @@ import { UserModel } from '../../models/user.model';
 export class UsersService {
 
   public users;
+  public userFormData$ = new Subject();
 
   public constructor(
     private readonly _userApiService: UserApiService,
@@ -24,6 +25,10 @@ export class UsersService {
   public addUser(data: UserModel): Observable<UserModel> {
     return this._userApiService
       .addUser(data);
+  }
+
+  public patchUserForm(userData: UserModel) {
+    this.userFormData$.next(new UserModel(userData));
   }
 
 }

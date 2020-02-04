@@ -1,30 +1,82 @@
 <form [formGroup]="formGroup" class="first-step step">
+
   <mat-form-field>
-    <input matInput type="text" name="firstname" placeholder="First name" formControlName="firstname" required>
-    <mat-error *ngIf="formGroup.get('firstname').errors?.required">Required</mat-error>
-    <mat-error *ngIf="formGroup.get('firstname').errors?.invalidName">
-      Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-    </mat-error>
+    <input
+      formControlName="firstname"
+      matInput
+      type="text"
+      name="firstname"
+      placeholder="First name"
+      required
+    >
+    <mat-error
+      [inputControl]="formGroup.get('firstname')"
+      [errorMessages]="{
+        'required': 'this control is required',
+        'pattern': 'Invalid name. Name can only contain: a-z, A-Z, 0-9, `'
+      }"
+      error-filed
+    ></mat-error>
   </mat-form-field>
+
   <mat-form-field>
-    <input matInput type="text" name="lastname" placeholder="Last name" formControlName="lastname" required>
-    <mat-error *ngIf="formGroup.get('lastname').errors?.required">Required</mat-error>
-    <mat-error *ngIf="formGroup.get('lastname').errors?.invalidName">
-      Invalid name. Name can only contain: a-z, A-Z, 0-9, `
-    </mat-error>
+    <input
+      formControlName="lastname"
+      matInput
+      type="text"
+      name="lastname"
+      placeholder="Last name"
+      required
+    >
+    <mat-error
+      [inputControl]="formGroup.get('lastname')"
+      [errorMessages]="{
+        'required': 'this control is required',
+        'pattern': 'Invalid name. Name can only contain: a-z, A-Z, 0-9, `'
+      }"
+      error-filed
+    ></mat-error>
   </mat-form-field>
+
   <mat-form-field>
-    <input matInput type="text" name="phone" placeholder="Phone" [textMask]="{mask: mask}" formControlName="phone" required>
-    <mat-error *ngIf="formGroup.get('phone').errors?.required">Required</mat-error>
-    <mat-error *ngIf="formGroup.get('phone').errors?.invalidPhone">
-      Invalid phone. Phone template: +0 (000)-000-0000
-    </mat-error>
+    <input
+      formControlName="phone"
+      [textMask]="{mask: phoneMask}"
+      matInput
+      type="text"
+      name="phone"
+      placeholder="Phone"
+      required
+    >
+    <mat-error
+      [inputControl]="formGroup.get('phone')"
+      [errorMessages]="{
+        'required': 'this control is required',
+        'pattern': 'Invalid phone. Phone template: (000)-000-0000'
+      }"
+      error-filed
+    ></mat-error>
   </mat-form-field>
+
   <mat-form-field>
-    <input matInput type="email" name="email" placeholder="Email" formControlName="email" required>
-    <mat-error *ngIf="formGroup.get('email').errors?.required">Required</mat-error>
-    <mat-error *ngIf="formGroup.get('email').errors?.invalidEmailAddress">Invalid email address</mat-error>
+    <input
+      formControlName="email"
+      matInput
+      type="email"
+      name="email"
+      placeholder="Email"
+      required
+    >
+    <mat-error
+      [inputControl]="formGroup.get('email')"
+      [errorMessages]="{
+        'required': 'this control is required',
+        'pattern': 'Invalid email address'
+      }"
+      error-filed
+    ></mat-error>
   </mat-form-field>
+
   <div>
     <button mat-button matStepperNext>Next</button>
   </div>

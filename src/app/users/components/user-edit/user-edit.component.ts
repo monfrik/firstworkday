@@ -7,7 +7,7 @@ import {
 
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
-import { UserModel } from '../../models/user.model';
+import { UserModel } from '../../models';
 
 @Component({
   selector: 'app-user-edit',
