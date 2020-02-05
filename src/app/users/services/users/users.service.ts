@@ -11,7 +11,7 @@ import { UserModel } from '../../models';
 export class UsersService {
 
   public users;
-  public userFormData$ = new Subject();
+  public userFormData$ = new Subject<{userData: UserModel, source: 'stepper' | 'list'}>();
 
   public constructor(
     private readonly _userApiService: UserApiService,
@@ -22,13 +22,19 @@ export class UsersService {
       .getUsers();
   }
 
+  public getUser(id: string): Observable<UserModel> {
+    return this._userApiService
+      .getUser(id);
+  }
+
   public addUser(data: UserModel): Observable<UserModel> {
     return this._userApiService
       .addUser(data);
   }
 
-  public patchUserForm(userData: UserModel) {
-    this.userFormData$.next(new UserModel(userData));
+  public patchUserForm(userData: UserModel, source: 'stepper' | 'list') {
+    console.log('UsersService patchUserForm', userData)
+    this.userFormData$.next({userData: userData, source: source});
   }
 
 }

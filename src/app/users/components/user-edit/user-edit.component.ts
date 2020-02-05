@@ -1,45 +1,75 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { UserModel } from '../../models';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { UsersService } from '../../services';
+import { UserModel } from '../../models/user.model';
+
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: 'user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
+  providers: [ UsersService ]
 })
 
-export class UserEditComponent implements OnInit {
-  public userForm: FormGroup;
+export class UserEditComponent implements OnInit, OnDestroy{
+  public formStepper;
+  public formList;
+  public initialData: UserModel;
 
-  public constructor(private _formBuilder: FormBuilder) {}
+  private _destroyed$ = new Subject();
+
+  public constructor(
+    private readonly _router: Router,
+    private readonly _snackBar: MatSnackBar,
+    private readonly _usersService: UsersService,
+    private readonly _route: ActivatedRoute
+  ) {}
 
   public ngOnInit(): void {
-    this.userForm = this._formBuilder.group({
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      address: this._formBuilder.group({
-        state: this._formBuilder.group({
-          name: ['', [Validators.required]],
-          shortname: ['', [Validators.required]],
-        }),
-        city: ['', [Validators.required]],
-        street: ['', [Validators.required]],
-        zipcode: ['', [Validators.required]],
-      }),
-      avatar: [[], [Validators.required, FileUploadValidators.filesLimit(1)]],
-    });
+    this._route.params
+      .subscribe(params => {
+        this._getUserData(params['id']);
+      })
   }
 
-  public clear(): void {}
-  public reset(): void {}
-  public save(): void {}
+  public ngOnDestroy(): void {
+    this._destroyed$.next();
+    this._destroyed$.complete();
+  }
+
+  public onSubmit(): void {
+    if (this.formList.valid) {
+      const newUser = new UserModel(this.formList.getRawValue());
+      this._usersService
+        .addUser(newUser)
+        .pipe(
+          takeUntil(this._destroyed$)
+        )
+        .subscribe(() => {
+          this._openSnackBar('New user added', 'Ok');
+          this._router.navigate(['/users']);
+        });
+    }
+  }
+
+  private _getUserData(id: string): void {
+    this._usersService
+      .getUser(id)
+      .subscribe(data => {
+        // this._usersService.patchUserForm(new UserModel(data));
+        // this.initialData = new UserModel(data);
+      })
+  }
+
+  private _openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, {
+      duration: 1000,
+    });
+  }
 }

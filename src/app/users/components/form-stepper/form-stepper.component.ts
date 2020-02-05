@@ -19,6 +19,7 @@ import {
 } from '@app/utils';
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -28,6 +29,9 @@ import { UserModel } from '@app/users/models';
 })
 
 export class FormStepperComponent implements OnInit {
+
+  @Input()
+  public initialData: UserModel | void;
 
   public formGroup: FormGroup;
 
@@ -50,17 +54,22 @@ export class FormStepperComponent implements OnInit {
     this.formGroup.valueChanges
       .subscribe({
         next: formData => {
+          console.log('FormStepperComponent _onValueChanges', formData);
           this._usersService
-            .patchUserForm(this._convertToModel(formData));
+            .patchUserForm(this._convertToModel(formData),  'stepper');
         }
       });
   }
 
   private _getValueChanges(): void {
     this._usersService.userFormData$
+      .pipe(
+        filter(data => data.source !== 'stepper')
+      )
       .subscribe({
-        next: userData => {
-          this._formUpdate(new UserModel(userData));
+        next: data => {
+          console.log('FormStepperComponent _getValueChanges', data.userData)
+          this._formUpdate(new UserModel(data.userData));
         }
       })
   }

@@ -36,6 +36,16 @@ export class UserApiService {
       );
   }
 
+  public getUser(id: string): Observable<UserModel> {
+    return this._http
+      .get<UserModel>(USERS_URL+'/'+id)
+      .pipe(
+        map((user: any) => {
+          return new UserModel(user);
+        })
+      );
+  }
+
   public addUser(user: UserModel): Observable<UserModel> {
     return this._http
       .post<UserModel>(USERS_URL, user, HTTP_OPTIONS);

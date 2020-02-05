@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {
@@ -26,12 +27,14 @@ import {
   STATE_SHORT_PATTERN,
 } from '@app/utils';
 import { UserModel } from '@app/users/models';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
-  styleUrls: ['./form-list.component.scss']
+  styleUrls: ['./form-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class FormListComponent implements OnInit {
@@ -59,7 +62,7 @@ export class FormListComponent implements OnInit {
     this._onValueChanges();
     this._getValueChanges();
   }
-
+  
   public submit(): void {
     // this.submitList.emit();
   }
@@ -68,17 +71,22 @@ export class FormListComponent implements OnInit {
     this.formGroup.valueChanges
       .subscribe({
         next: formData => {
+          console.log('FormListComponent _onValueChanges', formData);
           this._usersService
-            .patchUserForm(new UserModel(formData));
+            .patchUserForm(new UserModel(formData), 'list');
         }
       });
   }
 
   private _getValueChanges(): void {
     this._usersService.userFormData$
+      .pipe(
+        filter(data => data.source !== 'list')
+      )
       .subscribe({
-        next: userData => {
-          this.formGroup.patchValue(userData, {
+        next: data => {
+          console.log('FormListComponent _getValueChanges', data.userData)
+          this.formGroup.patchValue(data.userData, {
             emitEvent: false,
           });
         }

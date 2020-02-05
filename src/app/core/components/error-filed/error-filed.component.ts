@@ -22,8 +22,8 @@ export class ErrorFiledComponent {
       return {
         error,
         message: this.errorMessages[error]
-      }
-    })
+      };
+    });
   }
 
 }

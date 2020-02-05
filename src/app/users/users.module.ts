@@ -5,6 +5,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -37,6 +38,7 @@ import { ErrorFiledComponent } from '../core/components';
     TextMaskModule,
     SharedModule,
     UsersRoutingModule,
+    MatSortModule
   ],
   declarations: [
     UsersTableComponent,

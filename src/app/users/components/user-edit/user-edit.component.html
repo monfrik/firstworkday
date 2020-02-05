@@ -1,35 +1,10 @@
 <div class="user-edit">
-  <form [formGroup]="userForm" class="user-edit-form" (onSubmit)="save()">
-    <mat-form-field>
-      <input matInput placeholder="First name" type="text" name="firstname" formControlName="firstname" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Last name" type="text" name="lastname" formControlName="lastname" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Phone" type="tel" name="phone" formControlName="phone" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Email" type="email" name="email" formControlName="email" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="State" type="text" name="state" formControlName="name" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="State abbreviation" type="text" name="stateShort" formControlName="shortname" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="City" type="text" name="city" formControlName="city" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Street" type="text" name="street" formControlName="street" required>
-    </mat-form-field>
-    <input matInput placeholder="Zipcode" type="text" name="zipcode" formControlName="zipcode" required>
-    <mat-form-field>
-      <file-upload type="file" name="avatar" formControlName="avatar"></file-upload>
-    </mat-form-field>
-    <button mat-button type="button" (click)="clear()">Clear</button>
-    <button mat-button type="button" (click)="reset()">Reset</button>
-    <button mat-button type="submit">Save</button>
-  </form>
+  <mat-tab-group>
+    <mat-tab label="Form">
+      <app-form-list></app-form-list>
+    </mat-tab>
+    <mat-tab label="Stepper">
+      <app-form-stepper></app-form-stepper>
+    </mat-tab>
+  </mat-tab-group>
 </div>

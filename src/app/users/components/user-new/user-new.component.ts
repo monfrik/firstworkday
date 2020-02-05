@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,7 +25,6 @@ export class UserNewComponent implements OnDestroy {
   private _destroyed$ = new Subject();
 
   public constructor(
-    private readonly _formBuilder: FormBuilder,
     private readonly _router: Router,
     private readonly _snackBar: MatSnackBar,
     private readonly _usersService: UsersService,
@@ -57,53 +55,5 @@ export class UserNewComponent implements OnDestroy {
       duration: 1000,
     });
   }
-
-  // public onUpdateStepper(data: any = {}): void {
-  //   this.formList.patchValue({
-  //     firstname: data.firstFormGroup.firstname,
-  //     lastname: data.firstFormGroup.lastname,
-  //     phone: data.firstFormGroup.phone,
-  //     email: data.firstFormGroup.email,
-  //     address: {
-  //       state: {
-  //         name: data.secondFormGroup.state,
-  //         shortname: data.secondFormGroup.stateShort,
-  //       },
-  //       city: data.secondFormGroup.city,
-  //       street: data.secondFormGroup.street,
-  //       zipcode: data.secondFormGroup.zipcode,
-  //     },
-  //     avatar: data.thirdFormGroup.avatar,
-  //   }, {
-  //     emitEvent: false,
-  //   });
-  // }
-
-  // public onUpdateList(data: any = {}): void {
-  //   this.formStepper.get('firstFormGroup').patchValue({
-  //     firstname: data.firstname,
-  //     lastname: data.lastname,
-  //     phone: data.phone,
-  //     email: data.email,
-  //   }, {
-  //     emitEvent: false
-  //   });
-
-  //   this.formStepper.get('secondFormGroup').patchValue({
-  //     state: data.address.state.name,
-  //     stateShort: data.address.state.shortname,
-  //     city: data.address.city,
-  //     street: data.address.street,
-  //     zipcode: data.address.zipcode,
-  //   }, {
-  //     emitEvent: false
-  //   });
-
-  //   this.formStepper.get('thirdFormGroup').patchValue({
-  //     avatar: data.avatar,
-  //   }, {
-  //     emitEvent: false
-  //   });
-  // }
 
 }
