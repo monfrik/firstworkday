@@ -1,5 +1,5 @@
 <div class="form-stepper">
-  <mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-horizontal-stepper [linear]="false" #stepper>
     <mat-step [stepControl]="formGroup.get('firstFormGroup')">
       <ng-template matStepLabel>Fill out your pesonal data</ng-template>
       <app-first-step [formGroup]="formGroup.get('firstFormGroup')"></app-first-step>

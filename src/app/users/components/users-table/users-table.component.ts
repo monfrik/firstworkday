@@ -6,6 +6,12 @@ import { MatSort } from '@angular/material/sort';
 
 import { UsersService } from '../../services';
 import { UserModel } from '../../models/user.model';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import {
+  PHONE_PATTERN,
+  STATE_PATTERN,
+} from '@app/utils';
 
 
 @Component({
@@ -16,8 +22,8 @@ import { UserModel } from '../../models/user.model';
 })
 
 export class UsersTableComponent implements OnInit {
-
-  // public users = new MatTableDataSource<UserModel[]>([]);
+  
+  public filtersForm: FormGroup;
   public users: MatTableDataSource<any>;
   public displayedColumns: string[] = [
     'position',
@@ -41,9 +47,11 @@ export class UsersTableComponent implements OnInit {
 
   public constructor(
     private readonly _usersService: UsersService,
+    private readonly _formBuilder: FormBuilder,
   ) {}
 
   public ngOnInit(): void {
+    this._initialisationForm();
     this._usersService
     .getUsers()
     .subscribe({
@@ -57,25 +65,20 @@ export class UsersTableComponent implements OnInit {
       });
   }
 
-  public sortTable(attr) {
-    // console.log(this.users.data)
-    // this.users.data = this.users.data.sort((a, b) => {
-    //   console.log(a)
-    //   console.log(b.firstname.toLowerCase)
-    //   if (a.firstname.toLowerCase < b.firstname.toLowerCase) {
-    //     return -1
-    //   }
-    //   return 1
-    // })
-  }
-
   public sortUsers(sortEvent): void {
     console.log(sortEvent);
-    
   }
 
   public applyFilter(filterValue: string): void {
     this.users.filter = filterValue.trim().toLowerCase();
+  }
+
+  private _initialisationForm(){
+    this.filtersForm = this._formBuilder.group({
+      id: [[], []],
+      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
+    })
   }
 
 }

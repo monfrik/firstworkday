@@ -82,14 +82,12 @@
       <div formGroupName="state" class="form-list-subList">
 
         <mat-form-field>
-          <input
-            formControlName="name"
-            matInput
-            type="text"
-            name="state"
-            placeholder="State"
-            required
-          >
+          <mat-label>State</mat-label>
+          <mat-select formControlName="name" (selectionChange)="onChangeSelect($event?.value)">
+            <mat-option *ngFor="let state of states" [value]="state.name">
+              {{state.name}}
+            </mat-option>
+          </mat-select>
           <mat-error
             [inputControl]="state.get('name')"
             [errorMessages]="{
@@ -102,11 +100,12 @@
 
         <mat-form-field>
           <input
-            formControlName="shortname"
             matInput
             type="text"
             name="stateShort"
             placeholder="State abbreviation"
+            disabled
+            [value]="state.get('shortname').value"
             required
           >
           <mat-error
@@ -118,6 +117,7 @@
             error-filed
           ></mat-error>
         </mat-form-field>
+
       </div>
 
       <mat-form-field>

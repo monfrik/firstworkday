@@ -25,6 +25,7 @@ import {
   ZIPCODE_PATTERN,
   STATE_PATTERN,
   STATE_SHORT_PATTERN,
+  STATES,
 } from '@app/utils';
 import { UserModel } from '@app/users/models';
 import { filter } from 'rxjs/operators';
@@ -41,6 +42,8 @@ export class FormListComponent implements OnInit {
 
   public phoneMask: (string | RegExp)[] = PHONE_MASK;
   public zipcodeMask: (string | RegExp)[] = ZIPCODE_MASK;
+
+  public states = STATES;
 
   public formGroup: FormGroup;
 
@@ -62,9 +65,14 @@ export class FormListComponent implements OnInit {
     this._onValueChanges();
     this._getValueChanges();
   }
-  
+
   public submit(): void {
     // this.submitList.emit();
+  }
+
+  public onChangeSelect(stateName): void {
+    const currentState = STATES.find(element => element.name === stateName);
+    this.state.get('shortname').patchValue(currentState.shortname);
   }
 
   private _onValueChanges(): void {

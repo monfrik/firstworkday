@@ -82,8 +82,8 @@ export class FormStepperComponent implements OnInit {
       email: data.firstFormGroup.email,
       address: {
         state: {
-          name: data.secondFormGroup.state,
-          shortname: data.secondFormGroup.stateShort,
+          name: data.secondFormGroup.name,
+          shortname: data.secondFormGroup.shortname,
         },
         city: data.secondFormGroup.city,
         street: data.secondFormGroup.street,
@@ -102,8 +102,8 @@ export class FormStepperComponent implements OnInit {
         email: data.email,
       },
       secondFormGroup: {
-        state: data.address.state.name,
-        stateShort: data.address.state.shortname,
+        name: data.address.state.name,
+        shortname: data.address.state.shortname,
         city: data.address.city,
         street: data.address.street,
         zipcode: data.address.zipcode,
@@ -125,8 +125,8 @@ export class FormStepperComponent implements OnInit {
         email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
       }),
       secondFormGroup: this._formBuilder.group({
-        state: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
-        stateShort: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
+        name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
+        shortname: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
         city: ['', [Validators.required, Validators.pattern(CITY_PATTERN)]],
         street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
         zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],

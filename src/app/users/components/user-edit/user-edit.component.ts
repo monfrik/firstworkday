@@ -62,7 +62,7 @@ export class UserEditComponent implements OnInit, OnDestroy{
     this._usersService
       .getUser(id)
       .subscribe(data => {
-        // this._usersService.patchUserForm(new UserModel(data));
+        this._usersService.patchUserForm(new UserModel(data), 'service');
         // this.initialData = new UserModel(data);
       })
   }

@@ -6,6 +6,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -23,9 +26,9 @@ import {
   FirstStepComponent,
   SecondStepComponent,
   ThirdStepComponent,
-} from './components';
+} from './components'; 
 
-import { ErrorFiledComponent } from '../core/components';
+import { ErrorFiledComponent } from '@core/components';
 
 @NgModule({
   imports: [
@@ -38,7 +41,10 @@ import { ErrorFiledComponent } from '../core/components';
     TextMaskModule,
     SharedModule,
     UsersRoutingModule,
-    MatSortModule
+    MatSortModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatIconModule
   ],
   declarations: [
     UsersTableComponent,
