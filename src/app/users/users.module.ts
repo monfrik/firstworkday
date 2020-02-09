@@ -26,6 +26,7 @@ import {
   FirstStepComponent,
   SecondStepComponent,
   ThirdStepComponent,
+  TableFilterComponent
 } from './components'; 
 
 import { ErrorFiledComponent } from '@core/components';
@@ -55,7 +56,8 @@ import { ErrorFiledComponent } from '@core/components';
     FirstStepComponent,
     SecondStepComponent,
     ThirdStepComponent,
-    ErrorFiledComponent
+    TableFilterComponent,
+    ErrorFiledComponent,
   ],
 })
 

@@ -1,0 +1,16 @@
+<form [formGroup]="filtersForm" class="form-list-form">
+  <mat-form-field>
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let user of data" [selectable]="true" [removable]="true">
+        {{user?.firstname}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+          formControlName="userName"
+          [matChipInputFor]="chipList"
+          placeholder="New fruit..."
+        >
+    </mat-chip-list>
+  </mat-form-field>
+  <!-- <input formControlName="userName"> -->
+</form>

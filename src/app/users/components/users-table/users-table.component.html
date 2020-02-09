@@ -4,25 +4,7 @@
     <span>Table of users</span>
   </mat-toolbar>
 
-  <form [formGroup]="filtersForm" class="form-list-form">
-    <mat-form-field>
-      <mat-chip-list #chipList>
-        <mat-chip
-          *ngFor="let user of users.data"
-          [selectable]="true"
-          [removable]="true"
-          >
-          {{user?.firstname}}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-        <input
-          placeholder="New fruit..."
-          [matChipInputFor]="chipList"
-        >
-      </mat-chip-list>
-    </mat-form-field>
-  </form>
-
+  <app-table-filter [data]="users?.data"></app-table-filter>
 
   <!-- <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">

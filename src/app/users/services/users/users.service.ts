@@ -11,7 +11,7 @@ import { UserModel } from '../../models';
 export class UsersService {
 
   public users;
-  public userFormData$ = new Subject<{userData: UserModel, source: 'stepper' | 'list'}>();
+  public userFormData$ = new Subject<{userData: UserModel, source: 'stepper' | 'list' | 'service'}>();
 
   public constructor(
     private readonly _userApiService: UserApiService,
