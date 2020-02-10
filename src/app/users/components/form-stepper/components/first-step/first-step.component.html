@@ -77,6 +77,27 @@
     ></mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input
+      formControlName="birthday"
+      [matDatepicker]="picker"
+      matInput
+      name="birthday"
+      placeholder="Birthday"
+      required
+    >
+    <mat-error
+      [inputControl]="formGroup.get('birthday')"
+      [errorMessages]="{
+        'required': 'this control is required',
+        'pattern': 'Invalid birthday'
+      }"
+      error-filed
+    ></mat-error>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
   <div>
     <button mat-button matStepperNext>Next</button>
   </div>

@@ -24,6 +24,7 @@ export class UsersTableComponent implements OnInit {
     'lastname',
     'phone',
     'email',
+    'birthday',
     'addressStateName',
     'addressCity',
     'addressStreet',
@@ -60,8 +61,8 @@ export class UsersTableComponent implements OnInit {
     console.log(sortEvent);
   }
 
-  public applyFilter(filterValue: string): void {
-    this.users.filter = filterValue.trim().toLowerCase();
+  public onApllyFilter(filtres): void {
+    console.log('onApllyFilter', filtres);
   }
 
 }

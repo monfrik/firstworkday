@@ -1,25 +1,30 @@
 import {
   Component,
+  OnInit,
   Input,
-  OnInit
+  Output,
+  EventEmitter,
 } from '@angular/core';
 
 import {
   FormGroup,
   FormBuilder,
   Validators,
-  FormControl
 } from '@angular/forms';
 
-import { UserModel } from '@app/users/models';
-
 import { Observable } from 'rxjs';
-import { startWith, map, tap } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
+
+import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
+
+import { UserModel } from '@app/users/models';
 
 import {
   PHONE_PATTERN,
   STATE_PATTERN,
   NAME_PATTERN,
+  PHONE_MASK,
+  STATES,
 } from '@app/utils';
 
 
@@ -32,10 +37,16 @@ import {
 export class TableFilterComponent implements OnInit {
 
   @Input()
-  public data: UserModel[];
+  public data: UserModel[] = [];
+
+  @Output()
+  public applyFilter = new EventEmitter;
 
   public filtersForm: FormGroup;
-  public filteredData: Observable<UserModel[]>;
+  public filteredUsers: Observable<UserModel[]>;
+  public users: UserModel[] = [];
+  public phoneMask: (string | RegExp)[] = PHONE_MASK;
+  public states = STATES;
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -46,39 +57,76 @@ export class TableFilterComponent implements OnInit {
     this._formSubscribe();
   }
 
+  public add(event: MatChipInputEvent): void {
+    event.input.value = '';
+    this.filtersForm.get('userName').setValue('');
+  }
+
+  public remove(user: UserModel): void {
+    const index = this.users.indexOf(user);
+    if (index >= 0) {
+      this.users.splice(index, 1);
+    }
+  }
+
+  public selected(event: MatAutocompleteSelectedEvent): void {
+    this.users.push(this.data[event.option.value-1]);
+    this.filtersForm.get('userName').setValue('');
+  }
+
+  public submit() {
+    if (this.filtersForm.touched && this.filtersForm.valid) {
+      const usersId = this.users.map(element => element.id-1);
+      const currentState = this.filtersForm.get('state').value;
+      const dateStart = this.filtersForm.get('dateStart').value;
+      const dateEnd = this.filtersForm.get('dateEnd').value;
+      const state = STATES.find(element => element.name === currentState);
+
+      const emitData = {
+        usersId,
+        phone: this.filtersForm.get('phone').value || '',
+        state: state ? state.shortname : '',
+        dateStart,
+        dateEnd,
+      }
+      
+      this.applyFilter.emit(emitData);
+    }
+  }
+
   private _initialisationForm(): void {
     this.filtersForm = this._formBuilder.group({
       userName: ['', [Validators.pattern(NAME_PATTERN)]],
       phone: ['', [Validators.pattern(PHONE_PATTERN)]],
       state: ['', [Validators.pattern(STATE_PATTERN)]],
-    })
+      dateStart: ['', []],
+      dateEnd: ['', []],
+    });
   }
 
   private _formSubscribe(): void {
-    this.filtersForm.valueChanges
-      .subscribe({
-        next: (formData) => {
-          console.log(formData);
-          // this.filteredData = 
-        }
-      })
-    // this.filteredData = this.filtersForm.valueChanges
-    //   .pipe(
-    //     startWith(null),
-    //     tap(_ => console.log('1234567')),
-    //     map(_ => console.log('1234567')),
-    //     // map((userName: string | null) => userName ? this._filter(userName) : this.data.slice())
-    //   );
+    this.filteredUsers = this.filtersForm.valueChanges
+      .pipe(
+        startWith(null),
+        map((formData: any | null) => {
+          if (formData) {
+            return this._filter(formData.userName);
+          }
+          if (this.data) {
+            return this.data.slice();
+          }
+          return [];
+        })
+      );
   }
 
   private _filter(value: string): UserModel[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = value.toString().toLowerCase();
 
     return this.data.filter((user: UserModel) => {
-      const userName = user.firstname.toLowerCase() + ' ' + user.lastname.toLowerCase()
+      const userName = user.firstname.toLowerCase() + ' ' + user.lastname.toLowerCase();
       return userName.indexOf(filterValue) > -1;
-    })
+    });
   }
-
 
 }

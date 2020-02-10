@@ -18,8 +18,8 @@ import {
   ZIPCODE_MASK,
 
   NAME_PATTERN,
-  EMAIL_PATTERN,
   PHONE_PATTERN,
+  EMAIL_PATTERN,
   CITY_PATTERN,
   STREET_PATTERN,
   ZIPCODE_PATTERN,
@@ -108,6 +108,7 @@ export class FormListComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
       email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
       avatar: [null, [Validators.required, FileUploadValidators.filesLimit(1)]],
+      birthday: ['', [Validators.required]],
       address: this._formBuilder.group({
         state: this._formBuilder.group({
           name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],

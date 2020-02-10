@@ -9,8 +9,8 @@ import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import {
   NAME_PATTERN,
-  EMAIL_PATTERN,
   PHONE_PATTERN,
+  EMAIL_PATTERN,
   CITY_PATTERN,
   STREET_PATTERN,
   ZIPCODE_PATTERN,
@@ -80,6 +80,7 @@ export class FormStepperComponent implements OnInit {
       lastname: data.firstFormGroup.lastname,
       phone: data.firstFormGroup.phone,
       email: data.firstFormGroup.email,
+      birthday: data.firstFormGroup.birthday,
       address: {
         state: {
           name: data.secondFormGroup.name,
@@ -100,6 +101,7 @@ export class FormStepperComponent implements OnInit {
         lastname: data.lastname,
         phone: data.phone,
         email: data.email,
+        birthday: data.birthday,
       },
       secondFormGroup: {
         name: data.address.state.name,
@@ -123,6 +125,7 @@ export class FormStepperComponent implements OnInit {
         lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
         phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
         email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
+        birthday: ['', [Validators.required]],
       }),
       secondFormGroup: this._formBuilder.group({
         name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],

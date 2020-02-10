@@ -9,6 +9,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -45,6 +49,10 @@ import { ErrorFiledComponent } from '@core/components';
     MatSortModule,
     MatSelectModule,
     MatChipsModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
     MatIconModule
   ],
   declarations: [
@@ -59,6 +67,7 @@ import { ErrorFiledComponent } from '@core/components';
     TableFilterComponent,
     ErrorFiledComponent,
   ],
+  // providers: [MatDatepickerModule]
 })
 
 export class UsersModule { }

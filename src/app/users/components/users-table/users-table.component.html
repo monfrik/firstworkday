@@ -4,13 +4,21 @@
     <span>Table of users</span>
   </mat-toolbar>
 
-  <app-table-filter [data]="users?.data"></app-table-filter>
+  <app-table-filter
+    *ngIf="users?.data"
+    [data]="users?.data"
+    (applyFilter)="onApllyFilter($event)"
+  ></app-table-filter>
 
-  <!-- <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-  </mat-form-field> -->
-
-  <table mat-table [dataSource]="users" class="users-table-table" matSort matSortActive="addressStreet" matSortDirective (matSortChange)=sortUsers($event)>
+  <table
+    mat-table
+    matSort
+    matSortDirective
+    [dataSource]="users"
+    matSortActive="addressStreet"
+    (matSortChange)="sortUsers($event)"
+    class="users-table-table"
+  >
 
     <ng-container matColumnDef="position">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
@@ -35,6 +43,11 @@
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
       <td mat-cell *matCellDef="let element"> {{element?.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="birthday">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Birthday </th>
+      <td mat-cell *matCellDef="let element"> {{element?.birthday | date}} </td>
     </ng-container>
 
     <ng-container matColumnDef="addressStateName">
