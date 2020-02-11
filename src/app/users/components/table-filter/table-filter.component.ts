@@ -45,8 +45,12 @@ export class TableFilterComponent implements OnInit {
   public filtersForm: FormGroup;
   public filteredUsers: Observable<UserModel[]>;
   public users: UserModel[] = [];
-  public phoneMask: (string | RegExp)[] = PHONE_MASK;
+  
   public states = STATES;
+
+  public dateStart = new Date(-8640000000000);
+  public dateEnd = new Date();
+  public currentDate = new Date();
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -55,6 +59,13 @@ export class TableFilterComponent implements OnInit {
   public ngOnInit(): void {
     this._initialisationForm();
     this._formSubscribe();
+  }
+
+  public get submitColor(): string {
+    if (this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)) {
+      return 'warn';
+    }
+    return '';
   }
 
   public add(event: MatChipInputEvent): void {
@@ -74,18 +85,26 @@ export class TableFilterComponent implements OnInit {
     this.filtersForm.get('userName').setValue('');
   }
 
-  public submit() {
+  public changeDate(): void {
+    if (this.filtersForm.value.dateStart) {
+      this.dateStart.setTime(this.filtersForm.value.dateStart.getTime());
+    }
+    if (this.filtersForm.value.dateEnd) {
+      this.dateEnd.setTime(this.filtersForm.value.dateEnd.getTime());
+    }
+  }
+
+  public submit(): void {
     if (this.filtersForm.touched && this.filtersForm.valid) {
-      const usersId = this.users.map(element => element.id-1);
+      const usersId = this.users.map(element => element.id);
       const currentState = this.filtersForm.get('state').value;
-      const dateStart = this.filtersForm.get('dateStart').value;
-      const dateEnd = this.filtersForm.get('dateEnd').value;
+      const {dateStart, dateEnd, phone} = this.filtersForm.value;
       const state = STATES.find(element => element.name === currentState);
 
       const emitData = {
-        usersId,
-        phone: this.filtersForm.get('phone').value || '',
         state: state ? state.shortname : '',
+        usersId,
+        phone,
         dateStart,
         dateEnd,
       }
@@ -97,10 +116,10 @@ export class TableFilterComponent implements OnInit {
   private _initialisationForm(): void {
     this.filtersForm = this._formBuilder.group({
       userName: ['', [Validators.pattern(NAME_PATTERN)]],
-      phone: ['', [Validators.pattern(PHONE_PATTERN)]],
+      phone: ['', [Validators.pattern(/^\d{1,10}$/)]],
       state: ['', [Validators.pattern(STATE_PATTERN)]],
-      dateStart: ['', []],
-      dateEnd: ['', []],
+      dateStart: [null],
+      dateEnd: [null],
     });
   }
 

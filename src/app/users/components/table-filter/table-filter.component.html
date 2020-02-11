@@ -1,6 +1,7 @@
 <form [formGroup]="filtersForm" class="table-filter" (ngSubmit)="submit()">
 
   <mat-form-field class="table-filter-field">
+
     <mat-chip-list #chipList>
       <mat-chip
         *ngFor="let user of users"
@@ -11,6 +12,7 @@
         {{user?.firstname}}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
+
       <input
         formControlName="userName"
         [matChipInputFor]="chipList"
@@ -19,7 +21,16 @@
         matInput
         placeholder="New user..."
       >
+      <mat-error
+        [inputControl]="filtersForm.get('userName')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid name'
+        }"
+        error-filed
+      ></mat-error>
     </mat-chip-list>
+
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <mat-option
         *ngFor="let user of filteredUsers | async"
@@ -28,12 +39,12 @@
         {{user.firstname + ' ' + user.lastname}}
       </mat-option>
     </mat-autocomplete>
+
   </mat-form-field>
 
   <mat-form-field class="table-filter-field">
     <input
       formControlName="phone"
-      [textMask]="{mask: phoneMask}"
       matInput
       type="text"
       name="phone"
@@ -43,7 +54,7 @@
       [inputControl]="filtersForm.get('phone')"
       [errorMessages]="{
         'required': 'this control is required',
-        'pattern': 'Invalid phone. Phone template: (000)-000-0000'
+        'pattern': 'Invalid phone'
       }"
       error-filed
     ></mat-error>
@@ -66,10 +77,12 @@
         formControlName="dateStart"
         [matDatepicker]="pickerStart"
         matInput
+        (dateChange)="changeDate()"
         name="dateStart"
         placeholder="date start"
-      >
-      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        [max]="dateEnd"
+        >
+        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
       <mat-datepicker #pickerStart></mat-datepicker>
     </mat-form-field>
 
@@ -80,8 +93,11 @@
         formControlName="dateEnd"
         [matDatepicker]="pickerEnd"
         matInput
+        (dateChange)="changeDate()"
         name="dateEnd"
         placeholder="date end"
+        [min]="dateStart"
+        [max]="currentDate"
       >
       <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
       <mat-datepicker #pickerEnd></mat-datepicker>
@@ -89,6 +105,10 @@
   </div>
 
   <div class="form-list-actions">
-    <button mat-stroked-button type="submit">Save</button>
+    <button
+      mat-raised-button
+      [color]="submitColor"
+      type="submit"
+    >Search with filtres</button>
   </div>
 </form>
