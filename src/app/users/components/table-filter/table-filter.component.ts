@@ -6,14 +6,16 @@ import {
   EventEmitter,
 } from '@angular/core';
 
+import { ActivatedRoute } from '@angular/router';
+
 import {
   FormGroup,
   FormBuilder,
   Validators,
 } from '@angular/forms';
 
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { startWith, map, takeUntil } from 'rxjs/operators';
 
 import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
 
@@ -48,17 +50,21 @@ export class TableFilterComponent implements OnInit {
   
   public states = STATES;
 
-  public dateStart = new Date(-8640000000000);
+  public dateStart: Date;
   public dateEnd = new Date();
   public currentDate = new Date();
 
+  private _destroyed$ = new Subject<void>();
+
   public constructor(
     private readonly _formBuilder: FormBuilder,
+    private readonly _route: ActivatedRoute,
   ) {}
 
   public ngOnInit(): void {
     this._initialisationForm();
     this._formSubscribe();
+    this._initFiltres();
   }
 
   public get submitColor(): string {
@@ -85,17 +91,29 @@ export class TableFilterComponent implements OnInit {
     this.filtersForm.get('userName').setValue('');
   }
 
-  public changeDate(): void {
-    if (this.filtersForm.value.dateStart) {
-      this.dateStart.setTime(this.filtersForm.value.dateStart.getTime());
+  // public changeDate(): void {
+  //   if (this.filtersForm.value.dateStart) {
+  //     this.dateStart.setTime(this.filtersForm.value.dateStart.getTime());
+  //   }
+  //   if (this.filtersForm.value.dateEnd) {
+  //     this.dateEnd.setTime(this.filtersForm.value.dateEnd.getTime());
+  //   }
+  // }
+
+  public resetForm(): void {
+    this.filtersForm.reset();
+    const emitData = {
+      usersId: [],
+      state: '',
+      phone: '',
+      dateStart: '',
+      dateEnd: '',
     }
-    if (this.filtersForm.value.dateEnd) {
-      this.dateEnd.setTime(this.filtersForm.value.dateEnd.getTime());
-    }
+    this.applyFilter.emit(emitData);
   }
 
   public submit(): void {
-    if (this.filtersForm.touched && this.filtersForm.valid) {
+    if (this.filtersForm.valid) {
       const usersId = this.users.map(element => element.id);
       const currentState = this.filtersForm.get('state').value;
       const {dateStart, dateEnd, phone} = this.filtersForm.value;
@@ -124,28 +142,91 @@ export class TableFilterComponent implements OnInit {
   }
 
   private _formSubscribe(): void {
-    this.filteredUsers = this.filtersForm.valueChanges
+    // this.filteredUsers = this.filtersForm.valueChanges
+    //   .pipe(
+    //     startWith(null),
+    //     map((formData: any | null) => {
+    //       console.log('formData', formData);
+    //       console.log('1')
+    //       if (formData) {
+    //         console.log('2')
+    //         if (this.dateStart !== formData.dateStart) {
+    //           console.log('3')
+    //           this.dateStart = formData.dateStart;
+    //         }
+    //         if (this.dateEnd !== formData.dateEnd) {
+    //           console.log('4')
+    //           this.dateEnd = formData.dateEnd;
+    //         }
+    //         return this._filter(formData.userName);
+    //       }
+    //       if (this.data) {
+    //         return this.data.slice();
+    //       }
+    //       return [];
+    //     })
+    //   );
+
+      this.filtersForm.get('dateStart')
+      .valueChanges
       .pipe(
-        startWith(null),
-        map((formData: any | null) => {
-          if (formData) {
-            return this._filter(formData.userName);
-          }
-          if (this.data) {
-            return this.data.slice();
-          }
-          return [];
-        })
-      );
+        takeUntil(this._destroyed$)
+      )
+      .subscribe((value: Date)=> {
+        debugger;
+        if (!this.dateStart && value) {
+          this.dateStart = value
+        }
+        if (!!value && this.dateStart.getTime() !== value.getTime()) {
+          this.dateStart = value;
+        }
+      });
+
+      this.filtersForm.get('dateEnd')
+      .valueChanges
+      .pipe(
+        takeUntil(this._destroyed$)
+      )
+      .subscribe((value: Date)=> {
+        if (!this.dateEnd && value) {
+          this.dateEnd = value
+        }
+        if (!!value && this.dateEnd.getTime() !== value.getTime()) {
+          this.dateEnd = value;
+        }
+      });
   }
 
   private _filter(value: string): UserModel[] {
-    const filterValue = value.toString().toLowerCase();
+    let filterValue = '';
+    if (value) {
+      filterValue = value.toString().toLowerCase();
+    }
 
     return this.data.filter((user: UserModel) => {
       const userName = user.firstname.toLowerCase() + ' ' + user.lastname.toLowerCase();
       return userName.indexOf(filterValue) > -1;
     });
+  }
+
+  private _initFiltres(): void {
+    const {usersId, phone, state, dateStart, dateEnd} = this._route.snapshot.queryParams;
+    this.filtersForm.patchValue({
+      phone,
+      state,
+      dateStart,
+      dateEnd
+    });
+    if (usersId) {
+      if (typeof(usersId) === 'string') {
+        this.users.push(this.data[parseInt(usersId)-1]);
+      } else {
+        usersId.forEach((idUser) => {
+          this.users.push(this.data[idUser-1]);
+        });
+      }
+    }
+    
   }
 
 }

@@ -77,11 +77,11 @@
         formControlName="dateStart"
         [matDatepicker]="pickerStart"
         matInput
-        (dateChange)="changeDate()"
         name="dateStart"
         placeholder="date start"
         [max]="dateEnd"
         >
+
         <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
       <mat-datepicker #pickerStart></mat-datepicker>
     </mat-form-field>
@@ -93,12 +93,12 @@
         formControlName="dateEnd"
         [matDatepicker]="pickerEnd"
         matInput
-        (dateChange)="changeDate()"
         name="dateEnd"
         placeholder="date end"
         [min]="dateStart"
         [max]="currentDate"
       >
+
       <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
       <mat-datepicker #pickerEnd></mat-datepicker>
     </mat-form-field>
@@ -110,5 +110,10 @@
       [color]="submitColor"
       type="submit"
     >Search with filtres</button>
+    <button
+      mat-raised-button
+      type="button"
+      (click)="resetForm()"
+    >Clear</button>
   </div>
 </form>
