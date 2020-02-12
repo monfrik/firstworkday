@@ -22,7 +22,7 @@ export class UserNewComponent implements OnDestroy {
   public formStepper;
   public formList;
 
-  private _destroyed$ = new Subject();
+  private _destroyed$ = new Subject<void>();
 
   public constructor(
     private readonly _router: Router,

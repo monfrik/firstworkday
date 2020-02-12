@@ -35,6 +35,7 @@
       <mat-option
         *ngFor="let user of filteredUsers | async"
         [value]="user.id"
+        [disabled]="users.includes(user)"
       >
         {{user.firstname + ' ' + user.lastname}}
       </mat-option>

@@ -4,10 +4,14 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+
 import {
   FormBuilder,
   FormGroup,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 
 import { FileUploadValidators } from '@iplab/ngx-file-upload';
@@ -27,8 +31,15 @@ import {
   STATE_SHORT_PATTERN,
   STATES,
 } from '@app/utils';
+
 import { UserModel } from '@app/users/models';
-import { filter } from 'rxjs/operators';
+
+interface ControlData {
+  control: AbstractControl;
+  key: string;
+  source: 'stepper' | 'list' | 'service';
+  callback?: Function;
+}
 
 
 @Component({
@@ -47,6 +58,8 @@ export class FormListComponent implements OnInit {
 
   public formGroup: FormGroup;
 
+  private _destroyed$ = new Subject<void>();
+  
   public constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly _usersService: UsersService,
@@ -66,6 +79,11 @@ export class FormListComponent implements OnInit {
     this._getValueChanges();
   }
 
+  public ngOnDestroy(): void {
+    this._destroyed$.next();
+    this._destroyed$.complete();
+  }
+
   public submit(): void {
     // this.submitList.emit();
   }
@@ -76,12 +94,86 @@ export class FormListComponent implements OnInit {
   }
 
   private _onValueChanges(): void {
-    this.formGroup.valueChanges
+    // this.formGroup.valueChanges
+    //   .subscribe({
+    //     next: (formData) => {
+    //       console.log('FormListComponent _onValueChanges', formData);
+    //       this._usersService
+    //         .patchUserForm(new UserModel(formData), 'list');
+    //     }
+    //   });
+    // this._controlListener(this.formGroup.get('firstname'), 'list')
+    // this.formGroup.get('firstname');
+    const source = 'list';
+    this._controlListener({
+      control: this.formGroup.get('firstname'),
+      key: 'firstname',
+      source
+    });
+    this._controlListener({
+      control: this.formGroup.get('lastname'),
+      key: 'lastname',
+      source
+    });
+    this._controlListener({
+      control: this.formGroup.get('phone'),
+      key: 'phone',
+      source
+    });
+    this._controlListener({
+      control: this.formGroup.get('email'),
+      key: 'email',
+      source
+    });
+    this._controlListener({
+      control: this.formGroup.get('birthday'),
+      key: 'birthday',
+      source
+    });
+    this._controlListener({
+      control: this.formGroup.get('avatar'),
+      key: 'avatar',
+      source
+    });
+    this._controlListener({
+      control: this.state.get('name'),
+      key: 'state',
+      source,
+      callback: value => STATES.find(element => element.name === value),
+    });
+    this._controlListener({
+      control: this.state.get('city'),
+      key: 'city',
+      source
+    });
+    this._controlListener({
+      control: this.state.get('street'),
+      key: 'city',
+      source
+    });
+    this._controlListener({
+      control: this.state.get('zipcode'),
+      key: 'zipcode',
+      source
+    });
+  }
+
+  private _controlListener(controlParams: ControlData): void {
+    controlParams.control
+      .valueChanges
+      .pipe(
+        takeUntil(this._destroyed$),
+      )
       .subscribe({
-        next: formData => {
-          console.log('FormListComponent _onValueChanges', formData);
+        next: (value) => {
+          let patchValue;
+          if (controlParams.callback) {
+            patchValue = controlParams.callback(value);
+          } else {
+            patchValue = {[controlParams.key]: value};
+          }
           this._usersService
-            .patchUserForm(new UserModel(formData), 'list');
+            .patchUserForm(patchValue, controlParams.source);
         }
       });
   }
@@ -92,11 +184,11 @@ export class FormListComponent implements OnInit {
         filter(data => data.source !== 'list')
       )
       .subscribe({
-        next: data => {
+        next: (data) => {
           console.log('FormListComponent _getValueChanges', data.userData)
-          this.formGroup.patchValue(data.userData, {
-            emitEvent: false,
-          });
+          // this.formGroup.patchValue(data.userData, {
+          //   emitEvent: false,
+          // });
         }
       })
   }

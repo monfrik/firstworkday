@@ -32,9 +32,10 @@ export class UsersService {
       .addUser(data);
   }
 
-  public patchUserForm(userData: UserModel, source: 'stepper' | 'list' | 'service') {
-    console.log('UsersService patchUserForm', userData)
-    this.userFormData$.next({userData: userData, source: source});
+  public patchUserForm(patchValue: any, source: 'stepper' | 'list' | 'service') {
+    console.log('patchUserForm', patchValue)
+    // console.log('UsersService patchUserForm', userData)
+    // this.userFormData$.next({userData: userData, source: source});
   }
 
 }

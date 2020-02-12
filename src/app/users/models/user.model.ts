@@ -17,7 +17,6 @@ export class UserModel {
     this.phone = data.phone || void 0;
     this.email = data.email || void 0;
     this.birthday = data.birthday || void 0;
-    this.firstname = data.firstname || void 0;
     this.avatar = data.avatar || void 0;
     this.address = data.address ? new AddressModel(data.address) : void 0;
   }

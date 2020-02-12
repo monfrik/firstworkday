@@ -22,7 +22,7 @@ export class UserEditComponent implements OnInit, OnDestroy{
   public formList;
   public initialData: UserModel;
 
-  private _destroyed$ = new Subject();
+  private _destroyed$ = new Subject<void>();
 
   public constructor(
     private readonly _router: Router,

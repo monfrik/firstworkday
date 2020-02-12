@@ -22,10 +22,8 @@ import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/materi
 import { UserModel } from '@app/users/models';
 
 import {
-  PHONE_PATTERN,
   STATE_PATTERN,
   NAME_PATTERN,
-  PHONE_MASK,
   STATES,
 } from '@app/utils';
 
@@ -67,6 +65,11 @@ export class TableFilterComponent implements OnInit {
     this._initFiltres();
   }
 
+  public ngOnDestroy(): void {
+    this._destroyed$.next();
+    this._destroyed$.complete();
+  }
+
   public get submitColor(): string {
     if (this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)) {
       return 'warn';
@@ -90,15 +93,6 @@ export class TableFilterComponent implements OnInit {
     this.users.push(this.data[event.option.value-1]);
     this.filtersForm.get('userName').setValue('');
   }
-
-  // public changeDate(): void {
-  //   if (this.filtersForm.value.dateStart) {
-  //     this.dateStart.setTime(this.filtersForm.value.dateStart.getTime());
-  //   }
-  //   if (this.filtersForm.value.dateEnd) {
-  //     this.dateEnd.setTime(this.filtersForm.value.dateEnd.getTime());
-  //   }
-  // }
 
   public resetForm(): void {
     this.filtersForm.reset();
@@ -142,47 +136,44 @@ export class TableFilterComponent implements OnInit {
   }
 
   private _formSubscribe(): void {
-    // this.filteredUsers = this.filtersForm.valueChanges
-    //   .pipe(
-    //     startWith(null),
-    //     map((formData: any | null) => {
-    //       console.log('formData', formData);
-    //       console.log('1')
-    //       if (formData) {
-    //         console.log('2')
-    //         if (this.dateStart !== formData.dateStart) {
-    //           console.log('3')
-    //           this.dateStart = formData.dateStart;
-    //         }
-    //         if (this.dateEnd !== formData.dateEnd) {
-    //           console.log('4')
-    //           this.dateEnd = formData.dateEnd;
-    //         }
-    //         return this._filter(formData.userName);
-    //       }
-    //       if (this.data) {
-    //         return this.data.slice();
-    //       }
-    //       return [];
-    //     })
-    //   );
+    this.filteredUsers = this.filtersForm.get('userName')
+    .valueChanges
+      .pipe(
+        takeUntil(this._destroyed$),
+        startWith(null),
+        map((userName: any | null) => {
+          if (userName) {
+            return this._filter(userName);
+          }
+          if (this.data) {
+            return this.data.slice();
+          }
+          return [];
+        })
+      );
 
-      this.filtersForm.get('dateStart')
+    this.filtersForm.get('dateStart')
       .valueChanges
       .pipe(
-        takeUntil(this._destroyed$)
+        takeUntil(this._destroyed$),
       )
-      .subscribe((value: Date)=> {
-        debugger;
+      .subscribe((value: Date) => {
         if (!this.dateStart && value) {
           this.dateStart = value
         }
-        if (!!value && this.dateStart.getTime() !== value.getTime()) {
+        let dateStart = this.dateStart;
+        if (typeof(dateStart) === 'string') {
+          dateStart = new Date(dateStart);
+        }
+        if (typeof(value) === 'string') {
+          value = new Date(value);
+        }
+        if (!!value && dateStart.getTime() !== value.getTime()) {
           this.dateStart = value;
         }
       });
 
-      this.filtersForm.get('dateEnd')
+    this.filtersForm.get('dateEnd')
       .valueChanges
       .pipe(
         takeUntil(this._destroyed$)
@@ -191,7 +182,14 @@ export class TableFilterComponent implements OnInit {
         if (!this.dateEnd && value) {
           this.dateEnd = value
         }
-        if (!!value && this.dateEnd.getTime() !== value.getTime()) {
+        let dateEnd = this.dateEnd;
+        if (typeof(dateEnd) === 'string') {
+          dateEnd = new Date(dateEnd);
+        }
+        if (typeof(value) === 'string') {
+          value = new Date(value);
+        }
+        if (!!value && dateEnd.getTime() !== value.getTime()) {
           this.dateEnd = value;
         }
       });
@@ -199,24 +197,42 @@ export class TableFilterComponent implements OnInit {
 
   private _filter(value: string): UserModel[] {
     let filterValue = '';
+
     if (value) {
       filterValue = value.toString().toLowerCase();
     }
 
     return this.data.filter((user: UserModel) => {
       const userName = user.firstname.toLowerCase() + ' ' + user.lastname.toLowerCase();
-      return userName.indexOf(filterValue) > -1;
+      return (userName.indexOf(filterValue) > -1);
     });
   }
 
   private _initFiltres(): void {
     const {usersId, phone, state, dateStart, dateEnd} = this._route.snapshot.queryParams;
+
     this.filtersForm.patchValue({
       phone,
-      state,
+    }, {
+      emitEvent: false,
+    });
+    this.filtersForm.patchValue({
       dateStart,
       dateEnd
+    }, {
+      emitEvent: true,
     });
+
+    if (state) {
+      let initState = STATES.find(el => el.shortname == state);
+      this.filtersForm.patchValue({
+        state: initState.name
+      }, {
+        emitEvent: false,
+      })
+      this.filtersForm.value
+    }
+
     if (usersId) {
       if (typeof(usersId) === 'string') {
         this.users.push(this.data[parseInt(usersId)-1]);

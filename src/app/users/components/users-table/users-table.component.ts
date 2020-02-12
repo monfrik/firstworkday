@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -14,8 +17,8 @@ interface RouterParams {
   usersId?: number[] | string[];
   phone?: string;
   state?: string;
-  dateStart?: string;
-  dateEnd?: string;
+  dateStart?: string | Date;
+  dateEnd?: string | Date;
 }
 
 @Component({
@@ -49,6 +52,8 @@ export class UsersTableComponent implements OnInit {
   @ViewChild(MatSort, {static: true})
   public sort: MatSort;
 
+  private _destroyed$ = new Subject<void>();
+
   public constructor(
     private readonly _usersService: UsersService,
     private readonly _router: Router,
@@ -58,17 +63,25 @@ export class UsersTableComponent implements OnInit {
   public ngOnInit(): void {
     this._usersService
     .getUsers()
+    .pipe(
+      takeUntil(this._destroyed$)
+    )
     .subscribe({
       next: (data: UserModel[]) => {
-          this.users = new MatTableDataSource(data);
-          this.users.sort = this.sort;
-          this.users.paginator = this.paginator;
-          this.users.filterPredicate = this._filterTable;
-          this._initFiltres();
-        },
-        error: () => {},
-        complete: () => {},
-      });
+        this.users = new MatTableDataSource(data);
+        this.users.sort = this.sort;
+        this.users.paginator = this.paginator;
+        this.users.filterPredicate = this._filterTable;
+        this._initFiltres();
+      },
+      error: () => {},
+      complete: () => {},
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroyed$.next();
+    this._destroyed$.complete();
   }
 
   public sortUsers(sortEvent): void {
