@@ -14,9 +14,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material';
 
+
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 import { TextMaskModule } from 'angular2-text-mask';
+
+import { AppStoreModule } from '@app/store/store.module';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -53,7 +56,8 @@ import { ErrorFiledComponent } from '@core/components';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    AppStoreModule
   ],
   declarations: [
     UsersTableComponent,

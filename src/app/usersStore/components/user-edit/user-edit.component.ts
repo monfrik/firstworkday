@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { UsersService } from '../../services';
+// import { UsersService } from '../../services';
 import { UserModel } from '../../models/user.model';
 
 
@@ -14,7 +14,7 @@ import { UserModel } from '../../models/user.model';
   selector: 'app-user-edit',
   templateUrl: 'user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
-  providers: [ UsersService ]
+  // providers: [ UsersService ]
 })
 
 export class UserEditComponent implements OnInit, OnDestroy{
@@ -27,7 +27,7 @@ export class UserEditComponent implements OnInit, OnDestroy{
   public constructor(
     private readonly _router: Router,
     private readonly _snackBar: MatSnackBar,
-    private readonly _usersService: UsersService,
+    // private readonly _usersService: UsersService,
     private readonly _route: ActivatedRoute
   ) {}
 
@@ -46,25 +46,25 @@ export class UserEditComponent implements OnInit, OnDestroy{
   public onSubmit(): void {
     if (this.formList.valid) {
       const newUser = new UserModel(this.formList.getRawValue());
-      this._usersService
-        .addUser(newUser)
-        .pipe(
-          takeUntil(this._destroyed$)
-        )
-        .subscribe(() => {
-          this._openSnackBar('New user added', 'Ok');
-          this._router.navigate(['/users']);
-        });
+      // this._usersService
+      //   .addUser(newUser)
+      //   .pipe(
+      //     takeUntil(this._destroyed$)
+      //   )
+      //   .subscribe(() => {
+      //     this._openSnackBar('New user added', 'Ok');
+      //     this._router.navigate(['/users']);
+      //   });
     }
   }
 
   private _getUserData(id: string): void {
-    this._usersService
-      .getUser(id)
-      .subscribe(data => {
-        this._usersService.patchUserForm(new UserModel(data), 'service');
-        // this.initialData = new UserModel(data);
-      })
+    // this._usersService
+    //   .getUser(id)
+    //   .subscribe(data => {
+    //     this._usersService.patchUserForm(new UserModel(data), 'service');
+    //     // this.initialData = new UserModel(data);
+    //   })
   }
 
   private _openSnackBar(message: string, action: string): void {

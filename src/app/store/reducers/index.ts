@@ -5,15 +5,12 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import { environment } from '@src/environments/environment';
 
 export interface State {
 
 }
 
-export const reducers: ActionReducerMap<State> = {
-
-};
-
+export * from './users.reducer'
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
