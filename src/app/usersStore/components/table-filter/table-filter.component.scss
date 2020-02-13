@@ -1,0 +1,17 @@
+.table-filter {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-bottom: 100px;
+  &-field, &-dates {
+    width: 100%;
+  }
+  &-dates {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &-date {
+    width: 45%;
+  }
+}

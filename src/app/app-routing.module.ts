@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./users/users.module').then(mod => mod.UsersModule),
   },
   {
+    path: 'usersstore',
+    loadChildren: () => import('./usersStore/users-store.module').then(mod => mod.UsersStoreModule),
+  },
+  {
     path: '',
     redirectTo: 'users',
     pathMatch: 'full',

@@ -1,0 +1,7 @@
+.form-list {
+  &-form, &-subList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
