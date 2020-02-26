@@ -1,5 +1,5 @@
 <div class="form-list">
-  <form [formGroup]="formGroup" class="form-list-form">
+  <form [formGroup]="formGroup" class="form-list-form" (ngSubmit)="submit()">
 
     <mat-form-field>
       <input
@@ -77,13 +77,38 @@
         error-filed
       ></mat-error>
     </mat-form-field>
+
+    <mat-form-field>
+      <input
+        formControlName="birthday"
+        [matDatepicker]="picker"
+        matInput
+        name="birthday"
+        placeholder="Birthday"
+        required
+      >
+      <mat-error
+        [inputControl]="formGroup.get('birthday')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'pattern': 'Invalid birthday'
+        }"
+        error-filed
+      ></mat-error>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
     
     <div formGroupName="address" class="form-list-subList">
       <div formGroupName="state" class="form-list-subList">
 
         <mat-form-field>
           <mat-label>State</mat-label>
-          <mat-select formControlName="name" (selectionChange)="onChangeSelect($event?.value)">
+          <mat-select
+            formControlName="name"
+            (selectionChange)="onChangeSelect($event?.value)"
+            required
+          >
             <mat-option *ngFor="let state of states" [value]="state.name">
               {{state.name}}
             </mat-option>
@@ -181,21 +206,26 @@
 
     <file-upload
       formControlName="avatar"
+      [animation]="true"
       type="file"
       name="avatar"
     ></file-upload>
     <mat-error
       error-filed
-      [inputControl]="formGroup.get('firstname')"
+      [inputControl]="formGroup.get('avatar')"
       [errorMessages]="{
         'required': 'this control is required'
       }"
     ></mat-error>
 
     <div class="form-list-actions">
-      <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
+      <a
+        [routerLink]="['/']"
+        routerLinkActive="router-link-active"
+        class="form-list-link"
+      >Go to table</a> 
       <button mat-button (click)="formGroup.reset()" type="button">Clear</button>
-      <button mat-button (click)="submit()" type="submit">Save</button>
+      <button mat-button type="submit">Save</button>
     </div>
   </form>
 </div>

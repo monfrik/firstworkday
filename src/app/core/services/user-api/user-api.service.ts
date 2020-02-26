@@ -36,7 +36,7 @@ export class UserApiService {
       );
   }
 
-  public getUser(id: string): Observable<UserModel> {
+  public getUser(id: number): Observable<UserModel> {
     return this._http
       .get<UserModel>(USERS_URL+'/'+id)
       .pipe(
