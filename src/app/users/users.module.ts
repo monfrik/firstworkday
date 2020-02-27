@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MatInputModule } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -12,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -20,28 +20,31 @@ import { TextMaskModule } from 'angular2-text-mask';
 
 import { SharedModule } from '../shared/shared.module';
 import { UsersRoutingModule } from './users-routing.module';
+import { UsersService } from './services';
 import {
   UsersTableComponent,
   UserEditComponent,
-  UserNewComponent,
+  UserCreateComponent,
   FormListComponent,
   FormStepperComponent,
   FirstStepComponent,
   SecondStepComponent,
   ThirdStepComponent,
   TableFilterComponent
-} from './components'; 
+} from './components';
 
 import { ErrorFiledComponent } from '@core/components';
 import { TabDirective } from './directives';
 
 @NgModule({
   imports: [
+    // Angular
     ReactiveFormsModule,
     FileUploadModule,
     TextMaskModule,
     SharedModule,
     UsersRoutingModule,
+    // Material
     MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
@@ -53,12 +56,12 @@ import { TabDirective } from './directives';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   declarations: [
     UsersTableComponent,
     UserEditComponent,
-    UserNewComponent,
+    UserCreateComponent,
     FormStepperComponent,
     FormListComponent,
     FirstStepComponent,
@@ -68,7 +71,7 @@ import { TabDirective } from './directives';
     ErrorFiledComponent,
     TabDirective,
   ],
-  // providers: [MatDatepickerModule]
+  providers: [UsersService],
 })
 
 export class UsersModule { }

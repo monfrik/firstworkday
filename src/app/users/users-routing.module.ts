@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {
   UsersTableComponent,
   UserEditComponent,
-  UserNewComponent
+  UserCreateComponent
 } from './components';
 
 
@@ -14,8 +14,8 @@ const routes: Routes = [
     component: UsersTableComponent,
   },
   {
-    path: 'new',
-    component: UserNewComponent,
+    path: 'create',
+    component: UserCreateComponent,
   },
   {
     path: ':id',
