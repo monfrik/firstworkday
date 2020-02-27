@@ -5,7 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: 'users',
-    loadChildren: () => import('./users/users.module').then(mod => mod.UsersModule),
+    loadChildren: () => import('./users/users.module').then((mod) => mod.UsersModule),
   },
   {
     path: '',

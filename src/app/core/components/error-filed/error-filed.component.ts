@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { ErrorTemplate } from '@core/interfaces';
+import { IErrorTemplate } from '@core/interfaces';
 
 @Component({
   selector: '[error-filed]',
@@ -16,14 +16,18 @@ export class ErrorFiledComponent {
   @Input()
   public errorMessages: object = {};
 
-  public get errorTemplates(): ErrorTemplate[] {
+  public get errorTemplates(): IErrorTemplate[] {
     const errorKeys = Object.keys(this.errorMessages);
-    return errorKeys.map(error => {
+    return errorKeys.map((error) => {
       return {
         error,
-        message: this.errorMessages[error]
+        message: this.errorMessages[error],
       };
     });
+  }
+
+  public trackByFn(index: number): number {
+    return index;
   }
 
 }

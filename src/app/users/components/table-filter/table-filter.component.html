@@ -4,10 +4,10 @@
 
     <mat-chip-list #chipList>
       <mat-chip
-        *ngFor="let user of selectedUsers"
+        *ngFor="let user of selectedUsers; trackBy: trackByFn"
         [selectable]="true"
         [removable]="true"
-        (removed)="remove(user)">
+        (removed)="onRemoveUserFromChipList(user)">
         {{ user?.firstname }}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
@@ -16,7 +16,7 @@
         formControlName="userName"
         [matChipInputFor]="chipList"
         [matAutocomplete]="auto"
-        (matChipInputTokenEnd)="add($event)"
+        (matChipInputTokenEnd)="onMatChipInputTokenEnd($event)"
         matInput
         placeholder="New user..."
       >
@@ -30,9 +30,9 @@
       ></mat-error>
     </mat-chip-list>
 
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
       <mat-option
-        *ngFor="let user of filteredUsers"
+        *ngFor="let user of filteredUsers; trackBy: trackByFn"
         [value]="user.id"
         [disabled]="selectedUsers.includes(user)"
       >
@@ -65,7 +65,7 @@
     <mat-label>State</mat-label>
     <mat-select formControlName="state">
       <mat-option>None</mat-option>
-      <mat-option *ngFor="let state of states" [value]="state.name">
+      <mat-option *ngFor="let state of states; trackBy: trackByFn" [value]="state.name">
         {{ state.name }}
       </mat-option>
     </mat-select>

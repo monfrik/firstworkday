@@ -11,7 +11,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+// import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import { UsersService } from '@app/users/services';
 import {
@@ -24,7 +24,6 @@ import {
   STATE_PATTERN,
   STATE_SHORT_PATTERN,
 } from '@app/utils';
-
 import { UserModel } from '@app/users/models';
 import { IFormStepperData } from './interfaces';
 
