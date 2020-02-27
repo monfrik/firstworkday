@@ -1,12 +1,15 @@
-import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { Injectable } from '@angular/core';
+
+import { InMemoryDbService } from 'angular-in-memory-web-api';
+
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class InMemoryDataService implements InMemoryDbService {
-  createDb() {
+
+  public createDb(): any {
     const users = [
       {
         id: 1,
@@ -24,7 +27,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'N Clinton Ave',
           zipcode: '308-610',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 2,
@@ -42,7 +45,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Morris Ave',
           zipcode: '375-001',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 3,
@@ -60,7 +63,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '396-705',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 4,
@@ -78,7 +81,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '396-705',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 5,
@@ -96,7 +99,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '396-705',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 6,
@@ -114,7 +117,7 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '396-705',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
       {
         id: 7,
@@ -132,9 +135,10 @@ export class InMemoryDataService implements InMemoryDbService {
           street: 'Olali St',
           zipcode: '396-705',
         },
-        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/
+        avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
     ];
     return { users };
   }
+
 }

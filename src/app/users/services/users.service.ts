@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { UserApiService } from '@core/services';
+
 import { convertDate } from '@app/utils';
 import { UserModel } from '../models';
 
@@ -61,19 +62,19 @@ export class UsersService {
   }
 
   public clearEditedUser(): void {
-    this.editedUser$.next(null);
+    this._editedUser$.next(null);
   }
 
   public clearCreateUser(): void {
-    this.editedUser$.next(null);
+    this._editedUser$.next(null);
   }
 
   public patchEditedUser(userData: UserModel): void {
-    this.editedUser$.next(userData);
+    this._editedUser$.next(userData);
   }
 
   public patchCreateUser(userData: UserModel): void {
-    this.createUser$.next(userData);
+    this._createUser$.next(userData);
   }
 
   private _filterUsers(users: UserModel[], filter: any): UserModel[] {

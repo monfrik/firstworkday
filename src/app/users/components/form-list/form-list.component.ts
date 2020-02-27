@@ -6,10 +6,6 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-
 import {
   FormBuilder,
   FormGroup,
@@ -17,12 +13,12 @@ import {
   AbstractControl,
 } from '@angular/forms';
 
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-import { MatSnackBar } from '@angular/material';
+// import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import { UsersService } from '@app/users/services';
-
 import {
   PHONE_MASK,
   ZIPCODE_MASK,
@@ -37,7 +33,6 @@ import {
   STATE_SHORT_PATTERN,
   STATES,
 } from '@app/utils';
-
 import { UserModel } from '@app/users/models';
 
 
@@ -51,10 +46,10 @@ import { UserModel } from '@app/users/models';
 export class FormListComponent implements OnInit, OnDestroy {
 
   @Output()
-  public submitList = new EventEmitter<UserModel>();
+  public readonly submitList = new EventEmitter<UserModel>();
 
   @Output()
-  public patchFormList = new EventEmitter<UserModel>();
+  public readonly patchFormList = new EventEmitter<UserModel>();
 
   public phoneMask: (string | RegExp)[] = PHONE_MASK;
   public zipcodeMask: (string | RegExp)[] = ZIPCODE_MASK;
@@ -64,11 +59,10 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<void>();
   private _submited = false;
-  
+
   public constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly _usersService: UsersService,
-    private readonly _snackBar: MatSnackBar,
   ) {}
 
   public get address(): AbstractControl {
@@ -87,20 +81,24 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._patchUser();
-    this._destroy();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public submit(): void {
     if (this.formGroup.valid) {
       this._submited = true;
-      this._destroy();
       this.submitList.emit(new UserModel(this.formGroup.value));
     }
   }
 
   public onChangeSelect(stateName: string): void {
-    const currentState = STATES.find(state => state.name === stateName);
+    const currentState = STATES.find((state) => state.name === stateName);
     this.state.get('shortname').patchValue(currentState.shortname);
+  }
+
+  public trackByFn(index: number): number {
+    return index;
   }
 
   private _patchUser(): void {
@@ -112,8 +110,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   private _getValueChanges(): void {
     this._usersService.editedUser$
       .pipe(
-        takeUntil(this._destroy$),
         filter((editedUser: UserModel) => !!editedUser),
+        takeUntil(this._destroy$),
       )
       .subscribe({
         next: (editedUser: UserModel) => {
@@ -121,7 +119,7 @@ export class FormListComponent implements OnInit, OnDestroy {
         },
         error: () => {},
         complete: () => {},
-      })
+      });
   }
 
   private _formInitialization(): void {
@@ -141,8 +139,8 @@ export class FormListComponent implements OnInit, OnDestroy {
         city: ['', [Validators.required, Validators.pattern(CITY_PATTERN)]],
         street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
         zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
-      })
-    })
+      }),
+    });
   }
 
   private _changeTabSubscribe(): void {
@@ -159,17 +157,6 @@ export class FormListComponent implements OnInit, OnDestroy {
         error: () => {},
         complete: () => {},
       });
-  }
-
-  private _openSnackBar(message: string, action: string): void {
-    this._snackBar.open(message, action, {
-      duration: 1000,
-    });
-  }
-
-  private _destroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
 }

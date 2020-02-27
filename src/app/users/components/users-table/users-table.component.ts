@@ -13,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
-import { RouterParams } from '@app/core/interfaces';
+import { IRouterParams } from '@app/core/interfaces';
 import { convertDate } from '@app/utils';
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
@@ -51,7 +51,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   public sort: MatSort;
 
   private _destroy$ = new Subject<void>();
-  private _filter$ = new Subject<RouterParams>();
+  private _filter$ = new Subject<IRouterParams>();
 
   public constructor(
     private readonly _router: Router,
@@ -66,7 +66,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     this._subscribeRoute();
   }
 
-  public onApllyFilter(filtres: RouterParams): void {
+  public onApllyFilter(filtres: IRouterParams): void {
     this._filter$.next(filtres);
   }
 
@@ -81,8 +81,8 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe({
-        next: (filtres: RouterParams) => {
-          const queryParams = this._getRouterParams(filtres);
+        next: (filtres: IRouterParams) => {
+          const queryParams = this._getIRouterParams(filtres);
           this._router.navigate(['/users'], { queryParams });
         },
         error: () => {},
@@ -109,7 +109,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe({
-        next: (queryParams: RouterParams): void => {
+        next: (queryParams: IRouterParams): void => {
           this._getUsersWithQueryParams(queryParams);
         },
         error: () => {},
@@ -117,7 +117,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _getUsersWithQueryParams(queryParams: RouterParams): void {
+  private _getUsersWithQueryParams(queryParams: IRouterParams): void {
     this._usersService
       .getUsersWithParams(queryParams)
       .pipe(
@@ -149,8 +149,8 @@ export class UsersTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _getRouterParams(filtres: RouterParams): RouterParams {
-    const routerParams: RouterParams = {};
+  private _getIRouterParams(filtres: IRouterParams): IRouterParams {
+    const routerParams: IRouterParams = {};
 
     if (filtres.usersId && filtres.usersId.length) {
       routerParams.usersId = filtres.usersId;

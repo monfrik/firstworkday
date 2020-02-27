@@ -29,7 +29,7 @@ import {
   NAME_PATTERN,
   STATES,
 } from '@app/utils';
-import { RouterParams } from '@app/core/interfaces';
+import { IRouterParams } from '@app/core/interfaces';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   public users: UserModel[] = [];
 
   @Output()
-  public readonly applyFilter = new EventEmitter<RouterParams>();
+  public readonly applyFilter = new EventEmitter<IRouterParams>();
 
   public filtersForm: FormGroup;
   public filteredUsers: UserModel[];
@@ -82,19 +82,19 @@ export class TableFilterComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  public add(event: MatChipInputEvent): void {
+  public onMatChipInputTokenEnd(event: MatChipInputEvent): void {
     event.input.value = '';
     this.filtersForm.get('userName').setValue('');
   }
 
-  public remove(user: UserModel): void {
+  public onRemoveUserFromChipList(user: UserModel): void {
     const index = this.selectedUsers.indexOf(user);
     if (index >= 0) {
       this.selectedUsers.splice(index, 1);
     }
   }
 
-  public selected(event: MatAutocompleteSelectedEvent): void {
+  public onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     this.selectedUsers.push(this.users[event.option.value - 1]);
     this.filtersForm.get('userName').setValue('');
   }
@@ -132,6 +132,10 @@ export class TableFilterComponent implements OnInit, OnDestroy {
     };
 
     this.applyFilter.emit(emitData);
+  }
+
+  public trackByFn(index: number): number {
+    return index;
   }
 
   private _initialisationForm(): void {
