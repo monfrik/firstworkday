@@ -46,8 +46,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
   @Output()
   public patchFormStepper = new EventEmitter<UserModel>();
   
-  // public editedUser$ = this._store.pipe(select(selectEditedUser));
-
   public formGroup: FormGroup;
   public firstGroupForm: FormGroup;
   public secondFormGroup: FormGroup;
@@ -55,7 +53,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<void>();
   private _submited = false;
-  private _formChanged = false;
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -67,7 +64,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
     this._changeTabSubscribe();
     this._formInitialization();
     this._getValueChanges();
-    this._formSubscribe();
   }
 
   public ngOnDestroy(): void {
@@ -77,39 +73,32 @@ export class FormStepperComponent implements OnInit, OnDestroy {
 
   public submit(): void {
     if (this.formGroup.valid) {
-      if (this._formChanged) {
-        this._submited = true;
-        this._formChanged = false;
-        this._destroy();
-        const newUser = this._convertToModel(this.formGroup.value);
-        this.submitStepper.emit(newUser);
-      } else {
-        this._openSnackBar('Nothing to update', 'Ok');
-      }
+      this._submited = true;
+      this._destroy();
+      const newUser = this._convertToModel(this.formGroup.value);
+      this.submitStepper.emit(newUser);
     }
   }
 
   private _patchUser(): void {
-    if (this.formGroup.touched && !this._submited && this._formChanged) {
-      this._formChanged = false;
+    if (this.formGroup.touched && !this._submited) {
       this.patchFormStepper.emit(this._convertToModel(this.formGroup.value));
     }
   }
 
   private _getValueChanges(): void {
-    // this.editedUser$
-    //   .pipe(
-    //     takeUntil(this._destroy$),
-    //     filter((editedUser: UserModel) => !!editedUser),
-    //   )
-    //   .subscribe({
-    //     next: (user: UserModel) => {
-    //       this._formUpdate(user);
-    //       this._formChanged = false;
-    //     },
-    //     error: () => {},
-    //     complete: () => {},
-    //   })
+    this._usersService.editedUser$
+      .pipe(
+        takeUntil(this._destroy$),
+        filter((editedUser: UserModel) => !!editedUser),
+      )
+      .subscribe({
+        next: (user: UserModel) => {
+          this._formUpdate(user);
+        },
+        error: () => {},
+        complete: () => {},
+      })
   }
 
   private _convertToModel (formData: FormStepperData): UserModel {
@@ -192,20 +181,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
           if (tabName !== 'stepper') {
             this._patchUser();
           }
-        },
-        error: () => {},
-        complete: () => {},
-      });
-  }
-
-  private _formSubscribe(): void {
-    this.formGroup.valueChanges
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this._formChanged = true;
         },
         error: () => {},
         complete: () => {},

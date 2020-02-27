@@ -20,10 +20,11 @@ import { TextMaskModule } from 'angular2-text-mask';
 
 import { SharedModule } from '../shared/shared.module';
 import { UsersRoutingModule } from './users-routing.module';
+import { UsersService } from './services';
 import {
   UsersTableComponent,
   UserEditComponent,
-  UserNewComponent,
+  UserCreateComponent,
   FormListComponent,
   FormStepperComponent,
   FirstStepComponent,
@@ -37,11 +38,13 @@ import { TabDirective } from './directives';
 
 @NgModule({
   imports: [
+    // Angular
     ReactiveFormsModule,
     FileUploadModule,
     TextMaskModule,
     SharedModule,
     UsersRoutingModule,
+    // Material
     MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
@@ -58,7 +61,7 @@ import { TabDirective } from './directives';
   declarations: [
     UsersTableComponent,
     UserEditComponent,
-    UserNewComponent,
+    UserCreateComponent,
     FormStepperComponent,
     FormListComponent,
     FirstStepComponent,
@@ -68,7 +71,7 @@ import { TabDirective } from './directives';
     ErrorFiledComponent,
     TabDirective,
   ],
-  // providers: [MatDatepickerModule]
+  providers: [UsersService]
 })
 
 export class UsersModule { }

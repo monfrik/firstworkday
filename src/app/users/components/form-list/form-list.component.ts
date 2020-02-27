@@ -56,8 +56,6 @@ export class FormListComponent implements OnInit, OnDestroy {
   @Output()
   public patchFormList = new EventEmitter<UserModel>();
 
-  // public editedUser$ = this._store.pipe(select(selectEditedUser));
-
   public phoneMask: (string | RegExp)[] = PHONE_MASK;
   public zipcodeMask: (string | RegExp)[] = ZIPCODE_MASK;
   public states = STATES;
@@ -66,7 +64,6 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<void>();
   private _submited = false;
-  private _formChanged = false;
   
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -86,7 +83,6 @@ export class FormListComponent implements OnInit, OnDestroy {
     this._changeTabSubscribe();
     this._formInitialization();
     this._getValueChanges();
-    this._formSubscribe();
   }
 
   public ngOnDestroy(): void {
@@ -96,14 +92,9 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public submit(): void {
     if (this.formGroup.valid) {
-      if (this._formChanged) {
-        this._formChanged = false;
-        this._submited = true;
-        this._destroy();
-        this.submitList.emit(new UserModel(this.formGroup.value));
-      } else {
-        this._openSnackBar('Nothing to update', 'Ok');
-      }
+      this._submited = true;
+      this._destroy();
+      this.submitList.emit(new UserModel(this.formGroup.value));
     }
   }
 
@@ -113,26 +104,24 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private _patchUser(): void {
-    if (this.formGroup.touched && !this._submited && this._formChanged) {
-      this._formChanged = false;
+    if (this.formGroup.touched && !this._submited) {
       this.patchFormList.emit(new UserModel(this.formGroup.value));
     }
   }
 
   private _getValueChanges(): void {
-    // this.editedUser$
-    //   .pipe(
-    //     takeUntil(this._destroy$),
-    //     filter((editedUser: UserModel) => !!editedUser),
-    //   )
-    //   .subscribe({
-    //     next: (editedUser: UserModel) => {
-    //       this.formGroup.patchValue(editedUser);
-    //       this._formChanged = false;
-    //     },
-    //     error: () => {},
-    //     complete: () => {},
-    //   })
+    this._usersService.editedUser$
+      .pipe(
+        takeUntil(this._destroy$),
+        filter((editedUser: UserModel) => !!editedUser),
+      )
+      .subscribe({
+        next: (editedUser: UserModel) => {
+          this.formGroup.patchValue(editedUser);
+        },
+        error: () => {},
+        complete: () => {},
+      })
   }
 
   private _formInitialization(): void {
@@ -166,20 +155,6 @@ export class FormListComponent implements OnInit, OnDestroy {
           if (tabName !== 'list') {
             this._patchUser();
           }
-        },
-        error: () => {},
-        complete: () => {},
-      });
-  }
-
-  private _formSubscribe(): void {
-    this.formGroup.valueChanges
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this._formChanged = true;
         },
         error: () => {},
         complete: () => {},

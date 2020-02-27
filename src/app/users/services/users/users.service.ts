@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
 import { UserApiService } from '@core/services';
 import { UserModel } from '../../models';
@@ -13,7 +13,8 @@ import { convertDate } from '@app/utils';
 export class UsersService {
 
   public users;
-  public editedUser$ = new Subject<UserModel>();
+  public editedUser$ = new BehaviorSubject<UserModel>(null);
+  public createUser$ = new BehaviorSubject<UserModel>(null);
   public changeTabEvent = new EventEmitter<string>();
   
   public constructor(
@@ -26,41 +27,11 @@ export class UsersService {
   }
 
   public getUsersWithParams(filter: any): Observable<UserModel[]> {
-    // console.log('getUsersWithParams params', params);
     return this._userApiService
       .getUsers()
       .pipe(
         map((users: UserModel[]) => {
-          return users.filter((element: UserModel) => {
-            let condition = true;
-            if (filter.usersId && filter.usersId.length) {
-              condition = condition && filter.usersId.includes(element.id);
-            }
-        
-            if (filter.phone) {
-              const userPhone = element.phone.replace(/[^\d]/, '');
-              condition = condition && userPhone.includes(filter.phone);
-            }
-        
-            if (filter.state) {
-              condition = condition && filter.state === element.address.state.shortname;
-            }
-        
-            if (filter.dateStart || filter.dateEnd) {
-              debugger;
-              const birthday = element.birthday.toISOString().slice(0,10);
-        
-              if (filter.dateStart) {
-                condition = condition && convertDate(filter.dateStart) <= birthday;
-              }
-        
-              if (filter.dateEnd) {
-                condition = condition && convertDate(filter.dateEnd) >= birthday;
-              }
-            }
-        
-            return condition;
-          })
+          return this._filterUsers(users, filter);
         }),
       );
   }
@@ -76,19 +47,64 @@ export class UsersService {
   }
 
   public updateUser(updatedUser: UserModel): Observable<UserModel> {
-    // console.log('updateUser updatedUser', updatedUser);
     return this._userApiService
       .addUser(updatedUser);
   }
 
   public clearEditedUser(): void {
-    // console.log('clearEditedUser');
+    this.editedUser$.next(null);
+  }
+
+  public clearCreateUser(): void {
     this.editedUser$.next(null);
   }
 
   public patchEditedUser(userData: UserModel): void {
-    // console.log('patchEditedUser userData', userData)
     this.editedUser$.next(userData);
+  }
+
+  public patchCreateUser(userData: UserModel): void {
+    this.createUser$.next(userData);
+  }
+
+  private _filterUsers(users: UserModel[], filter: any): UserModel[] {
+    return users.filter((element: UserModel): boolean => {
+      if (filter.usersId && filter.usersId.length) {
+        if (!filter.usersId.includes(element.id)) {
+          return false;
+        }
+      }
+  
+      if (filter.phone) {
+        const userPhone = element.phone.replace(/[^\d]/, '');
+        if (!userPhone.includes(filter.phone)) {
+          return false;
+        }
+      }
+  
+      if (filter.state) {
+        if (filter.state !== element.address.state.shortname) {
+          return false;
+        }
+      }
+      
+      if (filter.dateStart || filter.dateEnd) {
+        const birthday = convertDate(element.birthday);
+  
+        if (filter.dateStart) {
+          if (convertDate(filter.dateStart) > birthday) {
+            return false;
+          }
+        }
+        
+        if (filter.dateEnd) {
+          if (convertDate(filter.dateEnd) < birthday) {
+            return false;
+          }
+        }
+      }
+      return true;
+    })
   }
 
 }

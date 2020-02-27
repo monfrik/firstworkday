@@ -71,10 +71,11 @@ export class TableFilterComponent implements OnInit {
     this._destroyed$.complete();
   }
 
-  public get submitColor(): string {
+  get submitColor(): string {
     if (this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)) {
       return 'warn';
     }
+
     return '';
   }
 
@@ -114,7 +115,7 @@ export class TableFilterComponent implements OnInit {
 
     const {dateStart, dateEnd, phone, state} = this.filtersForm.value;
     
-    const usersId = this.selectedUsers.map(element => element.id);
+    const usersId = this.selectedUsers.map(element => +element.id);
     
     const currentState = STATES.find(element => element.name === state);
     const stateShort = currentState ? currentState.shortname : '';

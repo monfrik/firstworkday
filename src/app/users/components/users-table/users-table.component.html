@@ -5,8 +5,8 @@
   </mat-toolbar>
 
   <app-table-filter
-    *ngIf="filtredTable?.data !== null"
-    [users]="filtredTable?.data"
+    *ngIf="allUsers !== null"
+    [users]="allUsers"
     (applyFilter)="onApllyFilter($event)"
   ></app-table-filter>
 
