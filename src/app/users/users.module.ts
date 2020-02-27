@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MatInputModule } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -12,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material';
 
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 
@@ -31,7 +31,7 @@ import {
   SecondStepComponent,
   ThirdStepComponent,
   TableFilterComponent
-} from './components'; 
+} from './components';
 
 import { ErrorFiledComponent } from '@core/components';
 import { TabDirective } from './directives';
@@ -56,7 +56,7 @@ import { TabDirective } from './directives';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   declarations: [
     UsersTableComponent,
@@ -71,7 +71,7 @@ import { TabDirective } from './directives';
     ErrorFiledComponent,
     TabDirective,
   ],
-  providers: [UsersService]
+  providers: [UsersService],
 })
 
 export class UsersModule { }

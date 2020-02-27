@@ -8,7 +8,7 @@
         [selectable]="true"
         [removable]="true"
         (removed)="remove(user)">
-        {{user?.firstname}}
+        {{ user?.firstname }}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
 
@@ -36,7 +36,7 @@
         [value]="user.id"
         [disabled]="selectedUsers.includes(user)"
       >
-        {{user.firstname + ' ' + user.lastname}}
+        {{ user.firstname + ' ' + user.lastname }}
       </mat-option>
     </mat-autocomplete>
 
@@ -66,7 +66,7 @@
     <mat-select formControlName="state">
       <mat-option>None</mat-option>
       <mat-option *ngFor="let state of states" [value]="state.name">
-        {{state.name}}
+        {{ state.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>

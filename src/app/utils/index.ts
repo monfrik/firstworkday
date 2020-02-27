@@ -1,4 +1,4 @@
-export * from './formPatterns';
+export * from './form-patterns';
 export * from './masks';
 export * from './states';
-export * from './dateFunctions';
+export * from './date-functions';

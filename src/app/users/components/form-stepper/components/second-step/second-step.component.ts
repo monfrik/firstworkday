@@ -19,8 +19,8 @@ export class SecondStepComponent {
   @Input()
   public formGroup: FormGroup;
 
-  public onChangeSelect(stateName): void {
-    const currentState = STATES.find(element => element.name === stateName);
+  public onChangeSelect(stateName: string): void {
+    const currentState = STATES.find((state) => state.name === stateName);
     this.formGroup.get('shortname').patchValue(currentState.shortname);
   }
 

@@ -6,17 +6,14 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { Validators, FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { MatSnackBar } from '@angular/material';
+import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import { UsersService } from '@app/users/services';
-
 import {
   NAME_PATTERN,
   PHONE_PATTERN,
@@ -29,7 +26,7 @@ import {
 } from '@app/utils';
 
 import { UserModel } from '@app/users/models';
-import { FormStepperData } from './interfaces';
+import { IFormStepperData } from './interfaces';
 
 @Component({
   selector: 'app-form-stepper',
@@ -41,11 +38,11 @@ import { FormStepperData } from './interfaces';
 export class FormStepperComponent implements OnInit, OnDestroy {
 
   @Output()
-  public submitStepper = new EventEmitter<UserModel>();
+  public readonly submitStepper = new EventEmitter<UserModel>();
 
   @Output()
-  public patchFormStepper = new EventEmitter<UserModel>();
-  
+  public readonly patchFormStepper = new EventEmitter<UserModel>();
+
   public formGroup: FormGroup;
   public firstGroupForm: FormGroup;
   public secondFormGroup: FormGroup;
@@ -57,7 +54,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
   public constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly _usersService: UsersService,
-    private readonly _snackBar: MatSnackBar,
   ) {}
 
   public ngOnInit(): void {
@@ -66,18 +62,18 @@ export class FormStepperComponent implements OnInit, OnDestroy {
     this._getValueChanges();
   }
 
-  public ngOnDestroy(): void {
-    this._patchUser();
-    this._destroy();
-  }
-
   public submit(): void {
     if (this.formGroup.valid) {
       this._submited = true;
-      this._destroy();
       const newUser = this._convertToModel(this.formGroup.value);
       this.submitStepper.emit(newUser);
     }
+  }
+
+  public ngOnDestroy(): void {
+    this._patchUser();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private _patchUser(): void {
@@ -89,8 +85,8 @@ export class FormStepperComponent implements OnInit, OnDestroy {
   private _getValueChanges(): void {
     this._usersService.editedUser$
       .pipe(
-        takeUntil(this._destroy$),
         filter((editedUser: UserModel) => !!editedUser),
+        takeUntil(this._destroy$),
       )
       .subscribe({
         next: (user: UserModel) => {
@@ -98,10 +94,10 @@ export class FormStepperComponent implements OnInit, OnDestroy {
         },
         error: () => {},
         complete: () => {},
-      })
+      });
   }
 
-  private _convertToModel (formData: FormStepperData): UserModel {
+  private _convertToModel (formData: IFormStepperData): UserModel {
     return new UserModel({
       firstname: formData.firstFormGroup.firstname,
       lastname: formData.firstFormGroup.lastname,
@@ -118,7 +114,7 @@ export class FormStepperComponent implements OnInit, OnDestroy {
         zipcode: formData.secondFormGroup.zipcode,
       },
       avatar: formData.thirdFormGroup.avatar,
-    })
+    });
   }
 
   private _formUpdate(data: UserModel): void {
@@ -139,7 +135,7 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       },
       thirdFormGroup: {
         avatar: data.avatar,
-      }
+      },
     });
   }
 
@@ -159,7 +155,7 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
       zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
     }),
-    
+
     this.thirdFormGroup = this._formBuilder.group({
       avatar: [null],
     }),
@@ -168,7 +164,7 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       firstFormGroup: this.firstGroupForm,
       secondFormGroup: this.secondFormGroup,
       thirdFormGroup: this.thirdFormGroup,
-    })
+    });
   }
 
   private _changeTabSubscribe(): void {
@@ -185,17 +181,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
         error: () => {},
         complete: () => {},
       });
-  }
-
-  private _openSnackBar(message: string, action: string): void {
-    this._snackBar.open(message, action, {
-      duration: 1000,
-    });
-  }
-
-  private _destroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
 }

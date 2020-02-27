@@ -1,11 +1,11 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { UserApiService } from '@core/services';
-import { UserModel } from '../../models';
-import { map } from 'rxjs/operators';
 import { convertDate } from '@app/utils';
+import { UserModel } from '../models';
 
 
 @Injectable()
@@ -13,13 +13,22 @@ import { convertDate } from '@app/utils';
 export class UsersService {
 
   public users;
-  public editedUser$ = new BehaviorSubject<UserModel>(null);
-  public createUser$ = new BehaviorSubject<UserModel>(null);
   public changeTabEvent = new EventEmitter<string>();
-  
+
+  private _editedUser$ = new BehaviorSubject<UserModel>(null);
+  private _createUser$ = new BehaviorSubject<UserModel>(null);
+
   public constructor(
     private readonly _userApiService: UserApiService,
   ) {}
+
+  get editedUser$(): Observable<UserModel> {
+    return this._editedUser$.asObservable();
+  }
+
+  get createUser$(): Observable<UserModel> {
+    return this._createUser$.asObservable();
+  }
 
   public getUsers(): Observable<UserModel[]> {
     return this._userApiService
@@ -74,29 +83,29 @@ export class UsersService {
           return false;
         }
       }
-  
+
       if (filter.phone) {
         const userPhone = element.phone.replace(/[^\d]/, '');
         if (!userPhone.includes(filter.phone)) {
           return false;
         }
       }
-  
+
       if (filter.state) {
         if (filter.state !== element.address.state.shortname) {
           return false;
         }
       }
-      
+
       if (filter.dateStart || filter.dateEnd) {
         const birthday = convertDate(element.birthday);
-  
+
         if (filter.dateStart) {
           if (convertDate(filter.dateStart) > birthday) {
             return false;
           }
         }
-        
+
         if (filter.dateEnd) {
           if (convertDate(filter.dateEnd) < birthday) {
             return false;
@@ -104,7 +113,7 @@ export class UsersService {
         }
       }
       return true;
-    })
+    });
   }
 
 }

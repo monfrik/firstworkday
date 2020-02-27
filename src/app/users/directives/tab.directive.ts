@@ -1,9 +1,10 @@
-import { Directive, Input, ElementRef } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
 
 @Directive({
-  selector: '[tab]'
+  selector: '[tab]',
 })
+
 export class TabDirective {
 
   @Input()
@@ -11,7 +12,5 @@ export class TabDirective {
 
   @Input()
   public isActive: boolean;
-
-  constructor (){}
 
 }

@@ -1,16 +1,22 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy
+} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { UsersService } from '../../services';
-import { UserModel } from '../../models/user.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
+
 import { RouterParams } from '@app/core/interfaces';
-import { Subject, Observable } from 'rxjs';
-import { takeUntil, tap, map } from 'rxjs/operators';
 import { convertDate } from '@app/utils';
+import { UsersService } from '@app/users/services';
+import { UserModel } from '@app/users/models';
 
 
 @Component({
@@ -20,7 +26,7 @@ import { convertDate } from '@app/utils';
 })
 
 export class UsersTableComponent implements OnInit, OnDestroy {
-  
+
   public allUsers: UserModel[] = null;
   public filtredTable: MatTableDataSource<any>;
   public displayedColumns: string[] = [
@@ -38,10 +44,10 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     'actions',
   ];
 
-  @ViewChild(MatPaginator, {static: true})
+  @ViewChild(MatPaginator, { static: true })
   public paginator: MatPaginator;
 
-  @ViewChild(MatSort, {static: true})
+  @ViewChild(MatSort, { static: true })
   public sort: MatSort;
 
   private _destroy$ = new Subject<void>();
@@ -55,9 +61,9 @@ export class UsersTableComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this._subscribeFilter();
-    this._getUsers();
     this._getAllUsers();
     this._initFiltres();
+    this._subscribeRoute();
   }
 
   public onApllyFilter(filtres: RouterParams): void {
@@ -78,47 +84,53 @@ export class UsersTableComponent implements OnInit, OnDestroy {
         next: (filtres: RouterParams) => {
           const queryParams = this._getRouterParams(filtres);
           this._router.navigate(['/users'], { queryParams });
-        }
-      })
+        },
+        error: () => {},
+        complete: () => {},
+      });
   }
 
-  private _subscribeRoute(): Observable<any> {
-    return this._activatedRoute.queryParams
+  private _subscribeRoute(): void {
+    this._activatedRoute.queryParams
       .pipe(
         takeUntil(this._destroy$),
         map((queryParams: any) => {
-          let newQueryParams = {...queryParams};
+          const newQueryParams = { ...queryParams };
           if (newQueryParams.usersId && typeof newQueryParams.usersId === 'string') {
             newQueryParams.usersId = [+newQueryParams.usersId];
           }
           if (newQueryParams.usersId && newQueryParams.usersId.length) {
-            newQueryParams.usersId = newQueryParams.usersId.map(userId => +userId);
+            newQueryParams.usersId = newQueryParams.usersId.map((userId) => +userId);
           }
           return newQueryParams;
-        })
+        }),
       )
-  }
-
-  private _getUsers(): void {
-    this._subscribeRoute()
       .pipe(
         takeUntil(this._destroy$),
       )
-      .subscribe((queryParams: any): void => {
-        this._usersService
-          .getUsersWithParams(queryParams)
-          .pipe(
-            takeUntil(this._destroy$),
-          )
-          .subscribe({
-            next: (usersWithParams: UserModel[]) => {
-              this.filtredTable = new MatTableDataSource(usersWithParams);
-              this.filtredTable.sort = this.sort;
-              this.filtredTable.paginator = this.paginator;
-            },
-            error: () => {},
-            complete: () => {},
-          });
+      .subscribe({
+        next: (queryParams: RouterParams): void => {
+          this._getUsersWithQueryParams(queryParams);
+        },
+        error: () => {},
+        complete: () => {},
+      });
+  }
+
+  private _getUsersWithQueryParams(queryParams: RouterParams): void {
+    this._usersService
+      .getUsersWithParams(queryParams)
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe({
+        next: (usersWithParams: UserModel[]) => {
+          this.filtredTable = new MatTableDataSource(usersWithParams);
+          this.filtredTable.sort = this.sort;
+          this.filtredTable.paginator = this.paginator;
+        },
+        error: () => {},
+        complete: () => {},
       });
   }
 
@@ -138,7 +150,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
   }
 
   private _getRouterParams(filtres: RouterParams): RouterParams {
-    let routerParams: RouterParams = {};
+    const routerParams: RouterParams = {};
 
     if (filtres.usersId && filtres.usersId.length) {
       routerParams.usersId = filtres.usersId;
@@ -165,7 +177,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     const state = this._activatedRoute.snapshot.queryParams.state || '';
     const dateStart = this._activatedRoute.snapshot.queryParams.dateStart || '';
     const dateEnd = this._activatedRoute.snapshot.queryParams.dateEnd || '';
-    
+
     this._filter$.next({
       usersId,
       phone,
