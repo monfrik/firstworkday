@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -19,9 +19,9 @@
       "dom"
     ],
     "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@utils/*": ["app/utils/*"]
+      "@app/*": ["src/app/*"],
+      "@core/*": ["src/app/core/*"],
+      "@utils": ["src/app/utils/index.ts"],
     }
   },
   "angularCompilerOptions": {

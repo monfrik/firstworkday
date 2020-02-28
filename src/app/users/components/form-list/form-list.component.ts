@@ -18,7 +18,6 @@ import { filter, takeUntil } from 'rxjs/operators';
 
 // import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
-import { UsersService } from '@app/users/services';
 import {
   PHONE_MASK,
   ZIPCODE_MASK,
@@ -32,7 +31,9 @@ import {
   STATE_PATTERN,
   STATE_SHORT_PATTERN,
   STATES,
-} from '@app/utils';
+} from '@utils';
+
+import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
 
 

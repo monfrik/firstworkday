@@ -11,9 +11,6 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-// import { FileUploadValidators } from '@iplab/ngx-file-upload';
-
-import { UsersService } from '@app/users/services';
 import {
   NAME_PATTERN,
   PHONE_PATTERN,
@@ -23,9 +20,15 @@ import {
   ZIPCODE_PATTERN,
   STATE_PATTERN,
   STATE_SHORT_PATTERN,
-} from '@app/utils';
+} from '@utils';
+
+import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
+
 import { IFormStepperData } from './interfaces';
+
+// import { FileUploadValidators } from '@iplab/ngx-file-upload';
+
 
 @Component({
   selector: 'app-form-stepper',
@@ -145,7 +148,7 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
       email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
       birthday: ['', [Validators.required]],
-    }),
+    });
 
     this.secondFormGroup = this._formBuilder.group({
       name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
@@ -153,11 +156,11 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       city: ['', [Validators.required, Validators.pattern(CITY_PATTERN)]],
       street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
       zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
-    }),
+    });
 
     this.thirdFormGroup = this._formBuilder.group({
       avatar: [null],
-    }),
+    });
 
     this.formGroup = this._formBuilder.group({
       firstFormGroup: this.firstGroupForm,
