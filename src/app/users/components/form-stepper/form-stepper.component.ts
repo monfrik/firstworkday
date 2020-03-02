@@ -5,11 +5,11 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
+  Input,
 } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
 
 import {
   NAME_PATTERN,
@@ -22,12 +22,9 @@ import {
   STATE_SHORT_PATTERN,
 } from '@utils';
 
-import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
 
 import { IFormStepperData } from './interfaces';
-
-// import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 
 @Component({
@@ -38,6 +35,26 @@ import { IFormStepperData } from './interfaces';
 })
 
 export class FormStepperComponent implements OnInit, OnDestroy {
+
+  @Input()
+  set user(user: UserModel) {
+    if (!user) {
+      return;
+    }
+
+    if (this.formGroup) {
+      this._formUpdate(user);
+    } else {
+      this._initialUserData = user;
+    }
+  }
+
+  @Input()
+  set activeTab(activeTab: boolean) {
+    if (!activeTab) {
+      this._patchUser();
+    }
+  }
 
   @Output()
   public readonly submitStepper = new EventEmitter<UserModel>();
@@ -51,17 +68,18 @@ export class FormStepperComponent implements OnInit, OnDestroy {
   public thirdFormGroup: FormGroup;
 
   private _destroy$ = new Subject<void>();
+  private _initialUserData: UserModel;
   private _submited = false;
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
-    private readonly _usersService: UsersService,
   ) {}
 
   public ngOnInit(): void {
-    this._changeTabSubscribe();
     this._formInitialization();
-    this._getValueChanges();
+    if (this._initialUserData) {
+      this._formUpdate(this._initialUserData);
+    }
   }
 
   public submit(): void {
@@ -79,24 +97,9 @@ export class FormStepperComponent implements OnInit, OnDestroy {
   }
 
   private _patchUser(): void {
-    if (this.formGroup.touched && !this._submited) {
+    if (this.formGroup && this.formGroup.touched && !this._submited) {
       this.patchFormStepper.emit(this._convertToModel(this.formGroup.value));
     }
-  }
-
-  private _getValueChanges(): void {
-    this._usersService.editedUser$
-      .pipe(
-        filter((editedUser: UserModel) => !!editedUser),
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: (user: UserModel) => {
-          this._formUpdate(user);
-        },
-        error: () => {},
-        complete: () => {},
-      });
   }
 
   private _convertToModel (formData: IFormStepperData): UserModel {
@@ -167,22 +170,6 @@ export class FormStepperComponent implements OnInit, OnDestroy {
       secondFormGroup: this.secondFormGroup,
       thirdFormGroup: this.thirdFormGroup,
     });
-  }
-
-  private _changeTabSubscribe(): void {
-    this._usersService.changeTabEvent
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: (tabName: string) => {
-          if (tabName !== 'stepper') {
-            this._patchUser();
-          }
-        },
-        error: () => {},
-        complete: () => {},
-      });
   }
 
 }

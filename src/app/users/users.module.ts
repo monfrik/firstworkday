@@ -35,7 +35,8 @@ import {
   FirstStepComponent,
   SecondStepComponent,
   ThirdStepComponent,
-  TableFilterComponent
+  TableFilterComponent,
+  FormsGroupComponent,
 } from './components';
 import { TabDirective } from './directives';
 
@@ -76,6 +77,7 @@ import { TabDirective } from './directives';
     TableFilterComponent,
     ErrorFiledComponent,
     TabDirective,
+    FormsGroupComponent,
   ],
   providers: [UsersService],
 })

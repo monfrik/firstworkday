@@ -3,9 +3,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { convertDate } from '@utils';
-
 import { UserApiService } from '@core/services';
+import { convertDate } from '@utils';
 
 import { UserModel } from '../models';
 

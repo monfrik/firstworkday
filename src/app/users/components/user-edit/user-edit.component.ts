@@ -1,30 +1,30 @@
-import { Component, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Subject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
-import { TabDirective } from '@app/users/directives';
 
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class UserEditComponent implements OnInit, OnDestroy {
 
-  @ViewChildren(TabDirective)
-  public tabs: QueryList<TabDirective>;
-
-  public formStepper;
-  public formList;
-  public initialData: UserModel;
+  public editedUser: UserModel;
 
   private _destroy$ = new Subject<void>();
   private _submited = false;
@@ -40,8 +40,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this._getUser(+this._activatedRoute.snapshot.params.id);
   }
 
-  public onSubmit(user: UserModel): void {
-    const editedUser = this._getUserWithId(user);
+  public onSubmit(editedUser: UserModel): void {
     this._submited = true;
     this._usersService
       .updateUser(editedUser)
@@ -58,43 +57,38 @@ export class UserEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onPacthFormList(user: UserModel): void {
-    this._pacthUser(user);
-  }
-
-  public onPacthFormStepper(user: UserModel): void {
-    this._pacthUser(user);
-  }
-
-  public onChangeTab(): void {
-    const activeTab = this.tabs.find((tab) => tab.isActive);
-    this._usersService.changeTabEvent.emit(activeTab.tab);
-  }
-
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
     if (!this._submited) {
       if (!confirm('Save data?')) {
         this._usersService.clearEditedUser();
+      } else {
+        this._usersService.patchEditedUser(this.editedUser);
       }
     }
   }
 
+  public onChangeUser(user: UserModel): void {
+    this._pacthUser(user);
+  }
+
   private _pacthUser(editedUser: UserModel): void {
-    const data = this._getUserWithId(editedUser);
-    this._usersService.patchEditedUser(data);
+    this.editedUser = editedUser;
   }
 
   private _getUser(id: number): void {
     this._usersService.editedUser$
       .pipe(
-        filter((editedUser: UserModel) => !editedUser || editedUser.id !== id),
         takeUntil(this._destroy$),
       )
       .subscribe({
-        next: () => {
-          this._fetchUser(id);
+        next: (editedUser: UserModel) => {
+          if (!editedUser || editedUser.id !== id) {
+            this._fetchUser(id);
+          } else {
+            this.editedUser = editedUser;
+          }
         },
         error: () => {},
         complete: () => {},
@@ -109,16 +103,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (user: UserModel) => {
-          this._usersService.patchEditedUser(user);
+          this.editedUser = user;
         },
         error: () => {},
         complete: () => {},
       });
-  }
-
-  private _getUserWithId(user: UserModel): UserModel {
-    const id = +this._activatedRoute.snapshot.params.id;
-    return { ...user, ...{ id } };
   }
 
   private _openSnackBar(message: string, action: string): void {

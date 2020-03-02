@@ -13,6 +13,8 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
+
 import { Subject } from 'rxjs';
 import {
   map,
@@ -21,16 +23,14 @@ import {
   filter
 } from 'rxjs/operators';
 
-import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
+import { UserModel } from '@app/users/models';
+import { IRouterParams } from '@app/core/interfaces';
 
 import {
   STATE_PATTERN,
   NAME_PATTERN,
   STATES,
 } from '@utils';
-
-import { UserModel } from '@app/users/models';
-import { IRouterParams } from '@app/core/interfaces';
 
 
 @Component({
