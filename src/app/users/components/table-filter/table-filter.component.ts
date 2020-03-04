@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -37,6 +38,7 @@ import {
   selector: 'app-table-filter',
   templateUrl: './table-filter.component.html',
   styleUrls: ['./table-filter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class TableFilterComponent implements OnInit, OnDestroy {
@@ -57,7 +59,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   public dateEnd = new Date();
   public readonly currentDate = new Date();
 
-  private _destroyed$ = new Subject<void>();
+  private readonly _destroyed$ = new Subject<void>();
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
@@ -76,11 +78,9 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   }
 
   get submitColor(): string {
-    if (this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)) {
-      return 'warn';
-    }
-
-    return '';
+    return this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)
+    ? 'warn'
+    : '';
   }
 
   public onMatChipInputTokenEnd(event: MatChipInputEvent): void {
@@ -96,12 +96,14 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   }
 
   public onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.selectedUsers.push(this.users[event.option.value - 1]);
+    const selectedUser = this.users[event.option.value - 1];
+    this.selectedUsers.push(selectedUser);
     this.filtersForm.get('userName').setValue('');
   }
 
   public resetForm(): void {
     this.filtersForm.reset();
+    this.selectedUsers = [];
     const emitData = {
       usersId: [],
       state: '',
@@ -121,11 +123,8 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
     const usersId = this.selectedUsers.map((selectedUser) => +selectedUser.id);
 
-    const currentState = STATES.find((stateItem) => stateItem.name === state);
-    const stateShort = currentState ? currentState.shortname : '';
-
     const emitData = {
-      state: stateShort,
+      state,
       usersId,
       phone,
       dateStart,
@@ -215,13 +214,11 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   private _initFiltres(): void {
     const { usersId, phone, state, dateStart, dateEnd } = this._activatedRoute.snapshot.queryParams;
 
-    const initState = STATES.find((stateItem) => stateItem.shortname === state);
-
     this.filtersForm.patchValue({
       phone,
       dateStart,
       dateEnd,
-      state: initState,
+      state,
     });
 
     if (usersId) {
