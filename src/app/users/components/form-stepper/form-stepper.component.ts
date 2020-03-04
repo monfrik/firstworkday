@@ -82,18 +82,18 @@ export class FormStepperComponent implements OnInit, OnDestroy {
     }
   }
 
+  public ngOnDestroy(): void {
+    this._patchUser();
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
   public submit(): void {
     if (this.formGroup.valid) {
       this._submited = true;
       const newUser = this._convertToModel(this.formGroup.value);
       this.submitStepper.emit(newUser);
     }
-  }
-
-  public ngOnDestroy(): void {
-    this._patchUser();
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
   private _patchUser(): void {

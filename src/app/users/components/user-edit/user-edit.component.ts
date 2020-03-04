@@ -21,13 +21,13 @@ import { UserModel } from '@app/users/models';
   styleUrls: ['./user-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class UserEditComponent implements OnInit, OnDestroy {
 
   public editedUser: UserModel;
 
-  private _destroy$ = new Subject<void>();
   private _submited = false;
+
+  private readonly _destroy$ = new Subject<void>();
 
   public constructor(
     private readonly _router: Router,
@@ -37,24 +37,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this._getUser(+this._activatedRoute.snapshot.params.id);
-  }
-
-  public onSubmit(editedUser: UserModel): void {
-    this._submited = true;
-    this._usersService
-      .updateUser(editedUser)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this._router.navigate(['/users']);
-          this._openSnackBar('User changed', 'Ok');
-        },
-        error: () => {},
-        complete: () => {},
-      });
+    const userId = +this._activatedRoute.snapshot.params.id;
+    this._getUser(userId);
   }
 
   public ngOnDestroy(): void {
@@ -69,12 +53,30 @@ export class UserEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onSubmit(editedUser: UserModel): void {
+    const updatedUser = this._getUserWithId(editedUser);
+    this._submited = true;
+    this._usersService
+      .updateUser(updatedUser)
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe({
+        next: () => {
+          this._router.navigate(['/users']);
+          this._openSnackBar('User changed', 'Ok');
+        },
+        error: () => {},
+        complete: () => {},
+      });
+  }
+
   public onChangeUser(user: UserModel): void {
     this._pacthUser(user);
   }
 
   private _pacthUser(editedUser: UserModel): void {
-    this.editedUser = editedUser;
+    this.editedUser = this._getUserWithId(editedUser);
   }
 
   private _getUser(id: number): void {
@@ -108,6 +110,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
         error: () => {},
         complete: () => {},
       });
+  }
+
+  private _getUserWithId(user: UserModel): UserModel {
+    const id = +this._activatedRoute.snapshot.params.id;
+    return { ...user, ...{ id } };
   }
 
   private _openSnackBar(message: string, action: string): void {

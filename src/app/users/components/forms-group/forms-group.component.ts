@@ -9,7 +9,6 @@ import {
   Output,
   AfterViewInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { Subject } from 'rxjs';
 
@@ -38,16 +37,9 @@ export class FormsGroupComponent implements AfterViewInit, OnDestroy {
   @ViewChildren(TabDirective)
   public tabs: QueryList<TabDirective>;
 
-  public formStepper;
-  public formList;
-
   public activeTab: string;
 
   private _destroy$ = new Subject<void>();
-
-  public constructor(
-    private readonly _activatedRoute: ActivatedRoute,
-  ) {}
 
   public get listActive(): boolean {
     return this.activeTab === 'list';
@@ -61,21 +53,21 @@ export class FormsGroupComponent implements AfterViewInit, OnDestroy {
     this._setActivaTab();
   }
 
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
   public onSubmit(user: UserModel): void {
-    this.submitGroup.emit(this._getUserWithId(user));
+    this.submitGroup.emit(user);
   }
 
   public onPacthForm(user: UserModel): void {
-    this.changeUser.emit(this._getUserWithId(user));
+    this.changeUser.emit(user);
   }
 
   public onChangeTab(): void {
     this._setActivaTab();
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
   private _setActivaTab(): void {
@@ -83,10 +75,6 @@ export class FormsGroupComponent implements AfterViewInit, OnDestroy {
     this.activeTab = activeTab
     ? activeTab.tab
     : this.tabs.first.tab;
-  }
-  private _getUserWithId(user: UserModel): UserModel {
-    const id = +this._activatedRoute.snapshot.params.id;
-    return { ...user, ...{ id } };
   }
 
 }
