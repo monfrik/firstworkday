@@ -1,8 +1,8 @@
 import {
   Component,
   OnDestroy,
-  ViewChildren,
-  QueryList
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -13,26 +13,22 @@ import { takeUntil } from 'rxjs/operators';
 
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
-import { TabDirective } from '@app/users/directives';
 
 
 @Component({
   selector: 'app-user-create',
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class UserCreateComponent implements OnDestroy {
+export class UserCreateComponent implements OnInit, OnDestroy {
 
-  @ViewChildren(TabDirective)
-  public tabs: QueryList<TabDirective>;
+  public userToCreate: UserModel;
 
-  public formStepper;
-  public formList;
-  public initialData: UserModel;
-
-  private _destroy$ = new Subject<void>();
   private _submited = false;
+
+  private readonly _destroy$ = new Subject<void>();
 
   public constructor(
     private readonly _router: Router,
@@ -40,34 +36,8 @@ export class UserCreateComponent implements OnDestroy {
     private readonly _snackBar: MatSnackBar,
   ) {}
 
-  public onSubmit(user: UserModel): void {
-    this._submited = true;
-    this._usersService
-      .addUser(user)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this._router.navigate(['/users']);
-          this._openSnackBar('User create', 'Ok');
-        },
-        error: () => {},
-        complete: () => {},
-      });
-  }
-
-  public onPacthFormList(user: UserModel): void {
-    this._pacthUser(user);
-  }
-
-  public onPacthFormStepper(user: UserModel): void {
-    this._pacthUser(user);
-  }
-
-  public onChangeTab(): void {
-    const activeTab = this.tabs.find((tab) => tab.isActive);
-    this._usersService.changeTabEvent.emit(activeTab.tab);
+  public ngOnInit(): void {
+    this._getUserToCreate();
   }
 
   public ngOnDestroy(): void {
@@ -76,12 +46,49 @@ export class UserCreateComponent implements OnDestroy {
     if (!this._submited) {
       if (!confirm('Save data?')) {
         this._usersService.clearCreateUser();
+      } else {
+        this._usersService.patchCreateUser(this.userToCreate);
       }
     }
   }
 
-  private _pacthUser(user: UserModel): void {
-    this._usersService.patchCreateUser(user);
+  public onSubmit(userToCreate: UserModel): void {
+    this._submited = true;
+    this._usersService
+      .updateUser(userToCreate)
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe({
+        next: () => {
+          this._router.navigate(['/users']);
+          this._openSnackBar('User changed', 'Ok');
+        },
+        error: () => {},
+        complete: () => {},
+      });
+  }
+
+  public onChangeUser(userToCreate: UserModel): void {
+    this._pacthUser(userToCreate);
+  }
+
+  private _getUserToCreate(): void {
+    this._usersService.createUser$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe({
+        next: (userToCreate: UserModel) => {
+          this.userToCreate = userToCreate || null;
+        },
+        error: () => {},
+        complete: () => {},
+      });
+  }
+
+  private _pacthUser(userToCreate: UserModel): void {
+    this.userToCreate = userToCreate;
   }
 
   private _openSnackBar(message: string, action: string): void {
