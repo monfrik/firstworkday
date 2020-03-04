@@ -4,8 +4,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { UserApiService } from '@core/services';
+import { convertDate } from '@utils';
 
-import { convertDate } from '@app/utils';
 import { UserModel } from '../models';
 
 

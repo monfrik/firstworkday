@@ -18,12 +18,12 @@ import {
   MatButtonModule,
   MatPaginatorModule,
 } from '@angular/material';
-
 import { TextMaskModule } from 'angular2-text-mask';
-
 import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { ErrorFiledComponent } from '@core/components';
 
 import { SharedModule } from '../shared/shared.module';
+
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersService } from './services';
 import {
@@ -35,10 +35,9 @@ import {
   FirstStepComponent,
   SecondStepComponent,
   ThirdStepComponent,
-  TableFilterComponent
+  TableFilterComponent,
+  FormsGroupComponent,
 } from './components';
-
-import { ErrorFiledComponent } from '@core/components';
 import { TabDirective } from './directives';
 
 @NgModule({
@@ -78,6 +77,7 @@ import { TabDirective } from './directives';
     TableFilterComponent,
     ErrorFiledComponent,
     TabDirective,
+    FormsGroupComponent,
   ],
   providers: [UsersService],
 })

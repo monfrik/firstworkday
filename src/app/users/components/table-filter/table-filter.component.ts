@@ -24,12 +24,13 @@ import {
 } from 'rxjs/operators';
 
 import { UserModel } from '@app/users/models';
+import { IRouterParams } from '@app/core/interfaces';
+
 import {
   STATE_PATTERN,
   NAME_PATTERN,
   STATES,
-} from '@app/utils';
-import { IRouterParams } from '@app/core/interfaces';
+} from '@utils';
 
 
 @Component({

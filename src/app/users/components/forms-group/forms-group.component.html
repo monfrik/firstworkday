@@ -1,0 +1,28 @@
+<div class="forms-group">
+  <mat-tab-group (selectedTabChange)="onChangeTab($event)">
+    <mat-tab
+      label="Form"
+      tab="list"
+      [isActive]="list.isActive"
+      #list
+    >
+      <app-form-list
+      [user]="user"
+      [activeTab]="listActive"
+      (submitList)="onSubmit($event)"
+      (patchFormList)="onPacthForm($event)"></app-form-list>
+    </mat-tab>
+    <mat-tab
+      label="Stepper"
+      tab="stepper"
+      [isActive]="stepper.isActive"
+      #stepper
+    >
+      <app-form-stepper
+      [user]="user"
+      [activeTab]="stepperActive"
+      (submitStepper)="onSubmit($event)"
+      (patchFormStepper)="onPacthForm($event)"></app-form-stepper>
+    </mat-tab>
+  </mat-tab-group>
+</div>

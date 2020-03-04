@@ -13,8 +13,9 @@ import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
+import { convertDate } from '@utils';
+
 import { IRouterParams } from '@app/core/interfaces';
-import { convertDate } from '@app/utils';
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
 
