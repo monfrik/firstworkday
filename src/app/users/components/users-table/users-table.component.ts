@@ -67,13 +67,13 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     this._subscribeRoute();
   }
 
-  public onApllyFilter(filtres: IRouterParams): void {
-    this._filter$.next(filtres);
-  }
-
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public onApllyFilter(filtres: IRouterParams): void {
+    this._filter$.next(filtres);
   }
 
   private _subscribeFilter(): void {
