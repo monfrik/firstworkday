@@ -109,8 +109,8 @@
             (selectionChange)="onChangeSelect($event?.value)"
             required
           >
-            <mat-option *ngFor="let state of states" [value]="state.name">
-              {{state.name}}
+            <mat-option *ngFor="let state of states; trackBy: trackByFn" [value]="state.name">
+              {{ state.name }}
             </mat-option>
           </mat-select>
           <mat-error

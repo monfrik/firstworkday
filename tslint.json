@@ -1,7 +1,4 @@
 {
-  "rulesDirectory": [
-    "node_modules/@nrwl/workspace/src/tslint"
-  ],
   "extends": [
     "tslint-microsoft-contrib/recommended",
     "codelyzer",
@@ -100,7 +97,9 @@
       [
         "@lib",
         "@app",
-        "@env"
+        "@env",
+        "@core",
+        "@utils"
       ]
     ],
     "no-inferred-empty-object-type": true,

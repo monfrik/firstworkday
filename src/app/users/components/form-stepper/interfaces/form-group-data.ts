@@ -1,10 +1,10 @@
-export interface FormStepperData {
-  firstFormGroup: FirstFormGroup;
-  secondFormGroup: SecondFormGroup;
-  thirdFormGroup: ThirdFormGroup;
+export interface IFormStepperData {
+  firstFormGroup: IFirstFormGroup;
+  secondFormGroup: ISecondFormGroup;
+  thirdFormGroup: IThirdFormGroup;
 }
 
-export interface FirstFormGroup {
+export interface IFirstFormGroup {
   firstname: string;
   lastname: string;
   phone: string;
@@ -12,7 +12,7 @@ export interface FirstFormGroup {
   birthday: Date;
 }
 
-export interface SecondFormGroup {
+export interface ISecondFormGroup {
   name: string;
   shortname: string;
   city: string;
@@ -20,6 +20,6 @@ export interface SecondFormGroup {
   zipcode: string;
 }
 
-export interface ThirdFormGroup {
+export interface IThirdFormGroup {
   avatar: any;
 }

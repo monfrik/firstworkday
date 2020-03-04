@@ -1,4 +1,4 @@
-export interface ErrorTemplate {
+export interface IErrorTemplate {
   error: string;
   message: string;
 }

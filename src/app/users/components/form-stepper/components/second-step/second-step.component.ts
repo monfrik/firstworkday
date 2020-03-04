@@ -7,7 +7,7 @@ import { ZIPCODE_MASK, STATES } from '@app/utils';
 @Component({
   selector: 'app-second-step',
   templateUrl: './second-step.component.html',
-  styleUrls: ['./second-step.component.scss']
+  styleUrls: ['./second-step.component.scss'],
 })
 
 export class SecondStepComponent {
@@ -19,9 +19,13 @@ export class SecondStepComponent {
   @Input()
   public formGroup: FormGroup;
 
-  public onChangeSelect(stateName): void {
-    const currentState = STATES.find(element => element.name === stateName);
+  public onChangeSelect(stateName: string): void {
+    const currentState = STATES.find((state) => state.name === stateName);
     this.formGroup.get('shortname').patchValue(currentState.shortname);
+  }
+
+  public trackByFn(index: number): number {
+    return index;
   }
 
 }

@@ -1,1 +1,1 @@
-export * from './tab/tab.directive';
+export * from './tab.directive';

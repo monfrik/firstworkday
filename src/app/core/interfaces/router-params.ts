@@ -1,4 +1,4 @@
-export interface RouterParams {
+export interface IRouterParams {
   usersId?: number[];
   phone?: string;
   state?: string;

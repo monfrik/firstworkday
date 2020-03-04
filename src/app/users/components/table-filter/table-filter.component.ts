@@ -4,49 +4,53 @@ import {
   Input,
   Output,
   EventEmitter,
+  OnDestroy,
 } from '@angular/core';
-
 import { ActivatedRoute } from '@angular/router';
-
 import {
   FormGroup,
   FormBuilder,
   Validators,
 } from '@angular/forms';
 
-import { Subject } from 'rxjs';
-import { map, takeUntil, startWith, filter } from 'rxjs/operators';
-
 import { MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
 
+import { Subject } from 'rxjs';
+import {
+  map,
+  takeUntil,
+  startWith,
+  filter
+} from 'rxjs/operators';
+
 import { UserModel } from '@app/users/models';
+import { IRouterParams } from '@app/core/interfaces';
 
 import {
   STATE_PATTERN,
   NAME_PATTERN,
   STATES,
-} from '@app/utils';
-import { RouterParams } from '@app/core/interfaces';
+} from '@utils';
 
 
 @Component({
   selector: 'app-table-filter',
   templateUrl: './table-filter.component.html',
-  styleUrls: ['./table-filter.component.scss']
+  styleUrls: ['./table-filter.component.scss'],
 })
 
-export class TableFilterComponent implements OnInit {
+export class TableFilterComponent implements OnInit, OnDestroy {
 
   @Input()
   public users: UserModel[] = [];
 
   @Output()
-  public readonly applyFilter = new EventEmitter<RouterParams>();
+  public readonly applyFilter = new EventEmitter<IRouterParams>();
 
   public filtersForm: FormGroup;
   public filteredUsers: UserModel[];
   public selectedUsers: UserModel[] = [];
-  
+
   public readonly states = STATES;
 
   public dateStart: Date;
@@ -71,27 +75,28 @@ export class TableFilterComponent implements OnInit {
     this._destroyed$.complete();
   }
 
-  public get submitColor(): string {
+  get submitColor(): string {
     if (this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)) {
       return 'warn';
     }
+
     return '';
   }
 
-  public add(event: MatChipInputEvent): void {
+  public onMatChipInputTokenEnd(event: MatChipInputEvent): void {
     event.input.value = '';
     this.filtersForm.get('userName').setValue('');
   }
 
-  public remove(user: UserModel): void {
+  public onRemoveUserFromChipList(user: UserModel): void {
     const index = this.selectedUsers.indexOf(user);
     if (index >= 0) {
       this.selectedUsers.splice(index, 1);
     }
   }
 
-  public selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectedUsers.push(this.users[event.option.value-1]);
+  public onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    this.selectedUsers.push(this.users[event.option.value - 1]);
     this.filtersForm.get('userName').setValue('');
   }
 
@@ -103,7 +108,7 @@ export class TableFilterComponent implements OnInit {
       phone: '',
       dateStart: '',
       dateEnd: '',
-    }
+    };
     this.applyFilter.emit(emitData);
   }
 
@@ -112,11 +117,11 @@ export class TableFilterComponent implements OnInit {
       return;
     }
 
-    const {dateStart, dateEnd, phone, state} = this.filtersForm.value;
-    
-    const usersId = this.selectedUsers.map(element => element.id);
-    
-    const currentState = STATES.find(element => element.name === state);
+    const { dateStart, dateEnd, phone, state } = this.filtersForm.value;
+
+    const usersId = this.selectedUsers.map((selectedUser) => +selectedUser.id);
+
+    const currentState = STATES.find((stateItem) => stateItem.name === state);
     const stateShort = currentState ? currentState.shortname : '';
 
     const emitData = {
@@ -125,9 +130,13 @@ export class TableFilterComponent implements OnInit {
       phone,
       dateStart,
       dateEnd,
-    }
-    
+    };
+
     this.applyFilter.emit(emitData);
+  }
+
+  public trackByFn(index: number): number {
+    return index;
   }
 
   private _initialisationForm(): void {
@@ -159,7 +168,7 @@ export class TableFilterComponent implements OnInit {
       .valueChanges
       .pipe(
         takeUntil(this._destroyed$),
-        filter(dateStart => !!dateStart),
+        filter((dateStart) => !!dateStart),
         map((dateStart: Date | string): Date => {
           return new Date(dateStart);
         }),
@@ -175,11 +184,11 @@ export class TableFilterComponent implements OnInit {
     this.filtersForm.get('dateEnd')
       .valueChanges
       .pipe(
-        takeUntil(this._destroyed$),
-        filter(dateEnd => !!dateEnd),
+        filter((dateEnd) => !!dateEnd),
         map((dateEnd: Date | string): Date => {
           return new Date(dateEnd);
         }),
+        takeUntil(this._destroyed$),
       )
       .subscribe({
         next: (dateEnd: Date): void => {
@@ -187,9 +196,9 @@ export class TableFilterComponent implements OnInit {
         },
         error: () => {},
         complete: () => {},
-      })
+      });
   }
-  
+
   private _filterUsersByName(value: any): UserModel[] {
     if (typeof value !== 'string') {
       return this.users;
@@ -198,16 +207,16 @@ export class TableFilterComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.users.filter((user: UserModel): boolean => {
-      const userName = user.firstname.toLowerCase() + ' ' + user.lastname.toLowerCase();
+      const userName = `${user.firstname.toLowerCase()} ${user.lastname.toLowerCase()}`;
       return userName.indexOf(filterValue) > -1;
     });
   }
 
   private _initFiltres(): void {
-    const {usersId, phone, state, dateStart, dateEnd} = this._activatedRoute.snapshot.queryParams;
-    
-    const initState = STATES.find(el => el.shortname == state);
-    
+    const { usersId, phone, state, dateStart, dateEnd } = this._activatedRoute.snapshot.queryParams;
+
+    const initState = STATES.find((stateItem) => stateItem.shortname === state);
+
     this.filtersForm.patchValue({
       phone,
       dateStart,
@@ -217,14 +226,13 @@ export class TableFilterComponent implements OnInit {
 
     if (usersId) {
       if (typeof usersId === 'string') {
-        this.selectedUsers.push(this.users[+usersId-1]);
+        this.selectedUsers.push(this.users[+usersId - 1]);
       } else {
         usersId.forEach((idUser: string): void => {
-          this.selectedUsers.push(this.users[+idUser-1]);
+          this.selectedUsers.push(this.users[+idUser - 1]);
         });
       }
     }
-    
   }
 
 }

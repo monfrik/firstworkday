@@ -233,6 +233,6 @@ export const STATES = [
   },
   {
     name: 'Wyoming',
-    shortname: 'WY'
-  }
-]
+    shortname: 'WY',
+  },
+];

@@ -1,6 +1,7 @@
 import { AddressModel } from './address.model';
 
 export class UserModel {
+
   public id: number;
   public firstname: string;
   public lastname: string;
@@ -11,13 +12,14 @@ export class UserModel {
   public avatar: any;
 
   public constructor(data: any = {}) {
-    this.id = data.id || void 0;
-    this.firstname = data.firstname || void 0;
-    this.lastname = data.lastname || void 0;
-    this.phone = data.phone || void 0;
-    this.email = data.email || void 0;
-    this.birthday = new Date(data.birthday) || void 0;
-    this.avatar = data.avatar || void 0;
-    this.address = data.address ? new AddressModel(data.address) : void 0;
+    this.id = data.id || undefined;
+    this.firstname = data.firstname || undefined;
+    this.lastname = data.lastname || undefined;
+    this.phone = data.phone || undefined;
+    this.email = data.email || undefined;
+    this.birthday = new Date(data.birthday) || undefined;
+    this.avatar = data.avatar || undefined;
+    this.address = data.address ? new AddressModel(data.address) : undefined;
   }
+
 }
