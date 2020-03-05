@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -10,7 +11,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
 import { convertDate } from '@utils';
@@ -24,11 +25,11 @@ import { UserModel } from '@app/users/models';
   selector: 'app-users-table',
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class UsersTableComponent implements OnInit, OnDestroy {
 
-  public allUsers: UserModel[] = null;
   public filtredTable: MatTableDataSource<any>;
   public displayedColumns: string[] = [
     'position',
@@ -44,21 +45,26 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     'avatar',
     'actions',
   ];
-
+  
   @ViewChild(MatPaginator, { static: true })
   public paginator: MatPaginator;
-
+  
   @ViewChild(MatSort, { static: true })
   public sort: MatSort;
-
+  
   private _destroy$ = new Subject<void>();
   private _filter$ = new Subject<IRouterParams>();
+  public _allUsers$ = new BehaviorSubject<UserModel[]>(null);
 
   public constructor(
     private readonly _router: Router,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _usersService: UsersService,
   ) {}
+
+  get allUsers$(): Observable<UserModel[]> {
+    return this._allUsers$.asObservable();
+  }
 
   public ngOnInit(): void {
     this._subscribeFilter();
@@ -143,7 +149,7 @@ export class UsersTableComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (allUsers: UserModel[]) => {
-          this.allUsers = allUsers;
+          this._allUsers$.next(allUsers);
         },
         error: () => {},
         complete: () => {},

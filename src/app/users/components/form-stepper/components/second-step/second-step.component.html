@@ -2,13 +2,13 @@
 
   <mat-form-field>
     <mat-label>State</mat-label>
-    <mat-select formControlName="name" (selectionChange)="onChangeSelect($event?.value)">
+    <mat-select formControlName="state" (selectionChange)="onChangeSelect($event?.value)">
       <mat-option *ngFor="let state of states; trackBy: trackByFn" [value]="state.name">
         {{ state.name }}
       </mat-option>
     </mat-select>
     <mat-error
-      [inputControl]="formGroup.get('name')"
+      [inputControl]="formGroup.get('state')"
       [errorMessages]="{
         'required': 'this control is required',
         'pattern': 'Invalid state'
@@ -24,11 +24,11 @@
       name="stateShort"
       placeholder="State abbreviation"
       disabled
-      [value]="formGroup.get('shortname').value"
+      [value]="formGroup.get('stateshort').value"
       required
     >
     <mat-error
-      [inputControl]="formGroup.get('shortname')"
+      [inputControl]="formGroup.get('stateshort')"
       [errorMessages]="{
         'required': 'this control is required',
         'pattern': 'Invalid state abbr. State abbr. template - AA'

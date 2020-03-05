@@ -44,13 +44,17 @@ import {
 export class TableFilterComponent implements OnInit, OnDestroy {
 
   @Input()
-  public users: UserModel[] = [];
+  set users(users: UserModel[]) {
+    this._allUsers = users;
+    this.filteredUsers = users || null;
+  };
 
   @Output()
   public readonly applyFilter = new EventEmitter<IRouterParams>();
 
   public filtersForm: FormGroup;
   public filteredUsers: UserModel[];
+  public _allUsers: UserModel[];
   public selectedUsers: UserModel[] = [];
 
   public readonly states = STATES;
@@ -66,6 +70,12 @@ export class TableFilterComponent implements OnInit, OnDestroy {
     private readonly _activatedRoute: ActivatedRoute,
   ) {}
 
+  get submitColor(): string {
+    return this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)
+    ? 'warn'
+    : '';
+  }
+
   public ngOnInit(): void {
     this._initialisationForm();
     this._formSubscribe();
@@ -75,12 +85,6 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroyed$.next();
     this._destroyed$.complete();
-  }
-
-  get submitColor(): string {
-    return this.filtersForm.invalid && (this.filtersForm.dirty || this.filtersForm.touched)
-    ? 'warn'
-    : '';
   }
 
   public onMatChipInputTokenEnd(event: MatChipInputEvent): void {
@@ -96,7 +100,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   }
 
   public onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-    const selectedUser = this.users[event.option.value - 1];
+    const selectedUser = this._allUsers[event.option.value - 1];
     this.selectedUsers.push(selectedUser);
     this.filtersForm.get('userName').setValue('');
   }
@@ -200,12 +204,12 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
   private _filterUsersByName(value: any): UserModel[] {
     if (typeof value !== 'string') {
-      return this.users;
+      return this._allUsers;
     }
 
     const filterValue = value.toLowerCase();
 
-    return this.users.filter((user: UserModel): boolean => {
+    return this._allUsers.filter((user: UserModel): boolean => {
       const userName = `${user.firstname.toLowerCase()} ${user.lastname.toLowerCase()}`;
       return userName.indexOf(filterValue) > -1;
     });
@@ -223,10 +227,10 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
     if (usersId) {
       if (typeof usersId === 'string') {
-        this.selectedUsers.push(this.users[+usersId - 1]);
+        this.selectedUsers.push(this._allUsers[+usersId - 1]);
       } else {
         usersId.forEach((idUser: string): void => {
-          this.selectedUsers.push(this.users[+idUser - 1]);
+          this.selectedUsers.push(this._allUsers[+idUser - 1]);
         });
       }
     }

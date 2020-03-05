@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
+import { IFormsGroupValue } from '@app/users/interfaces';
 
 
 @Component({
@@ -53,8 +54,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSubmit(editedUser: UserModel): void {
-    const updatedUser = this._getUserWithId(editedUser);
+  public onSubmit(editedUser: IFormsGroupValue): void {
+    const user = this._convertToModel(editedUser);
+    const updatedUser = this._getUserWithId(user);
     this._submited = true;
     this._usersService
       .updateUser(updatedUser)
@@ -71,8 +73,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onChangeUser(user: UserModel): void {
-    this._pacthUser(user);
+  public onChangeUser(user: IFormsGroupValue): void {
+    const patchUser = this._convertToModel(user);
+    this._pacthUser(patchUser);
   }
 
   private _pacthUser(editedUser: UserModel): void {
@@ -110,6 +113,26 @@ export class UserEditComponent implements OnInit, OnDestroy {
         error: () => {},
         complete: () => {},
       });
+  }
+
+  private _convertToModel (formData: IFormsGroupValue): UserModel {
+    return new UserModel({
+      firstname: formData.personalInfoForm.firstname,
+      lastname: formData.personalInfoForm.lastname,
+      phone: formData.personalInfoForm.phone,
+      email: formData.personalInfoForm.email,
+      birthday: formData.personalInfoForm.birthday,
+      avatar: formData.additionalInfoForm.avatar,
+      address: {
+        state: {
+          name: formData.addressInfoForm.state,
+          shortname: formData.addressInfoForm.stateshort,
+        },
+        city: formData.addressInfoForm.city,
+        street: formData.addressInfoForm.street,
+        zipcode: formData.addressInfoForm.zipcode,
+      },
+    });
   }
 
   private _getUserWithId(user: UserModel): UserModel {

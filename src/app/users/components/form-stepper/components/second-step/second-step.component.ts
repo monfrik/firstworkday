@@ -21,7 +21,7 @@ export class SecondStepComponent {
 
   public onChangeSelect(stateName: string): void {
     const currentState = STATES.find((state) => state.name === stateName);
-    this.formGroup.get('shortname').patchValue(currentState.shortname);
+    this.formGroup.get('stateshort').patchValue(currentState.shortname);
   }
 
   public trackByFn(index: number): number {

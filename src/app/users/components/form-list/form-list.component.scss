@@ -4,4 +4,13 @@
     flex-direction: column;
     width: 100%;
   }
+  &-actions {
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-submit {
+    display: flex;
+    justify-content: center;
+  }
 }
