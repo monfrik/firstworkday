@@ -138,7 +138,12 @@ export class InMemoryDataService implements InMemoryDbService {
         avatar: null/*'https://www.thispersondoesnotexist.com/image'*/,
       },
     ];
-    return { users };
+    const allowEmailDomains = [
+      'mail.ru',
+      'gmail.com',
+      'wis.software',
+    ];
+    return { users, allowEmailDomains };
   }
 
 }

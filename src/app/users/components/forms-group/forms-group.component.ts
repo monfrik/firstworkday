@@ -27,6 +27,7 @@ import {
   statesShortNameType,
 } from '@utils';
 
+import { AllowEmailService } from '@core/services';
 import { UserModel } from '@app/users/models';
 import { TabDirective } from '@app/users/directives';
 import {
@@ -41,6 +42,7 @@ import {
   selector: 'app-forms-group',
   templateUrl: './forms-group.component.html',
   styleUrls: ['./forms-group.component.scss'],
+  providers: [AllowEmailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
@@ -80,6 +82,7 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
+    private readonly _allowEmailService: AllowEmailService,
   ) {}
 
   public get listActive(): boolean {
@@ -123,10 +126,15 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
       lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
       phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
-      email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
+      email: [
+        '',
+        [Validators.required, Validators.pattern(EMAIL_PATTERN)],
+        [this._allowEmailService.asyncEmailDomainValidator()]
+      ],
       birthday: ['', [Validators.required]],
     });
 
+    
     this.addressInfoForm = this._formBuilder.group({
       state: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
       stateshort: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
@@ -134,11 +142,11 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
       zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
     });
-
+    
     this.additionalInfoForm = this._formBuilder.group({
       avatar: [null],
     });
-
+    
     this.formsGroup = this._formBuilder.group({
       personalInfoForm: this.personalInfoForm,
       addressInfoForm: this.addressInfoForm,

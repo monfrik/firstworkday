@@ -74,7 +74,8 @@
           [inputControl]="personalInfoForm.get('email')"
           [errorMessages]="{
             'required': 'this control is required',
-            'pattern': 'Invalid email address'
+            'pattern': 'Invalid email address',
+            'domainAvailable': 'This domain of email is invalid'
           }"
           error-filed
         ></mat-error>
