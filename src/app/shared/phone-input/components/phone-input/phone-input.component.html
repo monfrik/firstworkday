@@ -1,0 +1,20 @@
+<form [formGroup]="formGroup">
+  <mat-form-field>
+    <mat-label>Select country</mat-label>
+    <mat-select formControlName="country">
+      <mat-option *ngFor="let country of countries" [value]="country">
+        {{country}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      formControlName="phone"
+      [disableControl]="disableControl"
+      matInput
+      type="text"
+      name="phone"
+      placeholder="Phone"
+      required>
+  </mat-form-field>
+</form>
