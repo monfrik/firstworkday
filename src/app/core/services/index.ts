@@ -1,1 +1,2 @@
-export * from './user-api/user-api.service';
+export * from './user-api.service';
+export * from './allow-email-domains.service';

@@ -1,27 +1,34 @@
 <div class="form-stepper">
   <mat-horizontal-stepper [linear]="false" #stepper>
-    <mat-step [stepControl]="formGroup.get('firstFormGroup')">
+    <mat-step [stepControl]="formGroup.get('personalInfoForm')">
       <ng-template matStepLabel>Fill out your pesonal data</ng-template>
-      <app-first-step [formGroup]="formGroup.get('firstFormGroup')"></app-first-step>
+      <app-first-step [formGroup]="formGroup.get('personalInfoForm')"></app-first-step>
     </mat-step>
 
-    <mat-step [stepControl]="formGroup.get('secondFormGroup')">
-      <app-second-step [formGroup]="formGroup.get('secondFormGroup')"></app-second-step>
+    <mat-step [stepControl]="formGroup.get('addressInfoForm')">
+      <app-second-step [formGroup]="formGroup.get('addressInfoForm')"></app-second-step>
       <ng-template matStepLabel>Fill out your address</ng-template>
     </mat-step>
 
-    <mat-step [stepControl]="formGroup.get('thirdFormGroup')">
+    <mat-step [stepControl]="formGroup.get('additionalInfoForm')">
       <ng-template matStepLabel>Fill out your avatar</ng-template>
-      <app-third-step [formGroup]="formGroup.get('thirdFormGroup')"></app-third-step>
+      <app-third-step [formGroup]="formGroup.get('additionalInfoForm')"></app-third-step>
     </mat-step>
 
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <div>
-        <a [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
-        <button mat-button (click)="submit()">Submit</button>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+        <a mat-raised-button [routerLink]="['/']" routerLinkActive="router-link-active">Go to table</a> 
+        <button mat-raised-button [color]="submitColor" (click)="submit()">
+          <span *ngIf="isPending">
+            <mat-spinner diameter="18" class="form-list-pending"></mat-spinner>
+          </span>
+          <span *ngIf="!isPending">
+            Save
+          </span>
+        </button>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button (click)="stepper.reset()">Reset</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

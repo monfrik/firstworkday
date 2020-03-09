@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { UsersService } from '@app/users/services';
 import { UserModel } from '@app/users/models';
+import { IFormsGroupValue } from '@app/users/interfaces';
 
 
 @Component({
@@ -52,25 +53,27 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSubmit(userToCreate: UserModel): void {
+  public onSubmit(userToCreate: IFormsGroupValue): void {
     this._submited = true;
+    const user = this._convertToModel(userToCreate);
     this._usersService
-      .updateUser(userToCreate)
+      .updateUser(user)
       .pipe(
         takeUntil(this._destroy$),
       )
       .subscribe({
         next: () => {
           this._router.navigate(['/users']);
-          this._openSnackBar('User changed', 'Ok');
+          this._openSnackBar('User saved', 'Ok');
         },
         error: () => {},
         complete: () => {},
       });
   }
 
-  public onChangeUser(userToCreate: UserModel): void {
-    this._pacthUser(userToCreate);
+  public onChangeUser(userToCreate: IFormsGroupValue): void {
+    const user = this._convertToModel(userToCreate);
+    this._pacthUser(user);
   }
 
   private _getUserToCreate(): void {
@@ -85,6 +88,20 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         error: () => {},
         complete: () => {},
       });
+  }
+
+  private _convertToModel (formData: IFormsGroupValue): UserModel {
+    return new UserModel({
+      ...formData.personalInfoForm,
+      ...formData.additionalInfoForm,
+      address: {
+        ...formData.addressInfoForm,
+        state: {
+          name: formData.addressInfoForm.state,
+          shortname: formData.addressInfoForm.stateshort,
+        },
+      }
+    });
   }
 
   private _pacthUser(userToCreate: UserModel): void {

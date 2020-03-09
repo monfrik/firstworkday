@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
   Output,
@@ -8,30 +7,12 @@ import {
   Input,
 } from '@angular/core';
 import {
-  FormBuilder,
   FormGroup,
-  Validators,
   AbstractControl,
 } from '@angular/forms';
 
-import { Subject } from 'rxjs';
-
-import {
-  PHONE_MASK,
-  ZIPCODE_MASK,
-
-  NAME_PATTERN,
-  PHONE_PATTERN,
-  EMAIL_PATTERN,
-  CITY_PATTERN,
-  STREET_PATTERN,
-  ZIPCODE_PATTERN,
-  STATE_PATTERN,
-  STATE_SHORT_PATTERN,
-  STATES,
-} from '@utils';
-
-import { UserModel } from '@app/users/models';
+import { PHONE_MASK, ZIPCODE_MASK, STATES } from '@app/utils';
+import { IFormsGroup } from '@app/users/interfaces';
 
 
 @Component({
@@ -41,20 +22,10 @@ import { UserModel } from '@app/users/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class FormListComponent implements OnInit, OnDestroy {
+export class FormListComponent implements OnDestroy {
 
   @Input()
-  set user(user: UserModel) {
-    if (!user) {
-      return;
-    }
-
-    if (this.formGroup) {
-      this.formGroup.patchValue(user);
-    } else {
-      this._initialUserData = user;
-    }
-  }
+  public formGroup: FormGroup;
 
   @Input()
   set activeTab(activeTab: boolean) {
@@ -64,56 +35,50 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public readonly submitList = new EventEmitter<UserModel>();
+  public readonly submitList = new EventEmitter<IFormsGroup>();
 
   @Output()
-  public readonly patchFormList = new EventEmitter<UserModel>();
+  public readonly patchFormList = new EventEmitter<IFormsGroup>();
 
   public phoneMask: (string | RegExp)[] = PHONE_MASK;
   public zipcodeMask: (string | RegExp)[] = ZIPCODE_MASK;
   public states = STATES;
+  public isPending = false;
 
-  public formGroup: FormGroup;
+  constructor() {}
 
-  private _destroy$ = new Subject<void>();
-  private _initialUserData: UserModel;
-  private _submited = false;
-
-  public constructor(
-    private readonly _formBuilder: FormBuilder,
-  ) {}
-
-  public get address(): AbstractControl {
-    return this.formGroup.get('address');
+  public get personalInfoForm(): AbstractControl {
+    return this.formGroup.get('personalInfoForm');
   }
 
-  public get state(): AbstractControl {
-    return this.formGroup.get('address').get('state');
+  public get addressInfoForm(): AbstractControl {
+    return this.formGroup.get('addressInfoForm');
   }
 
-  public ngOnInit(): void {
-    this._formInitialization();
-    if (this._initialUserData) {
-      this.formGroup.patchValue(this._initialUserData);
-    }
+  public get additionalInfoForm(): AbstractControl {
+    return this.formGroup.get('additionalInfoForm');
+  }
+
+  get submitColor(): string {
+    return this.formGroup.invalid && (this.formGroup.dirty || this.formGroup.touched)
+    ? 'warn'
+    : '';
   }
 
   public ngOnDestroy(): void {
     this._patchUser();
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
   public submit(): void {
-    if (this.formGroup.valid) {
-      this._submited = true;
-      this.submitList.emit(new UserModel(this.formGroup.value));
+    if (this.formGroup && this.formGroup.valid) {
+      this.isPending = true;
+      this.submitList.emit(this.formGroup.value);
     }
   }
 
   public onChangeSelect(stateName: string): void {
     const currentState = STATES.find((state) => state.name === stateName);
-    this.state.get('shortname').patchValue(currentState.shortname);
+    this.addressInfoForm.get('stateshort').patchValue(currentState.shortname);
   }
 
   public trackByFn(index: number): number {
@@ -121,30 +86,9 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   private _patchUser(): void {
-    if (this.formGroup && this.formGroup.touched && !this._submited) {
-      this.patchFormList.emit(new UserModel(this.formGroup.value));
+    if (this.formGroup && this.formGroup.touched) {
+      this.patchFormList.emit(this.formGroup.value);
     }
-  }
-
-  private _formInitialization(): void {
-    this.formGroup = this._formBuilder.group({
-      firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
-      lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
-      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
-      email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
-      // avatar: [null, [Validators.required, FileUploadValidators.filesLimit(1)]],
-      avatar: [null, []],
-      birthday: ['', [Validators.required]],
-      address: this._formBuilder.group({
-        state: this._formBuilder.group({
-          name: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
-          shortname: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
-        }),
-        city: ['', [Validators.required, Validators.pattern(CITY_PATTERN)]],
-        street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
-        zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
-      }),
-    });
   }
 
 }

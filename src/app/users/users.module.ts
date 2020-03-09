@@ -17,6 +17,7 @@ import {
   MatTableModule,
   MatButtonModule,
   MatPaginatorModule,
+  MatProgressSpinnerModule,
 } from '@angular/material';
 import { TextMaskModule } from 'angular2-text-mask';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
@@ -64,6 +65,7 @@ import { TabDirective } from './directives';
     MatTableModule,
     MatButtonModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
   ],
   declarations: [
     UsersTableComponent,

@@ -5,8 +5,8 @@
   </mat-toolbar>
 
   <app-table-filter
-    *ngIf="allUsers !== null"
-    [users]="allUsers"
+    *ngIf="allUsers$ !== null"
+    [users]="allUsers$ | async"
     (applyFilter)="onApllyFilter($event)"
   ></app-table-filter>
 
@@ -93,6 +93,6 @@
 
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
-  <a [routerLink]="['/users/new']" routerLinkActive="router-link-active" class="users-table-new">New</a>
+  <a [routerLink]="['/users/create']" routerLinkActive="router-link-active" class="users-table-new">New</a>
   
 </div>
