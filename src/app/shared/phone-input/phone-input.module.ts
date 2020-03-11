@@ -14,7 +14,7 @@ import { PhoneInputComponent } from './components';
 @NgModule({
   declarations: [
     DisableControlDirective,
-    PhoneInputComponent
+    PhoneInputComponent,
   ],
   imports: [
     // Angular

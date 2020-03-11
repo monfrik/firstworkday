@@ -21,8 +21,16 @@ import {
   getCountries,
   AsYouType,
   parsePhoneNumberFromString,
+  getCountryCallingCode,
+  getExampleNumber,
+  CountryCode,
 } from 'libphonenumber-js';
 
+
+interface IPhoneCountryFormat {
+  country: string;
+  callingCode: string
+}
 
 @Component({
   selector: 'app-phone-input',
@@ -41,7 +49,9 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDest
 
   public formGroup: FormGroup;
   public disableControl = true;
-  public readonly countries = getCountries();
+
+  public readonly countries: CountryCode[] = getCountries();
+  public countryFormats: IPhoneCountryFormat[];
   
   private _destroy$ = new Subject<void>();
 
@@ -52,6 +62,15 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDest
   public ngOnInit(): void {
     this._initForm();
     this._formSubsribe();
+    this._getCollingCodes();
+
+    // this.countries.forEach((element: any): void => {
+    //   const asYouType = new AsYouType(element);
+    //   console.group('country', element);
+    //   console.log('country calling code = ', getCountryCallingCode(element));
+    //   console.log('country phone example = ', getExampleNumber(element, examples).number);
+    //   console.groupEnd();
+    // });
   }
 
   public ngOnDestroy(): void {
@@ -76,51 +95,70 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDest
   private _initForm(): void {
     this.formGroup = this._formBuilder.group({
       phone: [{value: '', disabled: true}, this._phoneValidator()],
-      country: [''],
+      countryFormat: [null],
     })
   }
 
   private _formSubsribe(): void {
-    this.formGroup.get('phone').valueChanges
+    this.formGroup.valueChanges
       .pipe(
         takeUntil(this._destroy$),
       )
-      .subscribe(() => {
-        this._onUpdatePhone();
+      .subscribe((formValue) => {
+        if (formValue.countryFormat && formValue.phone) {
+          this._changePhone(formValue);
+        }
       });
 
-    this.formGroup.get('country').valueChanges
+    this.formGroup.get('countryFormat').valueChanges
       .pipe(
         takeUntil(this._destroy$),
       )
-      .subscribe(() => {
-        this.disableControl = false;
+      .subscribe((value) => {
+        this.disableControl = !value;
       });
   }
 
-  private _onUpdatePhone(): void {
-    const phone = this.formGroup.get('phone').value;
-    const country = this.formGroup.get('country').value;
-
-    const asYouType = new AsYouType(country);
-    const phoneAsType = asYouType.input(phone);
+  private _changePhone(formValue): void {
+    const asYouType = new AsYouType(formValue.countryFormat.country);
+    const phoneAsType = asYouType.input(formValue.phone);
 
     this.formGroup.patchValue({phone: phoneAsType}, {
       emitEvent: false,
     });
 
     if (phoneAsType) {
-      const parsePhone = parsePhoneNumberFromString(phoneAsType, country);
+      const parsePhone = parsePhoneNumberFromString(phoneAsType, formValue.countryFormat.country);
       if (parsePhone) {
         this.writeValue(parsePhone.number as string);
       }
     }
   }
 
+  private _getCollingCodes(): void {
+    const countryFormats: IPhoneCountryFormat[] = [];
+
+    this.countries.forEach((country: CountryCode) => {
+      const callingCode = `+${getCountryCallingCode(country)}`;
+      countryFormats.push({country, callingCode});
+    });
+
+    this.countryFormats = countryFormats;
+  }
+    
   private _phoneValidator(): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} | null => {
-      const country = this.formGroup.get('country').value;
-      const parsePhone = parsePhoneNumberFromString(control.value, country);
+      const countryFormat = this.formGroup.get('countryFormat').value;
+      if (!countryFormat) {
+        return {phonePattern: true};
+      }
+
+      const phone = `${countryFormat.callingCode} ${control.value}`;
+      const parsePhone = parsePhoneNumberFromString(phone, countryFormat.county);
+      console.log('_phoneValidator', parsePhone);
+      if (parsePhone) {
+        console.log('_phoneValidator valid', parsePhone.isValid());
+      }
       if (!parsePhone || !parsePhone.isValid()) {
         return {phonePattern: true};
       }

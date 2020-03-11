@@ -19,10 +19,13 @@ import {
   MatPaginatorModule,
   MatProgressSpinnerModule,
 } from '@angular/material';
-import { TextMaskModule } from 'angular2-text-mask';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
-import { ErrorFiledComponent } from '@core/components';
 
+import { TextMaskModule } from 'angular2-text-mask';
+
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+
+
+import { ErrorFiledComponent } from '@core/components';
 import { SharedModule } from '@app/shared/shared.module';
 import { PhoneInputModule } from '@app/shared/phone-input';
 

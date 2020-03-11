@@ -1,23 +1,33 @@
-<form [formGroup]="formGroup">
-  <mat-form-field>
-    <mat-label>Select country</mat-label>
-    <mat-select formControlName="country">
-      <mat-option value="RU">
-        ru
-      </mat-option>
-      <mat-option *ngFor="let country of countries" [value]="country">
-        {{country}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      formControlName="phone"
-      [disableControl]="disableControl"
-      matInput
-      type="text"
-      name="phone"
-      placeholder="Phone"
-      required>
-  </mat-form-field>
-</form>
+<div class="phone-input">
+  <form [formGroup]="formGroup" class="phone-input-from">
+    <mat-form-field class="phone-input-select">
+      <mat-label>Select country</mat-label>
+      <mat-select formControlName="countryFormat">
+        <mat-option>
+          --None--
+        </mat-option>
+        <mat-option *ngFor="let countryFormat of countryFormats" [value]="countryFormat">
+          {{countryFormat.country}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="phone-input-callingCode">
+      <input
+        matInput
+        [value]="this.formGroup.get('countryFormat')?.value?.callingCode"
+        placeholder="Code"
+        disabled
+      >
+    </mat-form-field>
+    <mat-form-field class="phone-input-phone">
+      <input
+        formControlName="phone"
+        [disableControl]="disableControl"
+        matInput
+        type="text"
+        name="phone"
+        placeholder="Phone"
+        required>
+    </mat-form-field>
+  </form>
+</div>
