@@ -125,7 +125,7 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
     this.personalInfoForm = this._formBuilder.group({
       firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
       lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
-      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      phone: ['', [Validators.required]],
       email: [
         '',
         [Validators.required, Validators.pattern(EMAIL_PATTERN)],

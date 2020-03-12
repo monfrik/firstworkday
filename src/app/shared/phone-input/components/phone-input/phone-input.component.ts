@@ -4,6 +4,9 @@ import {
   ChangeDetectionStrategy,
   forwardRef,
   OnDestroy,
+  Input,
+  Self,
+  Optional,
 } from '@angular/core';
 import {
   FormGroup,
@@ -12,6 +15,7 @@ import {
   ControlValueAccessor,
   AbstractControl,
   ValidatorFn,
+  NgControl,
 } from '@angular/forms';
 
 import { Subject } from 'rxjs';
@@ -47,17 +51,25 @@ interface IPhoneCountryFormat {
 })
 export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
+  @Input()
+  public get value() {return this.value}
+  public set value(value) {
+    this._value = value;
+    this._controlValueAccessorChangeFn(value);
+  }
+
   public formGroup: FormGroup;
   public disableControl = true;
 
   public readonly countries: CountryCode[] = getCountries();
   public countryFormats: IPhoneCountryFormat[];
   
+  private _value: string;
   private _destroy$ = new Subject<void>();
 
   public constructor(
     private readonly _formBuilder: FormBuilder,
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this._initForm();
@@ -79,6 +91,8 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
   public writeValue(phone: string): void {
+    this.value = phone;
+
     this.onChange(phone);
   }
   
@@ -155,16 +169,27 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, OnDest
 
       const phone = `${countryFormat.callingCode} ${control.value}`;
       const parsePhone = parsePhoneNumberFromString(phone, countryFormat.county);
-      console.log('_phoneValidator', parsePhone);
-      if (parsePhone) {
-        console.log('_phoneValidator valid', parsePhone.isValid());
-      }
       if (!parsePhone || !parsePhone.isValid()) {
         return {phonePattern: true};
       }
 
       return null;
     };
+  }
+
+  private _controlValueAccessorChangeFn(value) {
+    const countryFormatControl = this.formGroup.get('countryFormat');
+    if (!this.formGroup || countryFormatControl.value || !value) {
+      return;
+    }
+
+    const parsePhone =  (value);
+    console.log(parsePhone);
+    console.log(parsePhone.country);
+    // this.formGroup.patchValue({
+    //   phone: value,
+    // })
+    console.log('__value', value)
   }
 
 }
