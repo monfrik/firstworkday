@@ -64,32 +64,24 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
     private readonly _changeDetector: ChangeDetectorRef,
   ) {}
 
-  public get phone() {return this._phone;}
+  public get phone() {return this._phone}
   public set phone(value) {
     this._changePhone(value);
   }
 
-  public get countryFormat() {return this._countryFormat;}
+  public get countryFormat() {return this._countryFormat}
   public set countryFormat(value) {
     this._countryFormat = value;
-    if (!value) {
-      this._phone = null;
+    if (value) {
+      this._changePhone(this.phone);
       return;
     }
-    
-    this._changePhone(this.phone);
+
+    this._phone = null;
   }
 
   public ngOnInit(): void {
     this._getCollingCodes();
-
-    // this.countries.forEach((element: any): void => {
-    //   const asYouType = new AsYouType(element);
-    //   console.group('country', element);
-    //   console.log('country calling code = ', getCountryCallingCode(element));
-    //   console.log('country phone example = ', getExampleNumber(element, examples).number);
-    //   console.groupEnd();
-    // });
   }
 
   public writeValue(phone: string): void {
