@@ -47,7 +47,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   set users(users: UserModel[]) {
     this._allUsers = users;
     this.filteredUsers = users || null;
-  };
+  }
 
   @Output()
   public readonly applyFilter = new EventEmitter<IRouterParams>();

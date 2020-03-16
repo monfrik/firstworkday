@@ -1,0 +1,33 @@
+<div class="phone-input">
+  <form class="phone-input-from" #form="ngForm">
+    <mat-form-field class="phone-input-select">
+      <mat-label>Select country</mat-label>
+      <mat-select [(ngModel)]="countryFormat" name="countryFormat">
+        <mat-option [value]="null">
+          --None--
+        </mat-option>
+        <mat-option *ngFor="let countryFormat of countryFormats" [value]="countryFormat">
+          {{ countryFormat.country }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="phone-input-callingCode">
+      <input
+        matInput
+        [value]="countryFormat?.callingCode"
+        placeholder="Code"
+        disabled
+      >
+    </mat-form-field>
+    <mat-form-field class="phone-input-phone">
+      <input
+        [(ngModel)]="phone"
+        [tmDisableControl]="!countryFormat?.callingCode"
+        matInput
+        type="text"
+        name="phone"
+        placeholder="Phone"
+        required>
+    </mat-form-field>
+  </form>
+</div>

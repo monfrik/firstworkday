@@ -19,11 +19,16 @@ import {
   MatPaginatorModule,
   MatProgressSpinnerModule,
 } from '@angular/material';
-import { TextMaskModule } from 'angular2-text-mask';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
-import { ErrorFiledComponent } from '@core/components';
 
-import { SharedModule } from '../shared/shared.module';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+
+import { TextMaskModule } from 'angular2-text-mask';
+
+import { PhoneInputModule } from 'phone-input';
+
+import { ErrorFiledComponent } from '@core/components';
+import { SharedModule } from '@app/shared/shared.module';
+// import { PhoneInputModule } from '@app/shared/phone-input';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersService } from './services';
@@ -47,7 +52,6 @@ import { TabDirective } from './directives';
     ReactiveFormsModule,
     FileUploadModule,
     TextMaskModule,
-    SharedModule,
     UsersRoutingModule,
     // Material
     MatStepperModule,
@@ -66,6 +70,10 @@ import { TabDirective } from './directives';
     MatButtonModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    // Shared
+    SharedModule,
+    // Other
+    PhoneInputModule,
   ],
   declarations: [
     UsersTableComponent,

@@ -100,7 +100,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
           name: formData.addressInfoForm.state,
           shortname: formData.addressInfoForm.stateshort,
         },
-      }
+      },
     });
   }
 

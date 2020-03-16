@@ -16,7 +16,6 @@ import { Subject } from 'rxjs';
 
 import {
   NAME_PATTERN,
-  PHONE_PATTERN,
   EMAIL_PATTERN,
   CITY_PATTERN,
   STREET_PATTERN,
@@ -125,16 +124,15 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
     this.personalInfoForm = this._formBuilder.group({
       firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
       lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
-      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      phone: ['', [Validators.required]],
       email: [
         '',
         [Validators.required, Validators.pattern(EMAIL_PATTERN)],
-        [this._allowEmailService.asyncEmailDomainValidator()]
+        [this._allowEmailService.asyncEmailDomainValidator()],
       ],
       birthday: ['', [Validators.required]],
     });
 
-    
     this.addressInfoForm = this._formBuilder.group({
       state: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
       stateshort: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
@@ -142,11 +140,11 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
       zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
     });
-    
+
     this.additionalInfoForm = this._formBuilder.group({
       avatar: [null],
     });
-    
+
     this.formsGroup = this._formBuilder.group({
       personalInfoForm: this.personalInfoForm,
       addressInfoForm: this.addressInfoForm,
