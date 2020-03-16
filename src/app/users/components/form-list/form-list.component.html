@@ -41,8 +41,8 @@
         ></mat-error>
       </mat-form-field>
   
-      <!-- <mat-form-field>
-        <input
+      <!-- <mat-form-field> -->
+        <!-- <input
           formControlName="phone"
           [textMask]="{mask: phoneMask}"
           matInput
@@ -50,17 +50,17 @@
           name="phone"
           placeholder="Phone"
           required
-        >
-        <mat-error
-          [inputControl]="personalInfoForm.get('phone')"
-          [errorMessages]="{
-            'required': 'this control is required',
-            'pattern': 'Invalid phone. Phone template: (000)-000-0000'
-          }"
-          error-filed
-        ></mat-error>
-      </mat-form-field> -->
-      <app-phone-input formControlName="phone"></app-phone-input>
+        > -->
+        <!-- </mat-form-field> -->
+      <tm-phone-input formControlName="phone"></app-phone-input>
+      <mat-error
+        [inputControl]="personalInfoForm.get('phone')"
+        [errorMessages]="{
+          'required': 'this control is required',
+          'phonePattern': 'Invalid phone.'
+        }"
+        error-filed
+      ></mat-error>
   
       <mat-form-field>
         <input

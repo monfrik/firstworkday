@@ -16,7 +16,6 @@ import { Subject } from 'rxjs';
 
 import {
   NAME_PATTERN,
-  PHONE_PATTERN,
   EMAIL_PATTERN,
   CITY_PATTERN,
   STREET_PATTERN,
@@ -129,12 +128,11 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       email: [
         '',
         [Validators.required, Validators.pattern(EMAIL_PATTERN)],
-        [this._allowEmailService.asyncEmailDomainValidator()]
+        [this._allowEmailService.asyncEmailDomainValidator()],
       ],
       birthday: ['', [Validators.required]],
     });
 
-    
     this.addressInfoForm = this._formBuilder.group({
       state: ['', [Validators.required, Validators.pattern(STATE_PATTERN)]],
       stateshort: ['', [Validators.required, Validators.pattern(STATE_SHORT_PATTERN)]],
@@ -142,20 +140,16 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       street: ['', [Validators.required, Validators.pattern(STREET_PATTERN)]],
       zipcode: ['', [Validators.required, Validators.pattern(ZIPCODE_PATTERN)]],
     });
-    
+
     this.additionalInfoForm = this._formBuilder.group({
       avatar: [null],
     });
-    
+
     this.formsGroup = this._formBuilder.group({
       personalInfoForm: this.personalInfoForm,
       addressInfoForm: this.addressInfoForm,
       additionalInfoForm: this.additionalInfoForm,
     });
-    this.formsGroup.get('personalInfoForm').get('phone').valueChanges
-      .subscribe((value) => {
-        console.log('phone ', value);
-      })
   }
 
   private _setActivaTab(): void {

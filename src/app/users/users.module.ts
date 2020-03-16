@@ -20,13 +20,15 @@ import {
   MatProgressSpinnerModule,
 } from '@angular/material';
 
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+
 import { TextMaskModule } from 'angular2-text-mask';
 
-import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { PhoneInputModule } from 'phone-input';
 
 import { ErrorFiledComponent } from '@core/components';
 import { SharedModule } from '@app/shared/shared.module';
-import { PhoneInputModule } from '@app/shared/phone-input';
+// import { PhoneInputModule } from '@app/shared/phone-input';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersService } from './services';
@@ -70,6 +72,7 @@ import { TabDirective } from './directives';
     MatProgressSpinnerModule,
     // Shared
     SharedModule,
+    // Other
     PhoneInputModule,
   ],
   declarations: [

@@ -19,9 +19,21 @@
       "dom"
     ],
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@core/*": ["src/app/core/*"],
-      "@utils": ["src/app/utils/index.ts"],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@utils": [
+        "src/app/utils/index.ts"
+      ],
+      "phone-input": [
+        "dist/phone-input"
+      ],
+      "phone-input/*": [
+        "dist/phone-input/*"
+      ]
     }
   },
   "angularCompilerOptions": {

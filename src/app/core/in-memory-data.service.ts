@@ -15,7 +15,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 1,
         firstname: 'Oliver',
         lastname: 'Baker',
-        phone: '+1 (153) 342-1560',
+        phone: '+7 951 515-51-15',
         email: 'all.bake@gmail.com',
         birthday: new Date(1995, 11, 17),
         address: {

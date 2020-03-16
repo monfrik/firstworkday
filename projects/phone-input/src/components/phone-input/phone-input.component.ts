@@ -24,9 +24,8 @@ import {
 
 import { IPhoneCountryFormat } from '../../interfaces';
 
-
 @Component({
-  selector: 'app-phone-input',
+  selector: 'tm-phone-input',
   templateUrl: './phone-input.component.html',
   styleUrls: ['./phone-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -111,6 +110,10 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
 
   public onChange(_: any): any { }
   public onTouched(): any { }
+
+  public trackByFn(index: number): number {
+    return index;
+  }
 
   private _changePhone(phone: string): void {
     if (!phone || !this.countryFormat) {

@@ -1,0 +1,17 @@
+{
+  "name": "phone-input",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14"
+  },
+  "dependencies": {
+    "@angular/common": "~8.2.14",
+    "@angular/core": "~8.2.14",
+    "@angular/forms": "~8.2.14",
+    "@angular/material": "^8.2.3",
+    "@angular/platform-browser-dynamic": "~8.2.14",
+    "libphonenumber-js": "^1.7.46",
+    "zone.js": "~0.9.1"
+  }
+}
