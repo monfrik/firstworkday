@@ -22,7 +22,7 @@
     <mat-form-field class="phone-input-phone">
       <input
         [(ngModel)]="phone"
-        [disableControl]="!countryFormat?.callingCode"
+        [tmDisableControl]="!countryFormat?.callingCode"
         matInput
         type="text"
         name="phone"

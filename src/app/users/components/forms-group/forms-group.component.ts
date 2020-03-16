@@ -150,6 +150,11 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
       addressInfoForm: this.addressInfoForm,
       additionalInfoForm: this.additionalInfoForm,
     });
+
+    this.formsGroup.get('personalInfoForm').get('phone').valueChanges
+      .subscribe((phone) => {
+        console.log('phone', phone);
+      })
   }
 
   private _setActivaTab(): void {
