@@ -24,9 +24,8 @@ import {
 
 import { IPhoneCountryFormat } from '../../interfaces';
 
-
 @Component({
-  selector: 'app-phone-input',
+  selector: 'tm-phone-input',
   templateUrl: './phone-input.component.html',
   styleUrls: ['./phone-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,19 +40,19 @@ import { IPhoneCountryFormat } from '../../interfaces';
       useExisting: forwardRef(() => PhoneInputComponent),
       multi: true,
     },
-  ]
+  ],
 })
 export class PhoneInputComponent implements OnInit, ControlValueAccessor, Validator {
 
   @Input()
-  public get value() {return this._value;}
-  public set value(value) {
+  public get value(): string { return this._value; }
+  public set value(value: string) {
     this._value = value;
     this._controlValueAccessorChangeFn(value);
   }
 
   public countryFormats: IPhoneCountryFormat[];
-  
+
   private _value: string;
   private _phone: string;
   private _countryFormat: IPhoneCountryFormat;
@@ -62,22 +61,20 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
 
   public constructor(
     private readonly _changeDetector: ChangeDetectorRef,
-  ) {}
+  ) { }
 
-  public get phone() {return this._phone}
-  public set phone(value) {
+  public get phone(): string { return this._phone; }
+  public set phone(value: string) {
     this._changePhone(value);
   }
 
-  public get countryFormat() {return this._countryFormat}
-  public set countryFormat(value) {
+  public get countryFormat(): IPhoneCountryFormat { return this._countryFormat; }
+  public set countryFormat(value: IPhoneCountryFormat) {
     this._countryFormat = value;
-    if (value) {
-      this._changePhone(this.phone);
-      return;
+    if (value === null) {
+      this._phone = null;
     }
-
-    this._phone = null;
+    this._changePhone(this.phone);
   }
 
   public ngOnInit(): void {
@@ -89,33 +86,41 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
     this.onChange(phone);
   }
 
-  public validate() {
+  public validate(): { phonePattern: true } | null {
     if (!this.phone || !this.countryFormat) {
-      return {phonePattern: true};
+      return { phonePattern: true };
     }
 
     const phone = `${this.countryFormat.callingCode} ${this.phone}`;
     const parsePhone = parsePhoneNumberFromString(phone, this.countryFormat.country);
 
-    console.groupEnd();
     if (!parsePhone || !parsePhone.isValid()) {
-      return {phonePattern: true};
+      return { phonePattern: true };
     }
 
     return null;
-}
-  
-  public registerOnChange(fn): void {
+  }
+
+  public registerOnChange(fn: any): void {
     this.onChange = fn;
   }
-  public registerOnTouched(fn): void {
+  public registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
-  
-  public onChange(_): any { }
+
+  public onChange(_: any): any { }
   public onTouched(): any { }
 
-  private _changePhone(phone = ''): void {
+  public trackByFn(index: number): number {
+    return index;
+  }
+
+  private _changePhone(phone: string): void {
+    if (!phone || !this.countryFormat) {
+      this.writeValue('');
+      return;
+    }
+
     const country = this.countryFormat.country;
     const asYouType = new AsYouType(country);
     const phoneAsType = asYouType.input(phone);
@@ -125,7 +130,7 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
       this.writeValue('');
       return;
     }
-    
+
     const parsePhone = parsePhoneNumberFromString(phoneAsType, country);
     if (!parsePhone) {
       this.writeValue('');
@@ -140,13 +145,13 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
 
     this.countries.forEach((country: CountryCode) => {
       const callingCode = `+${getCountryCallingCode(country)}`;
-      countryFormats.push({country, callingCode});
+      countryFormats.push({ country, callingCode });
     });
 
     this.countryFormats = countryFormats;
   }
-    
-  private _controlValueAccessorChangeFn(value): void {
+
+  private _controlValueAccessorChangeFn(value: string): void {
     if (this.countryFormat || !value) {
       return;
     }
@@ -154,15 +159,18 @@ export class PhoneInputComponent implements OnInit, ControlValueAccessor, Valida
     const phoneNumbers = findPhoneNumbersInText(value);
     const currentPhone = phoneNumbers[0];
     if (!currentPhone) {
-      return
+      return;
     }
 
-    this._countryFormat = {
-      country: currentPhone.number.country,
-      callingCode: '+' + currentPhone.number.countryCallingCode,
-    } as IPhoneCountryFormat;
+    this.countryFormat = this._getCountryFormatByName(currentPhone.number.country);
     this.phone = currentPhone.number.nationalNumber as string;
     this._changeDetector.detectChanges();
+  }
+
+  private _getCountryFormatByName(countryName: string | CountryCode): IPhoneCountryFormat {
+    return this.countryFormats
+      ? this.countryFormats.find((countryFormat) => countryFormat.country === countryName)
+      : null;
   }
 
 }

@@ -6,8 +6,8 @@
         <mat-option [value]="null">
           --None--
         </mat-option>
-        <mat-option *ngFor="let countryFormat of countryFormats" [value]="countryFormat">
-          {{countryFormat.country}}
+        <mat-option *ngFor="let countryFormat of countryFormats; trackBy: trackByFn" [value]="countryFormat">
+          {{ countryFormat.country }}
         </mat-option>
       </mat-select>
     </mat-form-field>

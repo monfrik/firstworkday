@@ -45,16 +45,16 @@ export class UsersTableComponent implements OnInit, OnDestroy {
     'avatar',
     'actions',
   ];
-  
+
   @ViewChild(MatPaginator, { static: true })
   public paginator: MatPaginator;
-  
+
   @ViewChild(MatSort, { static: true })
   public sort: MatSort;
-  
+
   private _destroy$ = new Subject<void>();
   private _filter$ = new Subject<IRouterParams>();
-  public _allUsers$ = new BehaviorSubject<UserModel[]>(null);
+  private _allUsers$ = new BehaviorSubject<UserModel[]>(null);
 
   public constructor(
     private readonly _router: Router,

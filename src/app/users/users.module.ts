@@ -20,9 +20,9 @@ import {
   MatProgressSpinnerModule,
 } from '@angular/material';
 
-import { TextMaskModule } from 'angular2-text-mask';
-
 import { FileUploadModule } from '@iplab/ngx-file-upload';
+
+import { TextMaskModule } from 'angular2-text-mask';
 
 import { PhoneInputModule } from 'phone-input';
 

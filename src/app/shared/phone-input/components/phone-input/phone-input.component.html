@@ -7,7 +7,7 @@
           --None--
         </mat-option>
         <mat-option *ngFor="let countryFormat of countryFormats" [value]="countryFormat">
-          {{countryFormat.country}}
+          {{ countryFormat.country }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -22,7 +22,7 @@
     <mat-form-field class="phone-input-phone">
       <input
         [(ngModel)]="phone"
-        [disableControl]="!countryFormat?.callingCode"
+        [tmDisableControl]="!countryFormat?.callingCode"
         matInput
         type="text"
         name="phone"

@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import {
   MatInputModule,
   MatSelectModule,
 } from '@angular/material';
 
-import { DisableControlDirective } from './directives';
-
 import { PhoneInputComponent } from './components';
+import { DisableControlDirective } from './directives';
 
 @NgModule({
   declarations: [
@@ -25,8 +24,8 @@ import { PhoneInputComponent } from './components';
     MatSelectModule,
   ],
   exports: [
-    PhoneInputComponent
-  ]
+    PhoneInputComponent,
+  ],
 })
 
 export class PhoneInputModule { }
