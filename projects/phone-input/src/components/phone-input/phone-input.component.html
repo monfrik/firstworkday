@@ -1,8 +1,8 @@
 <div class="phone-input">
-  <form class="phone-input-from" #form="ngForm">
+  <form class="phone-input-from" [formGroup]="phoneForm">
     <mat-form-field class="phone-input-select">
       <mat-label>Select country</mat-label>
-      <mat-select [(ngModel)]="countryFormat" name="countryFormat">
+      <mat-select formControlName="countryFormat" name="countryFormat">
         <mat-option [value]="null">
           --None--
         </mat-option>
@@ -14,15 +14,16 @@
     <mat-form-field class="phone-input-callingCode">
       <input
         matInput
-        [value]="countryFormat?.callingCode"
+        [value]="countryFormat?.value?.callingCode"
         placeholder="Code"
         disabled
       >
     </mat-form-field>
     <mat-form-field class="phone-input-phone">
       <input
-        [(ngModel)]="phone"
-        [tmDisableControl]="!countryFormat?.callingCode"
+        formControlName="phone"
+        [tmDisableControl]="!countryFormat?.value?.callingCode"
+        [errorStateMatcher]="phoneMatcher"
         matInput
         type="text"
         name="phone"
