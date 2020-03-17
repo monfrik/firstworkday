@@ -153,7 +153,7 @@ export class FormsGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.formsGroup.get('personalInfoForm').get('phone').valueChanges
       .subscribe((phone) => {
-        console.log('phone', phone);
+        // console.log('phone', phone);
       })
   }
 

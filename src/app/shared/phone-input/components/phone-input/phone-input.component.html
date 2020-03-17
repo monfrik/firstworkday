@@ -23,6 +23,7 @@
       <input
         [(ngModel)]="phone"
         [disableControl]="!countryFormat?.callingCode"
+        [errorStateMatcher]="matcher"
         matInput
         type="text"
         name="phone"

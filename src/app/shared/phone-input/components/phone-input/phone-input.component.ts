@@ -8,6 +8,8 @@ import {
   HostBinding,
   Self,
   Optional,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -55,6 +57,12 @@ class PhoneInputComponentBase {
 
 }
 
+export class PhoneErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!(control && control.invalid);
+  }
+}
+
 const PhoneInputComponentMixinBase: CanDisableCtor & CanUpdateErrorStateCtor =
   mixinDisabled(mixinErrorState(PhoneInputComponentBase));
 
@@ -71,6 +79,9 @@ export class PhoneInputComponent
   MatFormFieldControl<string>, ControlValueAccessor, CanDisable, CanUpdateErrorState {
 
   public static nextId = 0;
+
+  @ViewChild('form', {static: false})
+  public form: any;
 
   @Input()
   public get value(): string { return this._value; }
@@ -98,7 +109,7 @@ export class PhoneInputComponent
   private _required = false;
 
   @HostBinding()
-  public id = `phone-input-${PhoneInputComponent.nextId++}`;
+  public id = `app-phone-input-${PhoneInputComponent.nextId++}`;
 
   @HostBinding('attr.aria-describedby')
   public describedBy = '';
@@ -114,7 +125,7 @@ export class PhoneInputComponent
   private _phone: string;
   private _countryFormat: IPhoneCountryFormat;
 
-  public formControl = new FormControl('');
+  public readonly matcher = new PhoneErrorStateMatcher();
 
   private readonly countries: CountryCode[] = getCountries();
 
@@ -163,7 +174,6 @@ export class PhoneInputComponent
   }
 
   public ngAfterViewInit(): void {
-    this.formControl = this.ngControl.control as FormControl;
     this.ngControl.control.setValidators(this.phoneValidator());
 	}
 
@@ -195,6 +205,9 @@ export class PhoneInputComponent
   public phoneValidator(): ValidatorFn {
     return (): {phonePattern: true} | null => {
       if (!this.phone || !this.countryFormat) {
+        if (this.form.controls['phone']) {
+          this.form.controls['phone'].setErrors({ phonePattern: true });
+        }
         return { phonePattern: true };
       }
       
@@ -202,6 +215,9 @@ export class PhoneInputComponent
       const parsePhone = parsePhoneNumberFromString(phone, this.countryFormat.country);
       
       if (!parsePhone || !parsePhone.isValid()) {
+        if (this.form.controls['phone']) {
+          this.form.controls['phone'].setErrors({ phonePattern: true });
+        }
         return { phonePattern: true };
       }
   
